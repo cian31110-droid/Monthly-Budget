@@ -1,0 +1,2163 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UC & Tesco Budget Planner</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-blush: #FAF3F5;
+      --bg-blush-deep: #F5E6EB;
+      --bg-card: #FFFFFF;
+      --bg-subcard: #FDF7F9;
+      --bg-subcard-tint: #F9EBF0;
+      --border-soft: #F0DCE3;
+      --border-rose: #E8C5D1;
+      --pennli-rose: #E05A80;
+      --pennli-rose-dark: #C84369;
+      --pennli-rose-light: #FCE8EE;
+      --pennli-ink: #1F191C;
+      --pennli-muted: #7D6E75;
+      --pennli-mint: #169B6C;
+      --pennli-mint-bg: #E7F7F0;
+    }
+
+    body {
+      background-color: var(--bg-blush);
+      color: var(--pennli-ink);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Soft warm Pennli pastel backdrop */
+    .ambient-backdrop {
+      background-color: var(--bg-blush);
+      background-image:
+        radial-gradient(circle at 15% 0%, rgba(235, 148, 174, 0.18) 0%, transparent 48%),
+        radial-gradient(circle at 85% 10%, rgba(246, 195, 68, 0.10) 0%, transparent 42%),
+        radial-gradient(circle at 50% 100%, rgba(224, 90, 128, 0.10) 0%, transparent 55%);
+      background-attachment: fixed;
+    }
+
+    /* Elevated White & Soft Blush Pennli Cards */
+    .pennli-panel {
+      background: rgba(255, 255, 255, 0.96);
+      border: 1px solid var(--border-soft);
+      border-radius: 28px;
+      box-shadow: 0 12px 36px -8px rgba(186, 87, 116, 0.10), 0 2px 6px rgba(186, 87, 116, 0.04);
+      backdrop-filter: blur(14px);
+    }
+
+    /* Signature Tinted "Left to Spend" Envelope Card */
+    .pennli-hero-card {
+      background: linear-gradient(165deg, #FDF4F7 0%, #F9E9EF 100%);
+      border: 1px solid #F1D4DF;
+      border-radius: 28px;
+      box-shadow: 0 14px 34px -10px rgba(212, 95, 130, 0.12);
+    }
+
+    .pennli-subcard {
+      background: var(--bg-subcard);
+      border: 1px solid var(--border-soft);
+      border-radius: 20px;
+      transition: all 0.2s ease;
+    }
+    .pennli-subcard:hover {
+      border-color: var(--border-rose);
+      background: #FFFFFF;
+      box-shadow: 0 6px 18px -6px rgba(186, 87, 116, 0.08);
+    }
+
+    .pennli-input {
+      background: #FFFFFF;
+      border: 1.5px solid #EBD4DC;
+      border-radius: 14px;
+      color: var(--pennli-ink);
+      transition: all 0.2s ease;
+    }
+    .pennli-input:focus {
+      outline: none;
+      border-color: var(--pennli-rose);
+      box-shadow: 0 0 0 3px rgba(224, 90, 128, 0.16);
+    }
+
+    /* Clean Tabular Numbers */
+    .font-mono-num {
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.025em;
+    }
+
+    /* Pennli Rose Range Sliders */
+    input[type=range] {
+      -webkit-appearance: none;
+      background: transparent;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      height: 22px;
+      width: 22px;
+      border-radius: 999px;
+      background: var(--pennli-rose);
+      cursor: pointer;
+      margin-top: -8px;
+      box-shadow: 0 3px 10px rgba(224, 90, 128, 0.45);
+      border: 3px solid #FFFFFF;
+      transition: transform 0.15s ease, background-color 0.15s ease;
+    }
+    input[type=range]::-webkit-slider-thumb:hover {
+      transform: scale(1.12);
+      background: var(--pennli-rose-dark);
+    }
+    input[type=range]::-webkit-slider-runnable-track {
+      width: 100%;
+      height: 6px;
+      cursor: pointer;
+      background: #F2D6E0;
+      border-radius: 999px;
+    }
+
+    /* Floating iOS Frosted Bottom Tab Bar */
+    .ios-frosted-bar {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid rgba(235, 205, 216, 0.85);
+      box-shadow: 0 14px 36px rgba(145, 65, 92, 0.15);
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #FAF3F5;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #E5C2CE;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="min-h-screen ambient-backdrop selection:bg-[#FCE8EE] selection:text-[#C84369] pb-32">
+
+  <div class="max-w-3xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-9 space-y-6 relative z-10">
+
+    <!-- Top Pennli-Inspired App Header -->
+    <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2">
+      <div class="flex items-center gap-3.5">
+        <div class="w-14 h-14 rounded-[20px] bg-[#FADCE6] border border-[#F2C4D3] shadow-sm flex items-center justify-center shrink-0">
+          <svg class="w-10 h-10" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21 26V20C21 13.9249 25.9249 9 32 9C38.0751 9 43 13.9249 43 20V26" stroke="#2D2227" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="32" cy="24" r="9.5" fill="#F7C948" stroke="#2D2227" stroke-width="2.8"/>
+            <circle cx="32" cy="24" r="6" stroke="#E0A81E" stroke-width="1.5"/>
+            <path d="M13 25C13 23.3431 14.3431 22 16 22H48C49.6569 22 51 23.3431 51 25L47.8 49.4C47.34 52.8 44.44 55.4 41.01 55.4H22.99C19.56 55.4 16.66 52.8 16.2 49.4L13 25Z" fill="#EA638C" stroke="#2D2227" stroke-width="3" stroke-linejoin="round"/>
+            <path d="M20 29L21.5 46" stroke="#F69BB7" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-[#FCE8EE] text-[#D64B73] border border-[#F5CCD8]">Household Finance</span>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-[#1F191C] tracking-tight mt-1">
+            Know what’s <span class="text-[#E05A80]">safe to spend</span>
+          </h1>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-wrap items-center gap-2">
+        <button type="button" onclick="copyWhatsAppCard()" class="px-4 py-2.5 rounded-2xl bg-[#E05A80] hover:bg-[#C84369] text-white font-extrabold text-xs shadow-sm transition-all active:scale-95 flex items-center gap-1.5">
+          <span>📱 Send to Maegan</span>
+        </button>
+        <button type="button" onclick="saveCurrentMonth()" class="px-3.5 py-2.5 rounded-2xl bg-white hover:bg-[#FDF4F7] border border-[#EBD4DC] text-[#1F191C] font-extrabold text-xs shadow-sm transition-all active:scale-95">
+          💾 Save Month
+        </button>
+        <button type="button" id="copy-summary-btn" onclick="copySummary()" class="px-3.5 py-2.5 rounded-2xl bg-white hover:bg-[#FDF4F7] border border-[#EBD4DC] text-[#7D6E75] hover:text-[#1F191C] font-extrabold text-xs shadow-sm transition-all active:scale-95">
+          <span id="copy-summary-btn-label">📋 Copy</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Top Segmented 3-Page Switcher Navigation -->
+    <nav class="p-2 rounded-[22px] bg-[#F3DFE6] border border-[#EBCAD6] grid grid-cols-3 gap-1.5 shadow-inner">
+      <button
+        type="button"
+        id="tab-page-1"
+        onclick="switchPage(1)"
+        class="py-3 px-2 sm:px-4 rounded-2xl text-[11px] sm:text-xs font-extrabold transition-all bg-white text-[#1F191C] shadow-sm flex items-center justify-center gap-1.5"
+      >
+        <span class="text-sm">👜</span>
+        <span>Safe to Spend</span>
+      </button>
+      <button
+        type="button"
+        id="tab-page-2"
+        onclick="switchPage(2)"
+        class="py-3 px-2 sm:px-4 rounded-2xl text-[11px] sm:text-xs font-extrabold transition-all text-[#7D6E75] hover:text-[#1F191C] flex items-center justify-center gap-1.5"
+      >
+        <span class="text-sm">📊</span>
+        <span>Analyze &amp; Setup</span>
+      </button>
+      <button
+        type="button"
+        id="tab-page-3"
+        onclick="switchPage(3)"
+        class="py-3 px-2 sm:px-4 rounded-2xl text-[11px] sm:text-xs font-extrabold transition-all text-[#7D6E75] hover:text-[#1F191C] flex items-center justify-center gap-1.5"
+      >
+        <span class="text-sm">📑</span>
+        <span>Spreadsheet</span>
+      </button>
+    </nav>
+
+    <!-- ========================================== -->
+    <!-- PAGE 1: LANDING PAGE (4-WEEK ESSENTIALS)   -->
+    <!-- ========================================== -->
+    <div id="page-1-container" class="space-y-6">
+
+      <!-- Quick Cycle & Envelope Pills Strip -->
+      <section class="pennli-panel p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <span class="text-xs font-extrabold text-[#E05A80] uppercase tracking-wider block">📅 4-Week Tesco Cycle</span>
+          <h2 class="text-lg font-extrabold text-[#1F191C] tracking-tight mt-0.5">Your Weekly Spending Envelopes</h2>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <div class="px-4 py-2 rounded-2xl bg-[#FDF4F7] border border-[#F0D5DF] text-xs font-bold">
+            <span class="text-[#7D6E75]">Next Tesco: </span>
+            <strong id="p1-next-tesco" class="text-[#1F191C] font-mono-num font-extrabold">--</strong>
+          </div>
+          <div class="px-4 py-2 rounded-2xl bg-[#E7F7F0] border border-[#BCE8D6] text-xs font-bold">
+            <span class="text-[#147A54]">Groceries: </span>
+            <strong class="text-[#138A5E] font-mono-num font-extrabold">£50.00 / wk</strong>
+          </div>
+          <div class="px-4 py-2 rounded-2xl bg-[#FCE8EE] border border-[#F4C4D3] text-xs font-bold">
+            <span class="text-[#B83B60]">Joint Savings: </span>
+            <strong id="p1-header-savings" class="text-[#D64B73] font-mono-num font-extrabold">£100.00 / mo</strong>
+          </div>
+        </div>
+      </section>
+
+      <!-- Big Pennli "Left to spend" Weekly Allowance Hero Cards -->
+      <section class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <!-- Cian's Weekly Card -->
+        <div class="pennli-hero-card p-6 sm:p-7 space-y-6 flex flex-col justify-between relative overflow-hidden">
+          <div class="flex items-start justify-between">
+            <div>
+              <span class="text-xs font-extrabold uppercase tracking-wider text-[#C84369] block">👤 Cian's Envelope</span>
+              <h3 class="text-2xl font-extrabold text-[#1F191C] mt-1">Left to spend</h3>
+            </div>
+            <div class="w-14 h-14 rounded-2xl bg-white/90 border border-[#F1CEDB] flex items-center justify-center shadow-sm shrink-0">
+              <svg class="w-9 h-9" viewBox="0 0 64 64" fill="none">
+                <path d="M22 25V20C22 14.5 26.5 10 32 10C37.5 10 42 14.5 42 20V25" stroke="#8C4A60" stroke-width="3.5" stroke-linecap="round"/>
+                <circle cx="32" cy="24" r="9" fill="#F7C948" stroke="#8C4A60" stroke-width="2.5"/>
+                <path d="M15 25C15 23.3 16.3 22 18 22H46C47.7 22 49 23.3 49 25L46 48C45.5 51.5 42.5 54 39 54H25C21.5 54 18.5 51.5 18 48L15 25Z" fill="#E56B92" stroke="#8C4A60" stroke-width="2.8"/>
+                <circle cx="32" cy="40" r="3.5" fill="#FCE8EE"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Big Pennli Currency Display -->
+          <div class="p-4 rounded-2xl bg-white/80 border border-[#F1D4DF] space-y-2">
+            <div class="flex items-baseline gap-2 flex-wrap">
+              <div id="p1-cian-weekly" class="text-4xl sm:text-5xl font-mono-num font-extrabold text-[#1F191C] tracking-tight">
+                £131.35
+              </div>
+              <span class="text-xs font-bold text-[#7D6E75] font-mono-num">
+                of <strong id="p1-cian-monthly" class="text-[#1F191C]">£525.38</strong> monthly
+              </span>
+            </div>
+            <p class="text-xs font-bold text-[#7D6E75] pt-1 border-t border-[#F0DCE3] flex items-center justify-between">
+              <span>Per week allowance</span>
+              <strong id="p1-cian-daily" class="text-[#C84369] font-mono-num font-extrabold">£18.76 / day</strong>
+            </p>
+          </div>
+
+          <!-- Pennli Signature Pink Progress Bar -->
+          <div class="space-y-2">
+            <div class="w-full h-3 bg-[#F2CEDB] rounded-full overflow-hidden p-0.5 bg-white">
+              <div id="p1-cian-progress-bar" class="h-full bg-[#E05A80] rounded-full transition-all duration-300" style="width: 100%"></div>
+            </div>
+            <div class="flex items-center justify-between text-xs font-bold">
+              <span class="text-[#7D6E75]">Tap a week below as you spend it</span>
+              <span id="p1-cian-remaining-label" class="font-mono-num text-[#C84369] bg-white px-2.5 py-1 rounded-xl border border-[#F1D4DF]">£525.38 left</span>
+            </div>
+          </div>
+
+          <!-- Cian 4-Week Breakdown Grid -->
+          <div id="p1-cian-weeks-grid" class="grid grid-cols-2 gap-3 pt-1"></div>
+        </div>
+
+        <!-- Maegan's Weekly Card -->
+        <div class="pennli-hero-card p-6 sm:p-7 space-y-6 flex flex-col justify-between relative overflow-hidden">
+          <div class="flex items-start justify-between">
+            <div>
+              <span class="text-xs font-extrabold uppercase tracking-wider text-[#14855C] block">👤 Maegan's Envelope</span>
+              <h3 class="text-2xl font-extrabold text-[#1F191C] mt-1">Left to spend</h3>
+            </div>
+            <div class="w-14 h-14 rounded-2xl bg-white/90 border border-[#F1CEDB] flex items-center justify-center shadow-sm shrink-0">
+              <svg class="w-9 h-9" viewBox="0 0 64 64" fill="none">
+                <path d="M22 25V20C22 14.5 26.5 10 32 10C37.5 10 42 14.5 42 20V25" stroke="#8C4A60" stroke-width="3.5" stroke-linecap="round"/>
+                <circle cx="32" cy="24" r="9" fill="#F7C948" stroke="#8C4A60" stroke-width="2.5"/>
+                <path d="M15 25C15 23.3 16.3 22 18 22H46C47.7 22 49 23.3 49 25L46 48C45.5 51.5 42.5 54 39 54H25C21.5 54 18.5 51.5 18 48L15 25Z" fill="#E56B92" stroke="#8C4A60" stroke-width="2.8"/>
+                <circle cx="32" cy="40" r="3.5" fill="#FCE8EE"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Big Pennli Currency Display -->
+          <div class="p-4 rounded-2xl bg-white/80 border border-[#F1D4DF] space-y-2">
+            <div class="flex items-baseline gap-2 flex-wrap">
+              <div id="p1-maegan-weekly" class="text-4xl sm:text-5xl font-mono-num font-extrabold text-[#1F191C] tracking-tight">
+                £107.85
+              </div>
+              <span class="text-xs font-bold text-[#7D6E75] font-mono-num">
+                of <strong id="p1-maegan-monthly" class="text-[#1F191C]">£431.38</strong> monthly
+              </span>
+            </div>
+            <p class="text-xs font-bold text-[#7D6E75] pt-1 border-t border-[#F0DCE3] flex items-center justify-between">
+              <span>Per week allowance</span>
+              <strong id="p1-maegan-daily" class="text-[#14855C] font-mono-num font-extrabold">£15.41 / day</strong>
+            </p>
+          </div>
+
+          <!-- Pennli Signature Pink Progress Bar -->
+          <div class="space-y-2">
+            <div class="w-full h-3 bg-[#F2CEDB] rounded-full overflow-hidden p-0.5 bg-white">
+              <div id="p1-maegan-progress-bar" class="h-full bg-[#E05A80] rounded-full transition-all duration-300" style="width: 100%"></div>
+            </div>
+            <div class="flex items-center justify-between text-xs font-bold">
+              <span class="text-[#7D6E75]">Tap a week below as you spend it</span>
+              <span id="p1-maegan-remaining-label" class="font-mono-num text-[#14855C] bg-white px-2.5 py-1 rounded-xl border border-[#F1D4DF]">£431.38 left</span>
+            </div>
+          </div>
+
+          <!-- Maegan 4-Week Breakdown Grid -->
+          <div id="p1-maegan-weeks-grid" class="grid grid-cols-2 gap-3 pt-1"></div>
+        </div>
+      </section>
+
+      <!-- Essential Payday Hold-Back Summary ("Coming up this month") -->
+      <section class="pennli-panel p-6 space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#F2E2E8] pb-4">
+          <div>
+            <span class="text-xs font-extrabold text-[#E05A80] uppercase tracking-wider block">🛡️ Protected Envelopes</span>
+            <h3 class="text-lg font-extrabold text-[#1F191C] mt-0.5">Essential Money Aside This Month</h3>
+          </div>
+          <button type="button" onclick="resetWeeksTracker()" class="px-3.5 py-2 rounded-xl bg-[#FDF4F7] hover:bg-[#FCE8EE] border border-[#EBD4DC] text-xs font-extrabold text-[#C84369] transition-all active:scale-95">
+            🔄 Reset 4-Week Tracker
+          </button>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-3.5">
+          <div class="p-4 pennli-subcard space-y-1">
+            <span class="text-[11px] font-extrabold text-[#7D6E75] block">🛒 Groceries</span>
+            <span class="text-xs font-bold text-[#7D6E75] block">£50/wk</span>
+            <span class="text-base font-mono-num font-extrabold text-[#1F191C] pt-1 block">£200.00</span>
+          </div>
+          <div class="p-4 rounded-[22px] bg-[#E7F7F0] border border-[#BDE8D6] space-y-1">
+            <span class="text-[11px] font-extrabold text-[#147A54] block">🐷 Joint Savings</span>
+            <span class="text-xs font-bold text-[#147A54] block">£50 ea</span>
+            <span id="p1-savings-pot" class="text-base font-mono-num font-extrabold text-[#14855C] pt-1 block">£100.00</span>
+          </div>
+          <div class="p-4 rounded-[22px] bg-[#FFF6E5] border border-[#F5DFB3] space-y-1">
+            <span class="text-[11px] font-extrabold text-[#9E6B14] block">💡 Bills Pot Top-Up</span>
+            <span class="text-xs font-bold text-[#9E6B14] block">From Tesco</span>
+            <span id="p1-bills-topup" class="text-base font-mono-num font-extrabold text-[#B87914] pt-1 block">£100.77</span>
+          </div>
+          <div class="p-4 rounded-[22px] bg-[#FCE8EE] border border-[#F3C6D4] space-y-1">
+            <span class="text-[11px] font-extrabold text-[#B83B60] block">🏛️ UC Cash</span>
+            <span class="text-xs font-bold text-[#B83B60] block">For Bills</span>
+            <span id="p1-uc-cash" class="text-base font-mono-num font-extrabold text-[#D64B73] pt-1 block">£379.22</span>
+          </div>
+          <div class="p-4 pennli-subcard col-span-2 sm:col-span-1 space-y-1">
+            <span class="text-[11px] font-extrabold text-[#7D6E75] block">📝 Commitments</span>
+            <span class="text-xs font-bold text-[#7D6E75] block">Driving + SLC</span>
+            <span id="p1-commitments" class="text-base font-mono-num font-extrabold text-[#1F191C] pt-1 block">£174.00</span>
+          </div>
+        </div>
+
+        <div class="pt-2 flex flex-wrap justify-end gap-2">
+          <button
+            type="button"
+            onclick="switchPage(3)"
+            class="px-5 py-3 rounded-2xl bg-white hover:bg-[#FDF4F7] border border-[#EBD4DC] text-[#1F191C] text-xs font-extrabold transition-all flex items-center gap-2 active:scale-95 shadow-sm"
+          >
+            <span>📑 View Full Money Spreadsheet</span>
+          </button>
+          <button
+            type="button"
+            onclick="switchPage(2)"
+            class="px-5 py-3 rounded-2xl bg-[#FCE8EE] hover:bg-[#F7D4E0] border border-[#F3C6D4] text-[#C84369] text-xs font-extrabold transition-all flex items-center gap-2 active:scale-95 shadow-sm"
+          >
+            <span>Open Analyze &amp; Setup</span>
+            <span class="text-sm">→</span>
+          </button>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PAGE 2: FULL BUDGET ENGINE (PENNLI ANALYZE)-->
+    <!-- ========================================== -->
+    <div id="page-2-container" class="space-y-6 hidden">
+
+      <!-- High-level Summary Metrics (Pennli "Analyze" Top Cards) -->
+      <section class="pennli-panel p-6 space-y-5">
+        <div class="flex items-center justify-between border-b border-[#F2E2E8] pb-4">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-[#E05A80] block">📊 Analyze</span>
+            <h2 class="text-xl font-extrabold text-[#1F191C] tracking-tight mt-0.5">Monthly Overview</h2>
+          </div>
+          <span class="text-xs font-extrabold px-3.5 py-1.5 rounded-full bg-[#E7F7F0] text-[#14855C] border border-[#BCE8D6]">⚡ Live Math Active</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="p-5 rounded-2xl bg-[#E7F7F0] border border-[#C2EBD9] flex flex-col justify-between space-y-3">
+            <span class="text-xs font-extrabold text-[#147A54] block">🏛️ UC Cash Received</span>
+            <div>
+              <div id="uc-cash-display" class="text-2xl font-mono-num font-extrabold text-[#128058]">£379.22</div>
+              <div id="uc-taper-display" class="text-xs font-bold text-[#3E8E70] mt-1 font-mono-num">Base: £790.36 (-£411.14 taper)</div>
+            </div>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-[#FDF4F7] border border-[#F1D4DF] flex flex-col justify-between space-y-3">
+            <span class="text-xs font-extrabold text-[#7D6E75] block">📋 UC vs Fixed Bills</span>
+            <div>
+              <div id="uc-surplus-display" class="text-2xl font-mono-num font-extrabold text-[#1F191C]">-£100.77</div>
+              <div id="uc-surplus-desc" class="text-xs font-bold text-[#7D6E75] mt-1">Shortfall to cover £479.99 bills</div>
+            </div>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-[#FDF4F7] border border-[#F1D4DF] flex flex-col justify-between space-y-3">
+            <span class="text-xs font-extrabold text-[#7D6E75] block">💰 Joint Cash Left to Split</span>
+            <div>
+              <div id="total-cash-display" class="text-2xl font-mono-num font-extrabold text-[#E05A80]">£1,130.76</div>
+              <div class="text-xs font-bold text-[#7D6E75] mt-1">After Groceries &amp; Shortfall</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 01 (#4): Payday Radar & Double-Month Detector -->
+      <section class="pennli-panel p-6 space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#F2E2E8] pb-4">
+          <div>
+            <span class="text-xs font-extrabold text-[#7D6E75] block">📅 Coming Up This Month</span>
+            <h2 class="text-lg font-extrabold text-[#1F191C] tracking-tight mt-0.5">Upcoming Paydays &amp; Double-Month Detector</h2>
+          </div>
+          <span id="radar-status-badge" class="text-xs font-extrabold px-3.5 py-1.5 rounded-full bg-[#FCE8EE] text-[#C84369] border border-[#F4C4D3] self-start sm:self-center">Live Cycle</span>
+        </div>
+
+        <!-- Date Inputs -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="p-4 pennli-subcard space-y-2">
+            <label for="anchor-tesco-date" class="text-xs font-extrabold text-[#7D6E75] block">Known Tesco Payday (Friday)</label>
+            <input type="date" id="anchor-tesco-date" onchange="updatePaydayCalendar()" class="w-full px-3.5 py-2.5 pennli-input text-sm font-mono-num font-extrabold" />
+          </div>
+          <div class="p-4 pennli-subcard space-y-2">
+            <label for="uc-pay-day" class="text-xs font-extrabold text-[#7D6E75] block">UC Payment Day of Month (1–31)</label>
+            <input type="number" id="uc-pay-day" min="1" max="31" value="15" oninput="updatePaydayCalendar()" class="w-full px-3.5 py-2.5 pennli-input text-sm font-mono-num font-extrabold" />
+          </div>
+        </div>
+
+        <!-- Countdown & Double Month Alert Row -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="p-4 pennli-subcard flex flex-col justify-between space-y-2">
+            <span class="text-xs font-extrabold text-[#7D6E75]">⏳ Next Tesco Payday</span>
+            <div id="next-tesco-date-display" class="text-lg font-extrabold text-[#1F191C] font-mono-num">--</div>
+            <span id="next-tesco-countdown" class="text-xs font-extrabold text-[#14855C]">-- days away</span>
+          </div>
+
+          <div class="p-4 pennli-subcard flex flex-col justify-between space-y-2">
+            <span class="text-xs font-extrabold text-[#7D6E75]">⏳ Next Universal Credit</span>
+            <div id="next-uc-date-display" class="text-lg font-extrabold text-[#1F191C] font-mono-num">--</div>
+            <span id="next-uc-countdown" class="text-xs font-extrabold text-[#E05A80]">-- days away</span>
+          </div>
+
+          <div id="double-month-alert-box" class="p-4 rounded-[22px] bg-[#FFF6E5] border border-[#F5DFB3] flex flex-col justify-between space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-extrabold text-[#9E6B14]">⚠️ Next 2-Payday Month</span>
+              <button type="button" onclick="applyDetectedDoubleMonth()" class="text-[11px] font-extrabold px-3 py-1 rounded-full bg-white text-[#9E6B14] border border-[#ECCB8B] hover:bg-[#FFFDF9] transition-colors shadow-sm">Preview</button>
+            </div>
+            <div id="next-double-month-display" class="text-lg font-extrabold text-[#1F191C]">--</div>
+            <span id="next-double-month-dates" class="text-xs font-mono-num font-bold text-[#7D6E75]">--</span>
+          </div>
+        </div>
+
+        <!-- Upcoming 8-Payday Timeline Pills -->
+        <div class="pt-2">
+          <span class="text-xs font-extrabold text-[#7D6E75] block mb-3">Upcoming 4-Weekly Tesco Paydays (Double Months Highlighted):</span>
+          <div id="upcoming-paydays-pills" class="flex flex-wrap gap-2.5"></div>
+        </div>
+      </section>
+
+      <!-- Double Tesco Payday Mode Toggle -->
+      <section id="double-payday-card" class="pennli-panel p-6 transition-all duration-300">
+        <div class="flex items-center justify-between gap-4">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-2xl bg-[#FCE8EE] border border-[#F3C6D4] text-[#C84369] flex items-center justify-center font-extrabold text-base shrink-0">
+              2×
+            </div>
+            <div>
+              <div class="flex flex-wrap items-center gap-2">
+                <h2 class="text-base font-extrabold text-[#1F191C]">Double Tesco Payday Mode</h2>
+                <span id="double-payday-badge" class="text-[11px] font-bold px-3 py-1 rounded-full bg-[#FDF4F7] text-[#7D6E75] border border-[#EBD4DC]">Off • Normal Month</span>
+              </div>
+              <p class="text-xs font-medium text-[#7D6E75] mt-1">Turn on when two 4-weekly Tesco paychecks land inside the same Universal Credit period</p>
+            </div>
+          </div>
+
+          <button 
+            type="button" 
+            id="double-payday-toggle" 
+            onclick="toggleDoublePayday()" 
+            aria-pressed="false"
+            class="relative inline-flex shrink-0 cursor-pointer rounded-full border-2 border-[#E8C5D1] bg-[#F3DFE6] transition-colors duration-200 ease-in-out focus:outline-none p-0.5"
+            style="width: 56px; height: 30px;"
+          >
+            <span id="double-payday-knob" class="pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow-md transition duration-200 ease-in-out translate-x-0"></span>
+          </button>
+        </div>
+
+        <!-- Expandable Double Payday Breakdown Alert -->
+        <div id="double-payday-details" class="hidden mt-5 pt-5 border-t border-[#F2E2E8] space-y-4">
+          <div class="p-5 rounded-2xl bg-[#FFF8EB] border border-[#F3D79B] text-xs space-y-4">
+            <div class="flex items-center justify-between font-extrabold text-[#9E6B14] text-sm">
+              <span>⚠️ Two-Paycheck UC Assessment Active</span>
+              <span id="dp-total-wages" class="text-[#1F191C] font-mono-num font-extrabold">£2,863.06 Assessed</span>
+            </div>
+            <p class="text-xs font-medium text-[#5C4D54] leading-relaxed">
+              Because two Tesco paydays land inside one UC period, your assessed earnings double—reducing Universal Credit down to <strong id="dp-new-uc" class="text-[#1F191C] font-mono-num font-extrabold">£0.00</strong>.
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+              <div class="p-3.5 rounded-xl bg-white border border-[#F2E2E8] space-y-1">
+                <span class="text-[11px] font-extrabold text-[#7D6E75] block">UC Cash Drop</span>
+                <span id="dp-uc-drop" class="text-sm font-mono-num font-extrabold text-[#D64B73] block">-£379.22</span>
+              </div>
+              <div class="p-3.5 rounded-xl bg-white border border-[#F2E2E8] space-y-1">
+                <span class="text-[11px] font-extrabold text-[#7D6E75] block">Hold Back for Bills</span>
+                <span id="dp-hold-back" class="text-sm font-mono-num font-extrabold text-[#B87914] block">£479.99</span>
+              </div>
+              <div class="p-3.5 rounded-xl bg-[#E7F7F0] border border-[#BCE8D6] space-y-1">
+                <span class="text-[11px] font-extrabold text-[#147A54] block">Extra Pocket Boost</span>
+                <span id="dp-extra-boost" class="text-sm font-mono-num font-extrabold text-[#14855C] block">+£526.16 each</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 02: 2-Payday Action Plan -->
+      <section class="pennli-panel p-6 space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#F2E2E8] pb-4">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-[#E05A80] block">📝 Step-by-Step Guide</span>
+            <h2 class="text-xl font-extrabold text-[#1F191C] tracking-tight mt-0.5">The 2-Payday Action Plan</h2>
+          </div>
+          <p class="text-xs font-bold text-[#7D6E75] max-w-xs">
+            Tesco and Universal Credit arrive on different dates. Just follow the card for whichever payday lands today.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <!-- Box 1: TESCO PAYDAY -->
+          <div class="p-6 rounded-[24px] bg-[#FDF5F8] border border-[#F0D5DF] space-y-5 flex flex-col justify-between shadow-sm">
+            <div class="space-y-4">
+              <div class="flex items-start justify-between border-b border-[#F0D5DF] pb-3.5">
+                <div>
+                  <span class="text-xs font-extrabold text-[#E05A80] uppercase tracking-wider block">🛒 Every 4 Weeks</span>
+                  <h3 class="text-lg font-extrabold text-[#1F191C] mt-0.5">1. On Tesco Payday</h3>
+                </div>
+                <div class="text-right">
+                  <span class="text-[11px] font-extrabold text-[#7D6E75] block">Combined Pay In</span>
+                  <span id="action-tesco-in" class="text-lg font-mono-num font-extrabold text-[#1F191C]">£1,431.53</span>
+                </div>
+              </div>
+
+              <p class="text-xs font-bold text-[#7D6E75] leading-relaxed">
+                Both Tesco payslips land together. Do these <strong class="text-[#1F191C]">5 quick steps</strong> straight away:
+              </p>
+
+              <div class="space-y-2.5 text-xs">
+                <div class="flex items-center justify-between p-3.5 rounded-2xl bg-white border border-[#F0DCE3] shadow-sm">
+                  <span class="font-extrabold text-[#1F191C]">1. Move to Groceries Pot</span>
+                  <span class="font-mono-num font-extrabold text-[#1F191C]">£200.00</span>
+                </div>
+                <div class="flex items-center justify-between p-3.5 rounded-2xl bg-[#E7F7F0] border border-[#BCE8D6] shadow-sm">
+                  <div>
+                    <span class="font-extrabold text-[#147A54] block">2. Move to Joint Savings Pot</span>
+                    <span id="action-savings-desc" class="text-[11px] font-bold text-[#3E8E70]">£50 from Cian + £50 from Maegan</span>
+                  </div>
+                  <span id="action-savings-total" class="font-mono-num font-extrabold text-[#14855C]">£100.00</span>
+                </div>
+                <div class="flex items-center justify-between p-3.5 rounded-2xl bg-[#FFF6E5] border border-[#F5DFB3] shadow-sm">
+                  <div>
+                    <span class="font-extrabold text-[#9E6B14] block">3. Leave in Bills Pot (Top-Up)</span>
+                    <span class="text-[11px] font-bold text-[#9E7830]">Covers what UC doesn't reach</span>
+                  </div>
+                  <span id="action-bills-topup" class="font-mono-num font-extrabold text-[#B87914]">£100.77</span>
+                </div>
+                <div class="flex items-center justify-between p-3.5 rounded-2xl bg-white border border-[#F0DCE3] shadow-sm">
+                  <div>
+                    <span class="font-extrabold text-[#1F191C] block">4. Hold for Monthly Commitments</span>
+                    <span id="action-commitments-desc" class="text-[11px] font-bold text-[#7D6E75]">£70 Driving + £104 Maegan SLC</span>
+                  </div>
+                  <span id="action-commitments-total" class="font-mono-num font-extrabold text-[#1F191C]">£174.00</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-4 border-t border-[#F0D5DF] space-y-3">
+              <span class="text-xs font-extrabold text-[#7D6E75] block">5. Send 50/50 Pocket Money (£30 Phone &amp; Savings Included):</span>
+              <div class="grid grid-cols-2 gap-3">
+                <div class="p-3.5 rounded-2xl bg-white border border-[#F0DCE3] shadow-sm space-y-1">
+                  <span class="text-[11px] font-extrabold text-[#7D6E75] block">Cian Gets</span>
+                  <span id="action-cian-pocket" class="text-lg font-mono-num font-extrabold text-[#1F191C] block">£475.38</span>
+                </div>
+                <div class="p-3.5 rounded-2xl bg-[#FCE8EE] border border-[#F3C6D4] shadow-sm space-y-1">
+                  <span class="text-[11px] font-extrabold text-[#B83B60] block">Maegan Gets</span>
+                  <span id="action-maegan-pocket" class="text-lg font-mono-num font-extrabold text-[#D64B73] block">£381.38</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Box 2: UNIVERSAL CREDIT DAY -->
+          <div class="p-6 rounded-[24px] bg-[#FDF5F8] border border-[#F0D5DF] space-y-5 flex flex-col justify-between shadow-sm">
+            <div class="space-y-4">
+              <div class="flex items-start justify-between border-b border-[#F0D5DF] pb-3.5">
+                <div>
+                  <span class="text-xs font-extrabold text-[#14855C] uppercase tracking-wider block">🏛️ Once a Month</span>
+                  <h3 class="text-lg font-extrabold text-[#1F191C] mt-0.5">2. On Universal Credit Day</h3>
+                </div>
+                <div class="text-right">
+                  <span class="text-[11px] font-extrabold text-[#7D6E75] block">UC Cash In</span>
+                  <span id="action-uc-in" class="text-lg font-mono-num font-extrabold text-[#14855C]">£379.22</span>
+                </div>
+              </div>
+
+              <p class="text-xs font-bold text-[#7D6E75] leading-relaxed">
+                When Universal Credit lands on its separate date, <strong class="text-[#1F191C]">you don't need to split or move anything</strong>.
+              </p>
+
+              <div class="space-y-3 text-xs">
+                <div class="flex items-center justify-between p-4 rounded-2xl bg-[#E7F7F0] border border-[#BCE8D6] shadow-sm">
+                  <div>
+                    <span class="font-extrabold text-[#147A54] block">1. Leave 100% in Bills Account</span>
+                    <span class="text-[11px] font-bold text-[#3E8E70]">Joins the <strong id="action-uc-topup-inline" class="text-[#1F191C] font-mono-num">£100.77</strong> left from Tesco</span>
+                  </div>
+                  <span id="action-uc-keep" class="font-mono-num font-extrabold text-[#14855C]">£379.22</span>
+                </div>
+
+                <div class="p-4 rounded-2xl bg-white border border-[#F0DCE3] shadow-sm space-y-2">
+                  <div class="flex justify-between items-center text-xs font-extrabold text-[#1F191C]">
+                    <span>Total Ready in Bills Pot:</span>
+                    <span class="text-[#E05A80] font-mono-num font-extrabold text-sm">£479.99</span>
+                  </div>
+                  <p class="text-[11px] font-bold text-[#7D6E75] leading-relaxed">
+                    Automatically covers Council Tax (£145), Gas/Elec (£100), Water (£80), Internet (£50), Dad (£76), Google One (£18.99) &amp; YouTube (£10).
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-white border border-[#F0DCE3] shadow-sm space-y-1">
+              <span class="text-[11px] font-extrabold text-[#E05A80] block">✅ All Bills Covered</span>
+              <p id="action-uc-surplus-note" class="text-xs font-bold text-[#7D6E75] mt-1 leading-relaxed">
+                Rent (£460) goes direct to landlord. Your Bills Pot holds the exact £479.99 required.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- (#7): One-Tap "Send to Maegan" WhatsApp Payday Card -->
+        <div class="pt-4 border-t border-[#F2E2E8] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h3 class="text-sm font-extrabold text-[#1F191C]">WhatsApp Payday Summary</h3>
+            <p class="text-xs font-bold text-[#7D6E75]">Copy a clean message with today's exact numbers to send straight to Maegan</p>
+          </div>
+          <div class="flex items-center gap-2.5 shrink-0">
+            <button type="button" onclick="toggleWhatsAppPreview()" class="px-4 py-2.5 rounded-2xl bg-[#FDF4F7] hover:bg-[#FCE8EE] border border-[#EBD4DC] text-[#7D6E75] hover:text-[#1F191C] font-extrabold text-xs transition-all active:scale-95">
+              👁️ Preview Message
+            </button>
+            <button type="button" onclick="copyWhatsAppCard()" class="px-4 py-2.5 rounded-2xl bg-[#E05A80] hover:bg-[#C84369] text-white font-extrabold text-xs shadow-sm transition-all flex items-center gap-1.5 active:scale-95">
+              <span>📋 Copy for WhatsApp</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Expandable WhatsApp Message Preview -->
+        <div id="whatsapp-preview-drawer" class="hidden pt-2">
+          <div class="p-5 rounded-2xl bg-[#FDF4F7] border border-[#EBD4DC] space-y-3 shadow-inner">
+            <div class="flex items-center justify-between border-b border-[#EBD4DC] pb-2">
+              <span class="text-xs font-extrabold text-[#1F191C]">WhatsApp Message Preview</span>
+              <span class="text-[11px] font-bold text-[#7D6E75]">Tap copy above to share</span>
+            </div>
+            <pre id="whatsapp-preview-text" class="text-xs font-mono-num text-[#1F191C] whitespace-pre-wrap leading-relaxed select-all"></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 03: Household Wages Input -->
+      <section class="pennli-panel p-6 space-y-5">
+        <div class="flex items-center justify-between border-b border-[#F2E2E8] pb-4">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-[#7D6E75] block">💷 Monthly Earnings</span>
+            <h2 class="text-lg font-extrabold text-[#1F191C] tracking-tight mt-0.5">Tesco Take-Home Pay</h2>
+          </div>
+          <span id="pay-multiplier-pill" class="hidden text-xs font-extrabold bg-[#E05A80] text-white px-3.5 py-1.5 rounded-full shadow-sm">2× Paydays</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <!-- Cian's Pay -->
+          <div class="p-5 pennli-subcard space-y-4 shadow-sm">
+            <div class="flex items-center justify-between">
+              <div>
+                <label for="cian-pay-input" class="text-sm font-extrabold text-[#1F191C] block">Cian's Pay</label>
+                <span class="text-xs font-bold text-[#7D6E75]">16 hrs / week</span>
+              </div>
+              <div class="relative flex items-center">
+                <span class="absolute left-3 text-[#7D6E75] font-mono-num font-extrabold text-sm">£</span>
+                <input type="number" id="cian-pay-input" step="0.01" value="806.98" oninput="syncCianInput(this.value)" class="w-32 pl-7 pr-3 py-2 pennli-input text-base font-mono-num font-extrabold text-right" />
+              </div>
+            </div>
+            <input type="range" id="cian-pay-slider" min="0" max="1500" step="5" value="806.98" oninput="syncCianSlider(this.value)" class="w-full" />
+          </div>
+
+          <!-- Maegan's Pay -->
+          <div class="p-5 pennli-subcard space-y-4 shadow-sm">
+            <div class="flex items-center justify-between">
+              <div>
+                <label for="maegan-pay-input" class="text-sm font-extrabold text-[#1F191C] block">Maegan's Pay</label>
+                <span class="text-xs font-bold text-[#7D6E75]">12 hrs / week</span>
+              </div>
+              <div class="relative flex items-center">
+                <span class="absolute left-3 text-[#7D6E75] font-mono-num font-extrabold text-sm">£</span>
+                <input type="number" id="maegan-pay-input" step="0.01" value="624.55" oninput="syncMaeganInput(this.value)" class="w-32 pl-7 pr-3 py-2 pennli-input text-base font-mono-num font-extrabold text-right" />
+              </div>
+            </div>
+            <input type="range" id="maegan-pay-slider" min="0" max="1500" step="5" value="624.55" oninput="syncMaeganSlider(this.value)" class="w-full" />
+          </div>
+        </div>
+        
+        <div class="pt-3.5 border-t border-[#F2E2E8] flex justify-between items-center text-xs font-extrabold">
+          <span id="total-wages-label" class="text-[#7D6E75]">Combined Wages Assessed by UC:</span>
+          <span id="total-wages-display" class="text-base font-mono-num text-[#1F191C]">£1,431.53</span>
+        </div>
+      </section>
+
+      <!-- Joint Savings Contribution (£50 Each) -->
+      <section class="pennli-panel p-6 space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#F2E2E8] pb-4">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-[#14855C] block">🐷 Building Your Buffer</span>
+            <h2 class="text-lg font-extrabold text-[#1F191C] tracking-tight mt-0.5">Joint Savings Pot (£50 Each)</h2>
+          </div>
+          <span id="savings-monthly-badge" class="text-xs font-mono-num font-extrabold px-4 py-1.5 rounded-full bg-[#E7F7F0] text-[#14855C] border border-[#BCE8D6] self-start sm:self-center shadow-sm">
+            +£100.00 / month
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <!-- Per-Person Input -->
+          <div class="p-5 pennli-subcard space-y-3 flex flex-col justify-between shadow-sm">
+            <div>
+              <label for="savings-per-person-input" class="text-xs font-extrabold text-[#7D6E75] block">Taken From Each of You</label>
+              <p class="text-[11px] font-bold text-[#9A8991] mt-0.5">Deducted equally from Cian &amp; Maegan</p>
+            </div>
+            <div class="relative flex items-center pt-1">
+              <span class="absolute left-3 text-[#7D6E75] font-mono-num font-extrabold text-sm">£</span>
+              <input
+                type="number"
+                id="savings-per-person-input"
+                step="5"
+                value="50.00"
+                oninput="updateSavingsPerPerson(this.value)"
+                class="w-full pl-7 pr-3 py-2.5 pennli-input text-base font-mono-num font-extrabold text-[#14855C] text-right"
+              />
+            </div>
+          </div>
+
+          <!-- Monthly Total Going Into Savings -->
+          <div class="p-5 pennli-subcard space-y-2 flex flex-col justify-between shadow-sm">
+            <span class="text-xs font-extrabold text-[#7D6E75]">Added Every Payday</span>
+            <div id="savings-combined-display" class="text-2xl font-mono-num font-extrabold text-[#1F191C]">£100.00</div>
+            <span id="savings-split-note" class="text-xs font-mono-num font-extrabold text-[#14855C] bg-[#E7F7F0] px-3 py-1.5 rounded-xl border border-[#BCE8D6]">£50.00 Cian + £50.00 Maegan</span>
+          </div>
+
+          <!-- Total Saved Tracker -->
+          <div class="p-5 rounded-[22px] bg-[#E7F7F0] border border-[#BCE8D6] space-y-3 flex flex-col justify-between shadow-sm">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-extrabold text-[#147A54]">Total Pot Saved</span>
+              <div class="flex items-center gap-1.5">
+                <button type="button" onclick="adjustSavingsMonths(-1)" class="w-7 h-7 rounded-full bg-white border border-[#BCE8D6] text-[#147A54] font-mono-num font-extrabold text-xs flex items-center justify-center hover:bg-[#F2FBF7] active:scale-95 transition-all shadow-sm">-</button>
+                <span id="savings-months-badge" class="text-xs font-mono-num font-extrabold text-[#147A54] px-1.5">1 mo</span>
+                <button type="button" onclick="adjustSavingsMonths(1)" class="w-7 h-7 rounded-full bg-white border border-[#BCE8D6] text-[#147A54] font-mono-num font-extrabold text-xs flex items-center justify-center hover:bg-[#F2FBF7] active:scale-95 transition-all shadow-sm">+</button>
+              </div>
+            </div>
+            <div id="savings-accumulated-display" class="text-3xl font-mono-num font-extrabold text-[#128058]">£100.00</div>
+            <span class="text-[11px] font-bold text-[#3E8E70]">Tap + each payday you transfer</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 04: Live Debt Payoff Trackers -->
+      <section class="pennli-panel p-6 space-y-5">
+        <div class="flex items-center justify-between border-b border-[#F2E2E8] pb-4">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-[#C84369] block">🎯 Repayment Progress</span>
+            <h2 class="text-lg font-extrabold text-[#1F191C] tracking-tight mt-0.5">Debt Payoff Trackers</h2>
+          </div>
+          <span class="text-xs font-extrabold text-[#C84369] bg-[#FCE8EE] border border-[#F3C6D4] px-3.5 py-1.5 rounded-full shadow-sm">Live Balance</span>
+        </div>
+
+        <!-- Tracker 1: Maegan's Debt (Student Loans Company) -->
+        <div class="p-5 sm:p-6 pennli-subcard space-y-4 shadow-sm">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="space-y-1">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="text-sm font-extrabold text-[#1F191C]">Maegan's Debt • Student Loans Company</span>
+                <span class="text-[11px] font-extrabold bg-[#FCE8EE] text-[#C84369] px-3 py-0.5 rounded-full border border-[#F3C6D4]">1st of Month</span>
+              </div>
+              <p class="text-xs font-bold text-[#7D6E75]">
+                Starting Balance: <strong class="text-[#1F191C] font-mono-num">£2,400.00</strong> • Target Payoff: <strong class="text-[#1F191C]">November 2028</strong>
+              </p>
+            </div>
+            <div class="relative flex items-center sm:w-36 shrink-0">
+              <span class="absolute left-3 text-[#7D6E75] font-mono-num font-extrabold text-sm">£</span>
+              <input type="number" id="maegan-slc-input" step="0.01" value="104.00" oninput="updateMaeganSlcDebt(this.value)" class="w-full pl-7 pr-3 py-2 pennli-input text-sm font-mono-num font-extrabold text-[#D64B73] text-right" />
+            </div>
+          </div>
+
+          <div class="space-y-2.5">
+            <div class="flex justify-between text-xs font-mono-num font-extrabold">
+              <span class="text-[#7D6E75]">Paid: <strong id="slc-paid-amount" class="text-[#1F191C]">£104.00</strong> (<span id="slc-pct-text" class="text-[#E05A80]">4%</span>)</span>
+              <span class="text-[#7D6E75]">Remaining: <strong id="slc-remaining-amount" class="text-[#1F191C]">£2,296.00</strong></span>
+            </div>
+            <div class="w-full h-3 bg-[#F2CEDB] rounded-full overflow-hidden p-0.5 bg-white">
+              <div id="slc-progress-bar" class="h-full bg-[#E05A80] rounded-full transition-all duration-500" style="width: 4.33%"></div>
+            </div>
+            <div class="flex items-center justify-between pt-1">
+              <span id="slc-months-left" class="text-xs font-mono-num font-extrabold text-[#7D6E75]">23 payments left</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-extrabold text-[#7D6E75] mr-1">Months Paid:</span>
+                <button type="button" onclick="adjustSlcMonths(-1)" class="w-7 h-7 rounded-full bg-white border border-[#E8C5D1] text-[#C84369] font-mono-num font-extrabold text-xs flex items-center justify-center hover:bg-[#FCE8EE] active:scale-95 transition-all shadow-sm">-</button>
+                <span id="slc-months-paid-badge" class="text-xs font-mono-num font-extrabold text-[#1F191C] w-6 text-center">1</span>
+                <button type="button" onclick="adjustSlcMonths(1)" class="w-7 h-7 rounded-full bg-white border border-[#E8C5D1] text-[#C84369] font-mono-num font-extrabold text-xs flex items-center justify-center hover:bg-[#FCE8EE] active:scale-95 transition-all shadow-sm">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tracker 2: Cian's Center Parcs Payoff (To Dad) -->
+        <div class="p-5 sm:p-6 pennli-subcard space-y-4 shadow-sm">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="space-y-1">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="text-sm font-extrabold text-[#1F191C]">Center Parcs Payoff • To Dad</span>
+                <span class="text-[11px] font-extrabold bg-[#E7F7F0] text-[#147A54] px-3 py-0.5 rounded-full border border-[#BCE8D6]">£50/mo inside £76 Dad Bill</span>
+              </div>
+              <p class="text-xs font-bold text-[#7D6E75]">Covered inside UC Fixed Bills (£50 Center Parcs + £26 mobile contracts)</p>
+            </div>
+            <div class="flex items-center gap-2.5 shrink-0">
+              <label for="cp-total-input" class="text-xs font-extrabold text-[#7D6E75]">Total:</label>
+              <div class="relative flex items-center w-32">
+                <span class="absolute left-3 text-[#7D6E75] font-mono-num font-extrabold text-xs">£</span>
+                <input type="number" id="cp-total-input" step="10" value="500.00" oninput="updateCenterParcsTotal(this.value)" class="w-full pl-7 pr-3 py-2 pennli-input text-sm font-mono-num font-extrabold text-[#1F191C] text-right" />
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-2.5">
+            <div class="flex justify-between text-xs font-mono-num font-extrabold">
+              <span class="text-[#7D6E75]">Paid: <strong id="cp-paid-amount" class="text-[#1F191C]">£100.00</strong> (<span id="cp-pct-text" class="text-[#14855C]">20%</span>)</span>
+              <span class="text-[#7D6E75]">Remaining: <strong id="cp-remaining-amount" class="text-[#1F191C]">£400.00</strong></span>
+            </div>
+            <div class="w-full h-3 bg-[#F2CEDB] rounded-full overflow-hidden p-0.5 bg-white">
+              <div id="cp-progress-bar" class="h-full bg-[#E05A80] rounded-full transition-all duration-500" style="width: 20%"></div>
+            </div>
+            <div class="flex items-center justify-between pt-1">
+              <span id="cp-months-left" class="text-xs font-mono-num font-extrabold text-[#7D6E75]">8 payments left (£50/mo)</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-extrabold text-[#7D6E75] mr-1">Months Paid:</span>
+                <button type="button" onclick="adjustCpMonths(-1)" class="w-7 h-7 rounded-full bg-white border border-[#E8C5D1] text-[#C84369] font-mono-num font-extrabold text-xs flex items-center justify-center hover:bg-[#FCE8EE] active:scale-95 transition-all shadow-sm">-</button>
+                <span id="cp-months-paid-badge" class="text-xs font-mono-num font-extrabold text-[#1F191C] w-6 text-center">2</span>
+                <button type="button" onclick="adjustCpMonths(1)" class="w-7 h-7 rounded-full bg-white border border-[#E8C5D1] text-[#C84369] font-mono-num font-extrabold text-xs flex items-center justify-center hover:bg-[#FCE8EE] active:scale-95 transition-all shadow-sm">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Optional Extra Card / Debt -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3.5 border-t border-[#F2E2E8]">
+          <div class="p-4 pennli-subcard space-y-2 shadow-sm">
+            <label for="debt-input" class="block text-xs font-extrabold text-[#7D6E75]">Extra Credit Card Payment (Optional)</label>
+            <div class="relative flex items-center">
+              <span class="absolute left-3 text-[#7D6E75] font-mono-num font-extrabold text-sm">£</span>
+              <input type="number" id="debt-input" step="0.01" value="0.00" placeholder="0.00" oninput="updateDebt(this.value)" class="w-full pl-8 pr-3 py-2.5 pennli-input text-sm font-mono-num font-extrabold" />
+            </div>
+          </div>
+
+          <div class="p-4 pennli-subcard space-y-2 shadow-sm">
+            <label for="debt-payer-select" class="block text-xs font-extrabold text-[#7D6E75]">Deduct Extra Card From</label>
+            <select id="debt-payer-select" onchange="updateDebtPayer(this.value)" class="w-full px-3.5 py-2.5 pennli-input text-sm font-extrabold cursor-pointer">
+              <option value="cian">Cian Only</option>
+              <option value="maegan">Maegan Only</option>
+              <option value="split" selected>Split 50 / 50</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- NEW SECTION: One-Time Payments (Ad-hoc) -->
+      <section class="pennli-panel p-6 space-y-5">
+        <div class="flex items-center justify-between border-b border-[#F2E2E8] pb-4">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-[#E05A80] block">💸 Ad-hoc Expenses</span>
+            <h2 class="text-lg font-extrabold text-[#1F191C] tracking-tight mt-0.5">One-Time Payments</h2>
+          </div>
+          <span class="text-xs font-extrabold text-[#C84369] bg-[#FCE8EE] border border-[#F3C6D4] px-3.5 py-1.5 rounded-full shadow-sm">This Month</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="p-5 pennli-subcard space-y-2 shadow-sm">
+            <label for="onetime-input" class="block text-xs font-extrabold text-[#7D6E75]">Amount (e.g. paying someone back)</label>
+            <div class="relative flex items-center">
+              <span class="absolute left-3 text-[#7D6E75] font-mono-num font-extrabold text-sm">£</span>
+              <input type="number" id="onetime-input" step="0.01" value="0.00" placeholder="0.00" oninput="updateOneTime(this.value)" class="w-full pl-8 pr-3 py-2.5 pennli-input text-base font-mono-num font-extrabold text-[#D64B73]" />
+            </div>
+          </div>
+
+          <div class="p-5 pennli-subcard space-y-2 shadow-sm">
+            <label for="onetime-payer-select" class="block text-xs font-extrabold text-[#7D6E75]">Deduct One-Time Payment From</label>
+            <select id="onetime-payer-select" onchange="updateOneTimePayer(this.value)" class="w-full px-3.5 py-2.5 pennli-input text-sm font-extrabold cursor-pointer">
+              <option value="split" selected>Split 50 / 50</option>
+              <option value="cian">Cian Only</option>
+              <option value="maegan">Maegan Only</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 05: Personal Spending Breakdown (Receipt View) -->
+      <section class="pennli-panel p-6 space-y-5">
+        <div class="flex items-center justify-between border-b border-[#F2E2E8] pb-4">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-[#7D6E75] block">🧾 Personal Breakdown</span>
+            <h2 class="text-lg font-extrabold text-[#1F191C] tracking-tight mt-0.5">50/50 Pocket Money Split</h2>
+          </div>
+          <span class="text-xs px-3.5 py-1.5 rounded-full bg-[#FCE8EE] text-[#C84369] border border-[#F3C6D4] font-extrabold shadow-sm">Itemised</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <!-- Cian's Receipt -->
+          <div class="p-6 pennli-hero-card space-y-5 flex flex-col justify-between shadow-sm">
+            <div class="space-y-4">
+              <div class="flex items-center justify-between border-b border-[#F0D5DF] pb-3">
+                <span class="text-base font-extrabold text-[#1F191C]">👤 Cian's Share</span>
+                <span id="cian-deductions-badge" class="text-[11px] font-extrabold bg-white text-[#7D6E75] px-3 py-1 rounded-full border border-[#EBD4DC] shadow-sm">16 hrs/wk • -£70 Driving • -£50 Save</span>
+              </div>
+              
+              <div class="space-y-2 text-xs font-bold">
+                <div class="flex justify-between items-center bg-white rounded-2xl border border-[#F0DCE3] p-3 shadow-sm">
+                  <span class="text-[#1F191C]">+ 50% Tesco Wage Cut</span>
+                  <span id="cian-tesco-display" class="font-mono-num font-extrabold text-[#1F191C] text-sm">£615.77</span>
+                </div>
+
+                <div class="flex justify-between items-center px-3 py-2 bg-white/50 rounded-xl">
+                  <span class="text-[#7D6E75]">- Driving Lessons</span>
+                  <span class="font-mono-num font-extrabold text-[#D64B73]">-£70.00</span>
+                </div>
+
+                <div id="cian-savings-row" class="flex justify-between items-center px-3 py-2 rounded-2xl bg-[#E7F7F0] border border-[#BCE8D6]">
+                  <span class="text-[#147A54]">🐷 Joint Savings Contribution</span>
+                  <span id="cian-savings-receipt" class="font-mono-num font-extrabold text-[#14855C]">-£50.00</span>
+                </div>
+                
+                <div id="cian-uc-row" class="flex justify-between items-center px-3 py-2 bg-white/50 rounded-xl">
+                  <span id="cian-uc-label" class="text-[#7D6E75]">- Bill Shortfall Cut</span>
+                  <span id="cian-uc-surplus-display" class="font-mono-num font-extrabold text-[#5C4D54]">-£50.39</span>
+                </div>
+
+                <div id="cian-extra-debt-row" class="hidden justify-between items-center px-3 py-2 bg-white/50 rounded-xl">
+                  <span class="text-[#D64B73]">- Extra Card Debt</span>
+                  <span id="cian-extra-debt-display" class="font-mono-num font-extrabold text-[#D64B73]">-£0.00</span>
+                </div>
+
+                <div id="cian-onetime-row" class="hidden justify-between items-center px-3 py-2 rounded-2xl bg-[#FCE8EE] border border-[#F3C6D4]">
+                  <span class="text-[#B83B60]">- One-Time Payment</span>
+                  <span id="cian-onetime-display" class="font-mono-num font-extrabold text-[#D64B73]">-£0.00</span>
+                </div>
+                
+                <div class="flex justify-between items-center px-3 py-2 bg-[#E7F7F0] rounded-2xl border border-[#BCE8D6]">
+                  <span class="text-[#14855C]">+ Phone (From Maegan)</span>
+                  <span class="font-mono-num font-extrabold text-[#14855C]">+£30.00</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="flex justify-between items-end pt-4 border-t border-[#F0D5DF] mt-2">
+              <span class="text-xs font-extrabold text-[#7D6E75]">Final Pocket Money</span>
+              <div id="cian-total-display" class="text-3xl sm:text-4xl font-mono-num font-extrabold text-[#1F191C]">£475.38</div>
+            </div>
+          </div>
+
+          <!-- Maegan's Receipt -->
+          <div class="p-6 pennli-hero-card space-y-5 flex flex-col justify-between shadow-sm">
+            <div class="space-y-4">
+              <div class="flex items-center justify-between border-b border-[#F0D5DF] pb-3">
+                <span class="text-base font-extrabold text-[#1F191C]">👤 Maegan's Share</span>
+                <span id="maegan-deductions-badge" class="text-[11px] font-extrabold bg-white text-[#C84369] px-3 py-1 rounded-full border border-[#F3C6D4] shadow-sm">12 hrs/wk • -£104 SLC • -£50 Save</span>
+              </div>
+              
+              <div class="space-y-2 text-xs font-bold">
+                <div class="flex justify-between items-center bg-white rounded-2xl border border-[#F0DCE3] p-3 shadow-sm">
+                  <span class="text-[#1F191C]">+ 50% Tesco Wage Cut</span>
+                  <span id="maegan-tesco-display" class="font-mono-num font-extrabold text-[#1F191C] text-sm">£615.77</span>
+                </div>
+
+                <div class="flex justify-between items-center px-3 py-2 rounded-2xl bg-[#FCE8EE] border border-[#F3C6D4]">
+                  <span class="text-[#B83B60]">- Maegan's Debt (SLC)</span>
+                  <span id="maegan-slc-receipt" class="font-mono-num font-extrabold text-[#D64B73]">-£104.00</span>
+                </div>
+
+                <div id="maegan-savings-row" class="flex justify-between items-center px-3 py-2 rounded-2xl bg-[#E7F7F0] border border-[#BCE8D6]">
+                  <span class="text-[#147A54]">🐷 Joint Savings Contribution</span>
+                  <span id="maegan-savings-receipt" class="font-mono-num font-extrabold text-[#14855C]">-£50.00</span>
+                </div>
+                
+                <div id="maegan-uc-row" class="flex justify-between items-center px-3 py-2 bg-white/50 rounded-xl">
+                  <span id="maegan-uc-label" class="text-[#7D6E75]">- Bill Shortfall Cut</span>
+                  <span id="maegan-uc-surplus-display" class="font-mono-num font-extrabold text-[#5C4D54]">-£50.39</span>
+                </div>
+
+                <div id="maegan-extra-debt-row" class="hidden justify-between items-center px-3 py-2 bg-white/50 rounded-xl">
+                  <span class="text-[#D64B73]">- Extra Card Debt</span>
+                  <span id="maegan-extra-debt-display" class="font-mono-num font-extrabold text-[#D64B73]">-£0.00</span>
+                </div>
+
+                <div id="maegan-onetime-row" class="hidden justify-between items-center px-3 py-2 rounded-2xl bg-[#FCE8EE] border border-[#F3C6D4]">
+                  <span class="text-[#B83B60]">- One-Time Payment</span>
+                  <span id="maegan-onetime-display" class="font-mono-num font-extrabold text-[#D64B73]">-£0.00</span>
+                </div>
+                
+                <div class="flex justify-between items-center px-3 py-2 bg-white/50 rounded-xl">
+                  <span class="text-[#D64B73]">- Phone (To Cian)</span>
+                  <span class="font-mono-num font-extrabold text-[#D64B73]">-£30.00</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="flex justify-between items-end pt-4 border-t border-[#F0D5DF] mt-2">
+              <span class="text-xs font-extrabold text-[#7D6E75]">Final Pocket Money</span>
+              <div id="maegan-total-display" class="text-3xl sm:text-4xl font-mono-num font-extrabold text-[#E05A80]">£381.38</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- History Log Section -->
+      <section id="history-section" class="pennli-panel p-6 space-y-4 hidden">
+        <div class="flex items-center justify-between border-b border-[#F2E2E8] pb-3">
+          <h2 class="text-sm font-extrabold text-[#1F191C]">💾 Saved Monthly History</h2>
+          <button onclick="clearHistory()" class="text-xs text-[#D64B73] font-extrabold hover:underline">Clear History</button>
+        </div>
+        <div id="history-list" class="space-y-3"></div>
+      </section>
+
+    </div> <!-- End Page 2 Container -->
+
+    <!-- ========================================== -->
+    <!-- PAGE 3: FULL MONEY SPREADSHEET             -->
+    <!-- ========================================== -->
+    <div id="page-3-container" class="space-y-6 hidden">
+
+      <!-- Top Money In vs Money Out Summary Cards -->
+      <section class="pennli-panel p-6 space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#F2E2E8] pb-4">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-[#E05A80] block">📑 Clear Spreadsheet View</span>
+            <h2 class="text-xl font-extrabold text-[#1F191C] tracking-tight mt-0.5">Where Every Penny Goes</h2>
+          </div>
+          <span class="text-xs font-extrabold px-3.5 py-1.5 rounded-full bg-[#FCE8EE] text-[#C84369] border border-[#F3C6D4] self-start sm:self-center">
+            100% Accounted For
+          </span>
+        </div>
+
+        <!-- 3 Simple Money Source Boxes -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="p-4 rounded-2xl bg-[#FDF4F7] border border-[#F1D4DF] space-y-1">
+            <span class="text-xs font-extrabold text-[#7D6E75] block">🛒 1. Tesco Wages In</span>
+            <div id="sheet-tesco-in" class="text-2xl font-mono-num font-extrabold text-[#1F191C]">£1,431.53</div>
+            <span id="sheet-tesco-sub" class="text-[11px] font-bold text-[#7D6E75] block">Cian £806.98 + Maegan £624.55</span>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-[#E7F7F0] border border-[#C2EBD9] space-y-1">
+            <span class="text-xs font-extrabold text-[#147A54] block">🏛️ 2. Universal Credit In</span>
+            <div id="sheet-uc-in" class="text-2xl font-mono-num font-extrabold text-[#128058]">£379.22</div>
+            <span class="text-[11px] font-bold text-[#3E8E70] block">+ £460.00 Rent Direct to Landlord</span>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-[#FFF6E5] border border-[#F5DFB3] space-y-1">
+            <span class="text-xs font-extrabold text-[#9E6B14] block">💰 Total Household Money</span>
+            <div id="sheet-total-income" class="text-2xl font-mono-num font-extrabold text-[#B87914]">£1,810.75</div>
+            <span class="text-[11px] font-bold text-[#9E7830] block">£2,270.75 including £460 Rent</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Main Spreadsheet Table -->
+      <section class="pennli-panel overflow-hidden">
+        <div class="p-6 border-b border-[#F2E2E8] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-[#7D6E75] block">📋 Line-by-Line Table</span>
+            <h3 class="text-lg font-extrabold text-[#1F191C] mt-0.5">What We Spend, How Much &amp; Where It Comes From</h3>
+          </div>
+          <span class="text-xs font-bold text-[#7D6E75]">Updates automatically with your sliders</span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-[#FDF4F7] border-b border-[#F0DCE3] text-[11px] font-extrabold uppercase tracking-wider text-[#7D6E75]">
+                <th class="py-3.5 px-4 sm:px-6">What We're Spending On</th>
+                <th class="py-3.5 px-3 text-right">How Much</th>
+                <th class="py-3.5 px-4 sm:px-6">Where It Comes From</th>
+                <th class="py-3.5 px-4 sm:px-6 hidden sm:table-cell">When / How It's Paid</th>
+              </tr>
+            </thead>
+            <tbody id="spreadsheet-tbody" class="divide-y divide-[#F2E2E8] text-xs font-bold">
+              <!-- Populated dynamically via JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Bottom Quick Key / Legend -->
+      <section class="pennli-panel p-5 flex flex-wrap items-center justify-between gap-3 text-xs font-bold">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-[#7D6E75] font-extrabold mr-1">Color Key:</span>
+          <span class="px-3 py-1 rounded-full bg-[#E7F7F0] text-[#147A54] border border-[#BCE8D6]">🏛️ Bills Pot (UC + Tesco Top-Up)</span>
+          <span class="px-3 py-1 rounded-full bg-[#FCE8EE] text-[#C84369] border border-[#F3C6D4]">🛒 Joint Tesco Pay</span>
+          <span class="px-3 py-1 rounded-full bg-[#FFF6E5] text-[#9E6B14] border border-[#F5DFB3]">👤 Personal Share</span>
+        </div>
+      </section>
+
+    </div> <!-- End Page 3 Container -->
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-[#1F191C] text-white px-6 py-3 rounded-full font-extrabold text-xs shadow-2xl flex items-center gap-2 opacity-0 pointer-events-none transition-all duration-300 transform translate-y-4 z-50">
+      <span id="toast-text">Saved!</span>
+    </div>
+
+  </div>
+
+  <!-- Floating Pennli / iOS Frosted Bottom Tab Switcher -->
+  <div class="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 w-[94%] max-w-lg ios-frosted-bar rounded-full p-1.5 grid grid-cols-3 gap-1 shadow-lg">
+    <button
+      type="button"
+      id="bottom-tab-1"
+      onclick="switchPage(1)"
+      class="py-2.5 px-2 rounded-full text-[11px] sm:text-xs font-extrabold transition-all flex items-center justify-center gap-1.5 bg-[#FCE8EE] text-[#C84369] shadow-sm"
+    >
+      <span class="text-sm">👜</span>
+      <span>Safe Spend</span>
+    </button>
+    <button
+      type="button"
+      id="bottom-tab-2"
+      onclick="switchPage(2)"
+      class="py-2.5 px-2 rounded-full text-[11px] sm:text-xs font-extrabold transition-all flex items-center justify-center gap-1.5 text-[#7D6E75] hover:text-[#1F191C]"
+    >
+      <span class="text-sm">📊</span>
+      <span>Analyze</span>
+    </button>
+    <button
+      type="button"
+      id="bottom-tab-3"
+      onclick="switchPage(3)"
+      class="py-2.5 px-2 rounded-full text-[11px] sm:text-xs font-extrabold transition-all flex items-center justify-center gap-1.5 text-[#7D6E75] hover:text-[#1F191C]"
+    >
+      <span class="text-sm">📑</span>
+      <span>Spreadsheet</span>
+    </button>
+  </div>
+
+  <footer class="text-center text-xs font-bold text-[#9A8991] py-6 relative z-10">
+    Pennli-Inspired Pastel Edition • Auto-Save Active
+  </footer>
+
+  <script>
+    // Constant Financial Parameters
+    const BASE_UC = 790.36;
+    const WORK_ALLOWANCE = 684.00;
+    const TAPER_RATE = 0.55;
+    const FIXED_BILLS = 479.99;
+    const DRIVING_LESSONS = 70.00;
+    const GROCERIES = 200.00;
+    const MAEGAN_PHONE = 30.00;
+    const SLC_STARTING_TOTAL = 2400.00;
+    const CP_MONTHLY_PAYMENT = 50.00;
+
+    // Load saved state or defaults
+    let currentCianPay = parseFloat(localStorage.getItem('cianPay')) || 806.98;
+    let currentMaeganPay = parseFloat(localStorage.getItem('maeganPay')) || 624.55;
+    let maeganSlcDebt = parseFloat(localStorage.getItem('slcDebt')) || 104.00;
+    let savingsPerPerson = localStorage.getItem('savingsPerPerson') !== null ? parseFloat(localStorage.getItem('savingsPerPerson')) : 50.00;
+    let savingsMonthsCount = parseInt(localStorage.getItem('savingsMonthsCount')) || 1;
+    let currentDebt = parseFloat(localStorage.getItem('extraDebt')) || 0.00;
+    let debtPayer = localStorage.getItem('debtPayer') || 'split';
+    let currentOneTime = parseFloat(localStorage.getItem('oneTimeAmount')) || 0.00;
+    let oneTimePayer = localStorage.getItem('oneTimePayer') || 'split';
+    let isDoublePayday = localStorage.getItem('isDoublePayday') === 'true';
+    let slcMonthsPaid = parseInt(localStorage.getItem('slcMonths')) || 1;
+    let cpStartingTotal = parseFloat(localStorage.getItem('cpTotal')) || 500.00;
+    let cpMonthsPaid = parseInt(localStorage.getItem('cpMonths')) || 2;
+    let anchorTescoDate = localStorage.getItem('anchorTescoDate') || '2026-10-16';
+    let ucPayDay = parseInt(localStorage.getItem('ucPayDay')) || 15;
+    let currentPage = parseInt(localStorage.getItem('activeBudgetPage')) || 1;
+    let cianWeeksSpent = JSON.parse(localStorage.getItem('cianWeeksSpent') || '[false,false,false,false]');
+    let maeganWeeksSpent = JSON.parse(localStorage.getItem('maeganWeeksSpent') || '[false,false,false,false]');
+
+    // Sync input values on load
+    document.getElementById('cian-pay-input').value = currentCianPay.toFixed(2);
+    document.getElementById('cian-pay-slider').value = Math.min(currentCianPay, 1500);
+    document.getElementById('maegan-pay-input').value = currentMaeganPay.toFixed(2);
+    document.getElementById('maegan-pay-slider').value = Math.min(currentMaeganPay, 1500);
+    document.getElementById('maegan-slc-input').value = maeganSlcDebt.toFixed(2);
+    document.getElementById('savings-per-person-input').value = savingsPerPerson.toFixed(2);
+    document.getElementById('cp-total-input').value = cpStartingTotal.toFixed(2);
+    document.getElementById('debt-input').value = currentDebt.toFixed(2);
+    document.getElementById('debt-payer-select').value = debtPayer;
+    document.getElementById('onetime-input').value = currentOneTime.toFixed(2);
+    document.getElementById('onetime-payer-select').value = oneTimePayer;
+    document.getElementById('anchor-tesco-date').value = anchorTescoDate;
+    document.getElementById('uc-pay-day').value = ucPayDay;
+
+    if (isDoublePayday) {
+      isDoublePayday = false; // toggle function will set it true cleanly
+      toggleDoublePayday();
+    }
+
+    function saveState() {
+      localStorage.setItem('cianPay', currentCianPay);
+      localStorage.setItem('maeganPay', currentMaeganPay);
+      localStorage.setItem('slcDebt', maeganSlcDebt);
+      localStorage.setItem('savingsPerPerson', savingsPerPerson);
+      localStorage.setItem('savingsMonthsCount', savingsMonthsCount);
+      localStorage.setItem('extraDebt', currentDebt);
+      localStorage.setItem('debtPayer', debtPayer);
+      localStorage.setItem('oneTimeAmount', currentOneTime);
+      localStorage.setItem('oneTimePayer', oneTimePayer);
+      localStorage.setItem('isDoublePayday', isDoublePayday);
+      localStorage.setItem('slcMonths', slcMonthsPaid);
+      localStorage.setItem('cpTotal', cpStartingTotal);
+      localStorage.setItem('cpMonths', cpMonthsPaid);
+      localStorage.setItem('anchorTescoDate', anchorTescoDate);
+      localStorage.setItem('ucPayDay', ucPayDay);
+      localStorage.setItem('activeBudgetPage', currentPage);
+      localStorage.setItem('cianWeeksSpent', JSON.stringify(cianWeeksSpent));
+      localStorage.setItem('maeganWeeksSpent', JSON.stringify(maeganWeeksSpent));
+    }
+
+    function switchPage(pageNum) {
+      currentPage = pageNum;
+      const pages = [1, 2, 3];
+
+      pages.forEach(num => {
+        const container = document.getElementById(`page-${num}-container`);
+        const topTab = document.getElementById(`tab-page-${num}`);
+        const bottomTab = document.getElementById(`bottom-tab-${num}`);
+
+        if (num === pageNum) {
+          if (container) container.classList.remove('hidden');
+          if (topTab) topTab.className = 'py-3 px-2 sm:px-4 rounded-2xl text-[11px] sm:text-xs font-extrabold transition-all bg-white text-[#1F191C] shadow-sm flex items-center justify-center gap-1.5';
+          if (bottomTab) bottomTab.className = 'py-2.5 px-2 rounded-full text-[11px] sm:text-xs font-extrabold transition-all flex items-center justify-center gap-1.5 bg-[#FCE8EE] text-[#C84369] shadow-sm';
+        } else {
+          if (container) container.classList.add('hidden');
+          if (topTab) topTab.className = 'py-3 px-2 sm:px-4 rounded-2xl text-[11px] sm:text-xs font-extrabold transition-all text-[#7D6E75] hover:text-[#1F191C] flex items-center justify-center gap-1.5';
+          if (bottomTab) bottomTab.className = 'py-2.5 px-2 rounded-full text-[11px] sm:text-xs font-extrabold transition-all flex items-center justify-center gap-1.5 text-[#7D6E75] hover:text-[#1F191C]';
+        }
+      });
+
+      saveState();
+    }
+
+    function toggleWeekSpent(person, weekIdx) {
+      if (person === 'cian') {
+        cianWeeksSpent[weekIdx] = !cianWeeksSpent[weekIdx];
+      } else {
+        maeganWeeksSpent[weekIdx] = !maeganWeeksSpent[weekIdx];
+      }
+      saveState();
+      updateDOM(calculateBudget(currentCianPay, currentMaeganPay, maeganSlcDebt, currentDebt, debtPayer));
+    }
+
+    function resetWeeksTracker() {
+      cianWeeksSpent = [false, false, false, false];
+      maeganWeeksSpent = [false, false, false, false];
+      saveState();
+      updateDOM(calculateBudget(currentCianPay, currentMaeganPay, maeganSlcDebt, currentDebt, debtPayer));
+      showToast('4-Week tracker reset!');
+    }
+
+    // (#4) Automatic Next Payday & Double Month Detector
+    function updatePaydayCalendar() {
+      const dateVal = document.getElementById('anchor-tesco-date').value;
+      let ucDayVal = parseInt(document.getElementById('uc-pay-day').value);
+      if (isNaN(ucDayVal) || ucDayVal < 1) ucDayVal = 1;
+      if (ucDayVal > 31) ucDayVal = 31;
+
+      if (dateVal) anchorTescoDate = dateVal;
+      ucPayDay = ucDayVal;
+      saveState();
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      // Parse anchor date safely at midnight local time
+      const parts = anchorTescoDate.split('-');
+      let payCursor = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+      payCursor.setHours(0, 0, 0, 0);
+
+      // Roll backward or forward in 28-day steps so payCursor is the first payday >= today
+      const msPerDay = 1000 * 60 * 60 * 24;
+      while (payCursor < today) {
+        payCursor = new Date(payCursor.getTime() + 28 * msPerDay);
+      }
+      while (payCursor.getTime() - 28 * msPerDay >= today.getTime()) {
+        payCursor = new Date(payCursor.getTime() - 28 * msPerDay);
+      }
+
+      // Generate next 14 Tesco paydays (approx 1 year)
+      const upcomingPaydays = [];
+      let tempCursor = new Date(payCursor.getTime());
+      for (let i = 0; i < 14; i++) {
+        upcomingPaydays.push(new Date(tempCursor.getTime()));
+        tempCursor = new Date(tempCursor.getTime() + 28 * msPerDay);
+      }
+
+      // Next Tesco Payday display
+      const nextTesco = upcomingPaydays[0];
+      const tescoDaysDiff = Math.round((nextTesco - today) / msPerDay);
+      const nextTescoFormatted = nextTesco.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+      document.getElementById('next-tesco-date-display').innerText = nextTescoFormatted;
+      document.getElementById('next-tesco-countdown').innerText = tescoDaysDiff === 0 ? '🎉 TODAY!' : (tescoDaysDiff === 1 ? 'Tomorrow!' : `In ${tescoDaysDiff} days`);
+      const p1NextTesco = document.getElementById('p1-next-tesco');
+      if (p1NextTesco) {
+        p1NextTesco.innerText = `${nextTescoFormatted} (${tescoDaysDiff === 0 ? 'Today' : tescoDaysDiff + 'd'})`;
+      }
+
+      // Next UC Payday display
+      let nextUc = new Date(today.getFullYear(), today.getMonth(), Math.min(ucPayDay, new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate()));
+      if (nextUc < today) {
+        nextUc = new Date(today.getFullYear(), today.getMonth() + 1, Math.min(ucPayDay, new Date(today.getFullYear(), today.getMonth() + 2, 0).getDate()));
+      }
+      const ucDaysDiff = Math.round((nextUc - today) / msPerDay);
+      document.getElementById('next-uc-date-display').innerText = nextUc.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+      document.getElementById('next-uc-countdown').innerText = ucDaysDiff === 0 ? '🎉 TODAY!' : (ucDaysDiff === 1 ? 'Tomorrow!' : `In ${ucDaysDiff} days`);
+
+      // Group paydays by calendar month to detect 2-payday months
+      const monthMap = {};
+      upcomingPaydays.forEach(d => {
+        const key = `${d.getFullYear()}-${d.getMonth()}`;
+        if (!monthMap[key]) monthMap[key] = [];
+        monthMap[key].push(d);
+      });
+
+      let firstDoubleMonth = null;
+      for (const key in monthMap) {
+        if (monthMap[key].length >= 2) {
+          firstDoubleMonth = monthMap[key];
+          break;
+        }
+      }
+
+      const doubleMonthTitle = document.getElementById('next-double-month-display');
+      const doubleMonthDates = document.getElementById('next-double-month-dates');
+      const radarBadge = document.getElementById('radar-status-badge');
+
+      if (firstDoubleMonth) {
+        const mName = firstDoubleMonth[0].toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+        const d1 = firstDoubleMonth[0].toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+        const d2 = firstDoubleMonth[1].toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+        doubleMonthTitle.innerText = mName;
+        doubleMonthDates.innerText = `Paydays: ${d1} & ${d2}`;
+
+        const isCurrentMonthDouble = firstDoubleMonth[0].getMonth() === today.getMonth() && firstDoubleMonth[0].getFullYear() === today.getFullYear();
+        if (isCurrentMonthDouble) {
+          radarBadge.innerText = '⚠️ Double Month Now!';
+          radarBadge.className = 'text-xs font-extrabold px-3.5 py-1.5 rounded-full bg-[#FFF6E5] text-[#9E6B14] border border-[#F5DFB3] self-start sm:self-center shadow-sm';
+        } else {
+          radarBadge.innerText = `Next Double: ${firstDoubleMonth[0].toLocaleDateString('en-GB', { month: 'short' })}`;
+          radarBadge.className = 'text-xs font-extrabold px-3.5 py-1.5 rounded-full bg-[#FCE8EE] text-[#C84369] border border-[#F4C4D3] self-start sm:self-center shadow-sm';
+        }
+      } else {
+        doubleMonthTitle.innerText = 'None Soon';
+        doubleMonthDates.innerText = '1 payday per month';
+      }
+
+      // Render upcoming 8 payday pills
+      const pillsContainer = document.getElementById('upcoming-paydays-pills');
+      pillsContainer.innerHTML = '';
+      upcomingPaydays.slice(0, 8).forEach((d, idx) => {
+        const key = `${d.getFullYear()}-${d.getMonth()}`;
+        const isDouble = monthMap[key] && monthMap[key].length >= 2;
+        const span = document.createElement('span');
+        span.className = isDouble
+          ? 'text-xs font-mono-num font-extrabold px-3.5 py-1.5 rounded-2xl bg-[#E05A80] text-white shadow-sm'
+          : (idx === 0 ? 'text-xs font-mono-num font-extrabold px-3.5 py-1.5 rounded-2xl bg-[#FCE8EE] text-[#C84369] border border-[#F3C6D4]' : 'text-xs font-mono-num font-bold px-3.5 py-1.5 rounded-2xl bg-[#FDF4F7] text-[#7D6E75] border border-[#EBD4DC]');
+        span.innerText = `${isDouble ? '2× ' : ''}${d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}`;
+        pillsContainer.appendChild(span);
+      });
+    }
+
+    function applyDetectedDoubleMonth() {
+      if (!isDoublePayday) {
+        toggleDoublePayday();
+        showToast('Double Tesco Payday Mode switched ON!');
+      } else {
+        showToast('Double Payday Mode is already active!');
+      }
+    }
+
+    function calculateBudget(cianPay = currentCianPay, maeganPay = currentMaeganPay, slcDebt = maeganSlcDebt, debtAmount = currentDebt, payer = debtPayer, oneTimeAmount = currentOneTime, onePayer = oneTimePayer, doublePayday = isDoublePayday) {
+      const singleMonthCombined = cianPay + maeganPay;
+      const multiplier = doublePayday ? 2 : 1;
+      const totalTescoPay = singleMonthCombined * multiplier;
+
+      const normalOverAllowance = Math.max(0, singleMonthCombined - WORK_ALLOWANCE);
+      const normalTaper = normalOverAllowance * TAPER_RATE;
+      const normalUcCash = Math.max(0, BASE_UC - normalTaper);
+
+      const earningsOverAllowance = Math.max(0, totalTescoPay - WORK_ALLOWANCE);
+      const taperDeduction = earningsOverAllowance * TAPER_RATE;
+      const ucCashReceived = Math.max(0, BASE_UC - taperDeduction);
+
+      const ucSurplus = ucCashReceived - FIXED_BILLS;
+      const jointTescoAfterGroceries = Math.max(0, totalTescoPay - GROCERIES);
+      const distributedUC = ucSurplus < 0 ? ucSurplus : 0;
+      const totalHouseholdCash = jointTescoAfterGroceries + distributedUC;
+
+      let cianDebtShare = 0;
+      let maeganDebtShare = 0;
+
+      if (payer === 'cian') cianDebtShare = debtAmount;
+      else if (payer === 'maegan') maeganDebtShare = debtAmount;
+      else { cianDebtShare = debtAmount / 2; maeganDebtShare = debtAmount / 2; }
+
+      let cianOneTimeShare = 0;
+      let maeganOneTimeShare = 0;
+
+      if (onePayer === 'cian') cianOneTimeShare = oneTimeAmount;
+      else if (onePayer === 'maegan') maeganOneTimeShare = oneTimeAmount;
+      else { cianOneTimeShare = oneTimeAmount / 2; maeganOneTimeShare = oneTimeAmount / 2; }
+
+      const tescoHalf = jointTescoAfterGroceries / 2;
+      const halfShortfall = distributedUC < 0 ? Math.abs(distributedUC / 2) : 0;
+      const totalMonthlySavings = savingsPerPerson * 2;
+
+      const cianTotal = tescoHalf - DRIVING_LESSONS - savingsPerPerson - halfShortfall - cianDebtShare - cianOneTimeShare + MAEGAN_PHONE;
+      const maeganTotal = tescoHalf - slcDebt - savingsPerPerson - halfShortfall - maeganDebtShare - maeganOneTimeShare - MAEGAN_PHONE;
+      const extraBoostPerPerson = tescoHalf - (Math.max(0, singleMonthCombined - GROCERIES) / 2);
+
+      return {
+        singleMonthCombined, totalTescoPay, taperDeduction, ucCashReceived, ucSurplus, distributedUC, totalHouseholdCash,
+        slcDebt, savingsPerPerson, totalMonthlySavings, debtAmount, payer, cianDebtShare, maeganDebtShare,
+        oneTimeAmount, onePayer, cianOneTimeShare, maeganOneTimeShare,
+        tescoHalf, halfShortfall, cianTotal, maeganTotal, doublePayday, normalUcCash, extraBoostPerPerson
+      };
+    }
+
+    function updateSavingsTracker(calc) {
+      const each = calc.savingsPerPerson;
+      const combined = calc.totalMonthlySavings;
+      const accumulated = combined * savingsMonthsCount;
+
+      document.getElementById('savings-monthly-badge').innerText = `+£${combined.toFixed(2)} / month`;
+      document.getElementById('savings-combined-display').innerText = `£${combined.toFixed(2)}`;
+      document.getElementById('savings-split-note').innerText = `£${each.toFixed(2)} Cian + £${each.toFixed(2)} Maegan`;
+      document.getElementById('savings-months-badge').innerText = `${savingsMonthsCount} mo`;
+      document.getElementById('savings-accumulated-display').innerText = `£${accumulated.toFixed(2)}`;
+    }
+
+    function updateSavingsPerPerson(val) {
+      let num = parseFloat(val);
+      if (isNaN(num) || num < 0) num = 0;
+      savingsPerPerson = num;
+      saveState();
+      updateDOM(calculateBudget(currentCianPay, currentMaeganPay, maeganSlcDebt, currentDebt, debtPayer));
+    }
+
+    function adjustSavingsMonths(delta) {
+      savingsMonthsCount = Math.max(0, savingsMonthsCount + delta);
+      saveState();
+      updateDOM(calculateBudget(currentCianPay, currentMaeganPay, maeganSlcDebt, currentDebt, debtPayer));
+    }
+
+    function updateDebtTrackers() {
+      const slcPaid = Math.min(SLC_STARTING_TOTAL, slcMonthsPaid * maeganSlcDebt);
+      const slcRemaining = Math.max(0, SLC_STARTING_TOTAL - slcPaid);
+      const slcPct = SLC_STARTING_TOTAL > 0 ? Math.min(100, (slcPaid / SLC_STARTING_TOTAL) * 100) : 100;
+      const slcPaymentsLeft = maeganSlcDebt > 0 ? Math.ceil(slcRemaining / maeganSlcDebt) : 0;
+
+      document.getElementById('slc-paid-amount').innerText = `£${slcPaid.toFixed(2)}`;
+      document.getElementById('slc-pct-text').innerText = `${Math.round(slcPct)}%`;
+      document.getElementById('slc-remaining-amount').innerText = `£${slcRemaining.toFixed(2)}`;
+      document.getElementById('slc-progress-bar').style.width = `${slcPct}%`;
+      document.getElementById('slc-months-paid-badge').innerText = slcMonthsPaid;
+      document.getElementById('slc-months-left').innerText = slcRemaining <= 0 ? `🎉 PAID OFF!` : `${slcPaymentsLeft} payments left`;
+
+      const cpPaid = Math.min(cpStartingTotal, cpMonthsPaid * CP_MONTHLY_PAYMENT);
+      const cpRemaining = Math.max(0, cpStartingTotal - cpPaid);
+      const cpPct = cpStartingTotal > 0 ? Math.min(100, (cpPaid / cpStartingTotal) * 100) : 100;
+      const cpPaymentsLeft = Math.ceil(cpRemaining / CP_MONTHLY_PAYMENT);
+
+      document.getElementById('cp-paid-amount').innerText = `£${cpPaid.toFixed(2)}`;
+      document.getElementById('cp-pct-text').innerText = `${Math.round(cpPct)}%`;
+      document.getElementById('cp-remaining-amount').innerText = `£${cpRemaining.toFixed(2)}`;
+      document.getElementById('cp-progress-bar').style.width = `${cpPct}%`;
+      document.getElementById('cp-months-paid-badge').innerText = cpMonthsPaid;
+      document.getElementById('cp-months-left').innerText = cpRemaining <= 0 ? `🎉 PAID OFF!` : `${cpPaymentsLeft} payments left (£50/mo)`;
+    }
+
+    function toggleDoublePayday() {
+      isDoublePayday = !isDoublePayday;
+      const toggleBtn = document.getElementById('double-payday-toggle');
+      const knob = document.getElementById('double-payday-knob');
+      const badge = document.getElementById('double-payday-badge');
+      const details = document.getElementById('double-payday-details');
+      const pill = document.getElementById('pay-multiplier-pill');
+
+      toggleBtn.setAttribute('aria-pressed', isDoublePayday);
+
+      if (isDoublePayday) {
+        toggleBtn.classList.remove('bg-[#F3DFE6]', 'border-[#E8C5D1]');
+        toggleBtn.classList.add('bg-[#E05A80]', 'border-[#E05A80]');
+        knob.classList.remove('translate-x-0');
+        knob.classList.add('translate-x-6');
+        badge.innerText = 'Active • 2× Paydays';
+        badge.className = 'text-[11px] font-extrabold px-3.5 py-1.5 rounded-full bg-[#E05A80] text-white shadow-sm';
+        details.classList.remove('hidden');
+        pill.classList.remove('hidden');
+      } else {
+        toggleBtn.classList.add('bg-[#F3DFE6]', 'border-[#E8C5D1]');
+        toggleBtn.classList.remove('bg-[#E05A80]', 'border-[#E05A80]');
+        knob.classList.add('translate-x-0');
+        knob.classList.remove('translate-x-6');
+        badge.innerText = 'Off • Normal Month';
+        badge.className = 'text-[11px] font-extrabold px-3.5 py-1.5 rounded-full bg-[#FDF4F7] text-[#7D6E75] border border-[#EBD4DC]';
+        details.classList.add('hidden');
+        pill.classList.add('hidden');
+      }
+
+      saveState();
+      updateDOM(calculateBudget(currentCianPay, currentMaeganPay, maeganSlcDebt, currentDebt, debtPayer));
+    }
+
+    function adjustSlcMonths(delta) {
+      const maxMonths = maeganSlcDebt > 0 ? Math.ceil(SLC_STARTING_TOTAL / maeganSlcDebt) : 24;
+      slcMonthsPaid = Math.max(0, Math.min(maxMonths, slcMonthsPaid + delta));
+      saveState();
+      updateDebtTrackers();
+    }
+
+    function adjustCpMonths(delta) {
+      const maxMonths = cpStartingTotal > 0 ? Math.ceil(cpStartingTotal / CP_MONTHLY_PAYMENT) : 10;
+      cpMonthsPaid = Math.max(0, Math.min(maxMonths, cpMonthsPaid + delta));
+      saveState();
+      updateDebtTrackers();
+    }
+
+    function updateCenterParcsTotal(val) {
+      let num = parseFloat(val);
+      if (isNaN(num) || num < 0) num = 0;
+      cpStartingTotal = num;
+      saveState();
+      updateDebtTrackers();
+    }
+
+    function renderSpreadsheet(calc) {
+      const billsTopUpNeeded = calc.ucSurplus < 0 ? Math.abs(calc.ucSurplus) : 0;
+      const totalCashIn = calc.totalTescoPay + calc.ucCashReceived;
+
+      const tescoInEl = document.getElementById('sheet-tesco-in');
+      const tescoSubEl = document.getElementById('sheet-tesco-sub');
+      const ucInEl = document.getElementById('sheet-uc-in');
+      const totalIncEl = document.getElementById('sheet-total-income');
+
+      if (tescoInEl) tescoInEl.innerText = `£${calc.totalTescoPay.toFixed(2)}`;
+      if (tescoSubEl) {
+        const mult = calc.doublePayday ? ' (×2)' : '';
+        tescoSubEl.innerText = `Cian £${currentCianPay.toFixed(2)}${mult} + Maegan £${currentMaeganPay.toFixed(2)}${mult}`;
+      }
+      if (ucInEl) ucInEl.innerText = `£${calc.ucCashReceived.toFixed(2)}`;
+      if (totalIncEl) totalIncEl.innerText = `£${totalCashIn.toFixed(2)}`;
+
+      const tbody = document.getElementById('spreadsheet-tbody');
+      if (!tbody) return;
+
+      const payerBadge = (type, text) => {
+        if (type === 'uc-direct') return `<span class="inline-block px-2.5 py-1 rounded-full bg-[#E7F7F0] text-[#147A54] border border-[#BCE8D6] text-[11px] font-extrabold">${text}</span>`;
+        if (type === 'bills-pot') return `<span class="inline-block px-2.5 py-1 rounded-full bg-[#E7F7F0] text-[#147A54] border border-[#BCE8D6] text-[11px] font-extrabold">${text}</span>`;
+        if (type === 'tesco-joint') return `<span class="inline-block px-2.5 py-1 rounded-full bg-[#FCE8EE] text-[#C84369] border border-[#F3C6D4] text-[11px] font-extrabold">${text}</span>`;
+        if (type === 'personal') return `<span class="inline-block px-2.5 py-1 rounded-full bg-[#FFF6E5] text-[#9E6B14] border border-[#F5DFB3] text-[11px] font-extrabold">${text}</span>`;
+        if (type === 'pocket') return `<span class="inline-block px-2.5 py-1 rounded-full bg-[#FCE8EE] text-[#E05A80] border border-[#F3C6D4] text-[11px] font-extrabold">${text}</span>`;
+        return text;
+      };
+
+      const rows = [
+        // Category Header: Housing & Household Bills
+        { isHeader: true, title: '🏠 1. HOUSING & FIXED HOUSEHOLD BILLS (£939.99 Total)' },
+        {
+          item: '🏡 Rent (£460.00)',
+          amount: '£460.00',
+          source: payerBadge('uc-direct', '🏛️ Universal Credit Housing'),
+          when: 'Paid direct to landlord by UC'
+        },
+        {
+          item: '🏛️ Council Tax',
+          amount: '£145.00',
+          source: payerBadge('bills-pot', `🏛️ Bills Pot (£${calc.ucCashReceived.toFixed(2)} UC + £${billsTopUpNeeded.toFixed(2)} Tesco)`),
+          when: 'Monthly Direct Debit'
+        },
+        {
+          item: '🔥 Gas & Electricity',
+          amount: '£100.00',
+          source: payerBadge('bills-pot', '🏛️ Bills Pot (UC + Tesco Top-Up)'),
+          when: 'Monthly Direct Debit'
+        },
+        {
+          item: '💧 Water Bill',
+          amount: '£80.00',
+          source: payerBadge('bills-pot', '🏛️ Bills Pot (UC + Tesco Top-Up)'),
+          when: 'Monthly Direct Debit'
+        },
+        {
+          item: '👨‍👧 Dad (£50 Center Parcs + £26 Phones)',
+          amount: '£76.00',
+          source: payerBadge('bills-pot', '🏛️ Bills Pot (UC + Tesco Top-Up)'),
+          when: 'Monthly Transfer to Dad'
+        },
+        {
+          item: '🌐 Internet / Wi-Fi',
+          amount: '£50.00',
+          source: payerBadge('bills-pot', '🏛️ Bills Pot (UC + Tesco Top-Up)'),
+          when: 'Monthly Direct Debit'
+        },
+        {
+          item: '☁️ Google One Storage',
+          amount: '£18.99',
+          source: payerBadge('bills-pot', '🏛️ Bills Pot (UC + Tesco Top-Up)'),
+          when: 'Monthly Subscription'
+        },
+        {
+          item: '▶️ YouTube Subscription',
+          amount: '£10.00',
+          source: payerBadge('bills-pot', '🏛️ Bills Pot (UC + Tesco Top-Up)'),
+          when: 'Monthly Subscription'
+        },
+
+        // Category Header: Food & Savings
+        { isHeader: true, title: '🛒 2. FOOD & JOINT SAVINGS POTS' },
+        {
+          item: '🛍️ Monthly Groceries (£50 / week)',
+          amount: `£${GROCERIES.toFixed(2)}`,
+          source: payerBadge('tesco-joint', '🛒 Joint Tesco Pay (Taken First)'),
+          when: 'Moved on Tesco Payday'
+        },
+        {
+          item: '🐷 Joint Savings Pot',
+          amount: `£${calc.totalMonthlySavings.toFixed(2)}`,
+          source: payerBadge('tesco-joint', `🛒 Tesco Pay (£${calc.savingsPerPerson.toFixed(2)} Cian + £${calc.savingsPerPerson.toFixed(2)} Maegan)`),
+          when: 'Moved on Tesco Payday'
+        },
+
+        // Category Header: Personal Commitments & Debt
+        { isHeader: true, title: '🎯 3. PERSONAL COMMITMENTS & DEBT' },
+        {
+          item: '🚗 Cian Driving Lessons',
+          amount: `£${DRIVING_LESSONS.toFixed(2)}`,
+          source: payerBadge('personal', "👤 Cian's 50% Tesco Cut"),
+          when: 'Held back on Tesco Payday'
+        },
+        {
+          item: '🎓 Maegan Student Loan (SLC)',
+          amount: `£${calc.slcDebt.toFixed(2)}`,
+          source: payerBadge('personal', "👤 Maegan's 50% Tesco Cut"),
+          when: 'Paid 1st of the Month'
+        },
+        {
+          item: '📱 Maegan Phone Share to Cian',
+          amount: `£${MAEGAN_PHONE.toFixed(2)}`,
+          source: payerBadge('personal', "👤 Maegan's Cut → Added to Cian"),
+          when: 'Built into 50/50 Pocket Split'
+        }
+      ];
+
+      if (calc.debtAmount > 0) {
+        const whoCard = calc.payer === 'cian' ? "👤 Cian's Cut Only" : (calc.payer === 'maegan' ? "👤 Maegan's Cut Only" : `👤 Split 50/50 (£${calc.cianDebtShare.toFixed(2)} each)`);
+        rows.push({
+          item: '💳 Extra Credit Card Payment',
+          amount: `£${calc.debtAmount.toFixed(2)}`,
+          source: payerBadge('personal', whoCard),
+          when: 'Held back on Tesco Payday'
+        });
+      }
+
+      if (calc.oneTimeAmount > 0) {
+        const whoOneTime = calc.onePayer === 'cian' ? "👤 Cian's Cut Only" : (calc.onePayer === 'maegan' ? "👤 Maegan's Cut Only" : `👤 Split 50/50 (£${calc.cianOneTimeShare.toFixed(2)} each)`);
+        rows.push({
+          item: '💸 One-Time Payment (This Month)',
+          amount: `£${calc.oneTimeAmount.toFixed(2)}`,
+          source: payerBadge('personal', whoOneTime),
+          when: 'Held back on Tesco Payday'
+        });
+      }
+
+      // Category Header: Final Safe-to-Spend Pocket Money
+      rows.push(
+        { isHeader: true, title: '✨ 4. FINAL SAFE-TO-SPEND POCKET MONEY' },
+        {
+          item: `🟢 Cian's Final Pocket Money (£${(calc.cianTotal / 4).toFixed(2)}/wk)`,
+          amount: `£${calc.cianTotal.toFixed(2)}`,
+          source: payerBadge('pocket', "👜 Cian's Safe-to-Spend Envelope"),
+          when: '4 Weekly Envelopes'
+        },
+        {
+          item: `🟢 Maegan's Final Pocket Money (£${(calc.maeganTotal / 4).toFixed(2)}/wk)`,
+          amount: `£${calc.maeganTotal.toFixed(2)}`,
+          source: payerBadge('pocket', "👜 Maegan's Safe-to-Spend Envelope"),
+          when: '4 Weekly Envelopes'
+        }
+      );
+
+      tbody.innerHTML = rows.map(r => {
+        if (r.isHeader) {
+          return `
+            <tr class="bg-[#FAF0F4]">
+              <td colspan="4" class="py-2.5 px-4 sm:px-6 text-[11px] font-extrabold uppercase tracking-wider text-[#C84369]">
+                ${r.title}
+              </td>
+            </tr>
+          `;
+        }
+        return `
+          <tr class="hover:bg-[#FDF7F9] transition-colors">
+            <td class="py-3.5 px-4 sm:px-6 font-extrabold text-[#1F191C]">${r.item}</td>
+            <td class="py-3.5 px-3 text-right font-mono-num font-extrabold text-sm text-[#1F191C]">${r.amount}</td>
+            <td class="py-3.5 px-4 sm:px-6">${r.source}</td>
+            <td class="py-3.5 px-4 sm:px-6 text-[#7D6E75] hidden sm:table-cell">${r.when}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function updateDOM(calc) {
+      document.getElementById('total-wages-label').innerText = calc.doublePayday ? 'Combined Wages (2x Paydays Assessed):' : 'Combined Wages (Assessed for UC):';
+      document.getElementById('total-wages-display').innerText = `£${calc.totalTescoPay.toFixed(2)}`;
+
+      document.getElementById('dp-total-wages').innerText = `£${calc.totalTescoPay.toFixed(2)} Assessed`;
+      document.getElementById('dp-new-uc').innerText = `£${calc.ucCashReceived.toFixed(2)}`;
+      document.getElementById('dp-uc-drop').innerText = `-£${Math.max(0, calc.normalUcCash - calc.ucCashReceived).toFixed(2)}`;
+      document.getElementById('dp-hold-back').innerText = `£${calc.ucSurplus < 0 ? Math.abs(calc.ucSurplus).toFixed(2) : '0.00'}`;
+      document.getElementById('dp-extra-boost').innerText = `+£${Math.max(0, calc.extraBoostPerPerson).toFixed(2)} each`;
+
+      document.getElementById('uc-cash-display').innerText = `£${calc.ucCashReceived.toFixed(2)}`;
+      document.getElementById('uc-taper-display').innerText = `Base: £790.36 (-£${calc.taperDeduction.toFixed(2)} taper)`;
+      
+      document.getElementById('uc-surplus-display').innerText = calc.ucSurplus < 0 ? `-£${Math.abs(calc.ucSurplus).toFixed(2)}` : `£${calc.ucSurplus.toFixed(2)}`;
+      document.getElementById('uc-surplus-desc').innerText = calc.ucSurplus < 0 ? "Shortfall to cover £479.99 bills" : "Leftover after £479.99 bills";
+      
+      document.getElementById('total-cash-display').innerText = `£${calc.totalHouseholdCash.toFixed(2)}`;
+
+      document.getElementById('cian-tesco-display').innerText = `£${calc.tescoHalf.toFixed(2)}`;
+      document.getElementById('maegan-tesco-display').innerText = `£${calc.tescoHalf.toFixed(2)}`;
+      document.getElementById('maegan-slc-receipt').innerText = `-£${calc.slcDebt.toFixed(2)}`;
+
+      document.getElementById('cian-savings-receipt').innerText = `-£${calc.savingsPerPerson.toFixed(2)}`;
+      document.getElementById('maegan-savings-receipt').innerText = `-£${calc.savingsPerPerson.toFixed(2)}`;
+      document.getElementById('cian-deductions-badge').innerText = `16 hrs/wk • -£70 Driving • -£${calc.savingsPerPerson.toFixed(0)} Save`;
+      document.getElementById('maegan-deductions-badge').innerText = `12 hrs/wk • -£${calc.slcDebt.toFixed(0)} SLC • -£${calc.savingsPerPerson.toFixed(0)} Save`;
+      
+      const cianUcRow = document.getElementById('cian-uc-row');
+      const maeganUcRow = document.getElementById('maegan-uc-row');
+      
+      if (calc.distributedUC < 0) {
+        document.getElementById('cian-uc-surplus-display').innerText = `-£${calc.halfShortfall.toFixed(2)}`;
+        document.getElementById('maegan-uc-surplus-display').innerText = `-£${calc.halfShortfall.toFixed(2)}`;
+        cianUcRow.style.display = 'flex';
+        maeganUcRow.style.display = 'flex';
+      } else {
+        cianUcRow.style.display = 'none';
+        maeganUcRow.style.display = 'none';
+      }
+
+      const cianExtraRow = document.getElementById('cian-extra-debt-row');
+      if (calc.cianDebtShare > 0) {
+        cianExtraRow.classList.remove('hidden');
+        cianExtraRow.classList.add('flex');
+        document.getElementById('cian-extra-debt-display').innerText = `-£${calc.cianDebtShare.toFixed(2)}`;
+      } else {
+        cianExtraRow.classList.add('hidden');
+        cianExtraRow.classList.remove('flex');
+      }
+
+      const maeganExtraRow = document.getElementById('maegan-extra-debt-row');
+      if (calc.maeganDebtShare > 0) {
+        maeganExtraRow.classList.remove('hidden');
+        maeganExtraRow.classList.add('flex');
+        document.getElementById('maegan-extra-debt-display').innerText = `-£${calc.maeganDebtShare.toFixed(2)}`;
+      } else {
+        maeganExtraRow.classList.add('hidden');
+        maeganExtraRow.classList.remove('flex');
+      }
+
+      const cianOneTimeRow = document.getElementById('cian-onetime-row');
+      if (calc.cianOneTimeShare > 0) {
+        cianOneTimeRow.classList.remove('hidden');
+        cianOneTimeRow.classList.add('flex');
+        document.getElementById('cian-onetime-display').innerText = `-£${calc.cianOneTimeShare.toFixed(2)}`;
+      } else {
+        cianOneTimeRow.classList.add('hidden');
+        cianOneTimeRow.classList.remove('flex');
+      }
+
+      const maeganOneTimeRow = document.getElementById('maegan-onetime-row');
+      if (calc.maeganOneTimeShare > 0) {
+        maeganOneTimeRow.classList.remove('hidden');
+        maeganOneTimeRow.classList.add('flex');
+        document.getElementById('maegan-onetime-display').innerText = `-£${calc.maeganOneTimeShare.toFixed(2)}`;
+      } else {
+        maeganOneTimeRow.classList.add('hidden');
+        maeganOneTimeRow.classList.remove('flex');
+      }
+
+      document.getElementById('cian-total-display').innerText = `£${calc.cianTotal.toFixed(2)}`;
+      document.getElementById('maegan-total-display').innerText = `£${calc.maeganTotal.toFixed(2)}`;
+
+      // Update 2-Payday Action Plan Card
+      const billsTopUpNeeded = calc.ucSurplus < 0 ? Math.abs(calc.ucSurplus) : 0;
+      const totalCommitmentsHeld = DRIVING_LESSONS + calc.slcDebt + calc.debtAmount + calc.oneTimeAmount;
+      
+      document.getElementById('action-tesco-in').innerText = `£${calc.totalTescoPay.toFixed(2)}`;
+      document.getElementById('action-savings-desc').innerText = `£${calc.savingsPerPerson.toFixed(0)} from Cian + £${calc.savingsPerPerson.toFixed(0)} from Maegan`;
+      document.getElementById('action-savings-total').innerText = `£${calc.totalMonthlySavings.toFixed(2)}`;
+      document.getElementById('action-bills-topup').innerText = `£${billsTopUpNeeded.toFixed(2)}`;
+      
+      let commitmentsText = `£70 Driving + £${calc.slcDebt.toFixed(0)} Maegan SLC`;
+      if (calc.debtAmount > 0) {
+        commitmentsText += ` + £${calc.debtAmount.toFixed(0)} Card`;
+      }
+      if (calc.oneTimeAmount > 0) {
+        commitmentsText += ` + £${calc.oneTimeAmount.toFixed(0)} One-Time`;
+      }
+      document.getElementById('action-commitments-desc').innerText = commitmentsText;
+      document.getElementById('action-commitments-total').innerText = `£${totalCommitmentsHeld.toFixed(2)}`;
+      
+      document.getElementById('action-cian-pocket').innerText = `£${calc.cianTotal.toFixed(2)}`;
+      document.getElementById('action-maegan-pocket').innerText = `£${calc.maeganTotal.toFixed(2)}`;
+
+      document.getElementById('action-uc-in').innerText = `£${calc.ucCashReceived.toFixed(2)}`;
+      document.getElementById('action-uc-keep').innerText = `£${calc.ucCashReceived.toFixed(2)}`;
+      document.getElementById('action-uc-topup-inline').innerText = `£${billsTopUpNeeded.toFixed(2)}`;
+
+      if (calc.ucSurplus >= 0) {
+        document.getElementById('action-uc-surplus-note').innerText = `UC covers all £479.99 bills on its own AND leaves +£${calc.ucSurplus.toFixed(2)} extra buffer in the bank!`;
+      } else {
+        document.getElementById('action-uc-surplus-note').innerText = `£${calc.ucCashReceived.toFixed(2)} UC + £${billsTopUpNeeded.toFixed(2)} from Tesco = Exact £479.99 ready for every bill!`;
+      }
+
+      // Update WhatsApp Payday Card Preview (#7)
+      const previewEl = document.getElementById('whatsapp-preview-text');
+      if (previewEl) {
+        previewEl.innerText = buildWhatsAppCardText(calc);
+      }
+
+      // Update Page 1 (Landing Page - 4-Week Essentials)
+      const cianWeekly = calc.cianTotal / 4;
+      const cianDaily = calc.cianTotal / 28;
+      const maeganWeekly = calc.maeganTotal / 4;
+      const maeganDaily = calc.maeganTotal / 28;
+
+      document.getElementById('p1-cian-monthly').innerText = `£${calc.cianTotal.toFixed(2)}`;
+      document.getElementById('p1-cian-weekly').innerText = `£${cianWeekly.toFixed(2)}`;
+      document.getElementById('p1-cian-daily').innerText = `£${cianDaily.toFixed(2)} / day`;
+
+      document.getElementById('p1-maegan-monthly').innerText = `£${calc.maeganTotal.toFixed(2)}`;
+      document.getElementById('p1-maegan-weekly').innerText = `£${maeganWeekly.toFixed(2)}`;
+      document.getElementById('p1-maegan-daily').innerText = `£${maeganDaily.toFixed(2)} / day`;
+
+      document.getElementById('p1-header-savings').innerText = `£${calc.totalMonthlySavings.toFixed(2)} / mo`;
+      document.getElementById('p1-savings-pot').innerText = `£${calc.totalMonthlySavings.toFixed(2)}`;
+      document.getElementById('p1-bills-topup').innerText = `£${billsTopUpNeeded.toFixed(2)}`;
+      document.getElementById('p1-uc-cash').innerText = `£${calc.ucCashReceived.toFixed(2)}`;
+      document.getElementById('p1-commitments').innerText = `£${totalCommitmentsHeld.toFixed(2)}`;
+
+      // Render Cian & Maegan 4-Week Interactive Grids & Progress Bars
+      renderPersonWeekGrid('cian', cianWeekly, calc.cianTotal, cianWeeksSpent);
+      renderPersonWeekGrid('maegan', maeganWeekly, calc.maeganTotal, maeganWeeksSpent);
+
+      updateSavingsTracker(calc);
+      updateDebtTrackers();
+      renderSpreadsheet(calc);
+    }
+
+    function renderPersonWeekGrid(person, weeklyAmount, monthlyTotal, spentArray) {
+      const grid = document.getElementById(`p1-${person}-weeks-grid`);
+      const remLabel = document.getElementById(`p1-${person}-remaining-label`);
+      const progBar = document.getElementById(`p1-${person}-progress-bar`);
+      if (!grid || !remLabel) return;
+
+      let weeksRemaining = 0;
+      grid.innerHTML = '';
+
+      for (let i = 0; i < 4; i++) {
+        const isSpent = Boolean(spentArray[i]);
+        if (!isSpent) weeksRemaining++;
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.onclick = () => toggleWeekSpent(person, i);
+        btn.className = isSpent
+          ? 'p-3.5 rounded-2xl bg-white/40 border border-[#EBD4DC] text-left transition-all opacity-55 shadow-inner'
+          : 'p-3.5 rounded-2xl bg-white hover:bg-[#FFFBFD] border border-[#E8C5D1] shadow-sm text-left transition-all active:scale-95';
+
+        btn.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-extrabold ${isSpent ? 'text-[#9A8991] line-through' : 'text-[#7D6E75]'}">Week ${i + 1}</span>
+            <span class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full ${isSpent ? 'bg-[#F3DFE6] text-[#9A8991]' : 'bg-[#E7F7F0] text-[#14855C]'}">${isSpent ? 'Spent' : 'Safe'}</span>
+          </div>
+          <div class="text-base font-mono-num font-extrabold mt-1.5 ${isSpent ? 'text-[#9A8991] line-through' : 'text-[#1F191C]'}">
+            £${weeklyAmount.toFixed(2)}
+          </div>
+        `;
+        grid.appendChild(btn);
+      }
+
+      const moneyLeft = weeksRemaining * weeklyAmount;
+      remLabel.innerText = `£${moneyLeft.toFixed(2)} left (${weeksRemaining}/4 wks)`;
+      if (progBar) {
+        progBar.style.width = `${(weeksRemaining / 4) * 100}%`;
+      }
+    }
+
+    // (#7) Build WhatsApp Payday Card Message
+    function buildWhatsAppCardText(calc) {
+      const billsTopUpNeeded = calc.ucSurplus < 0 ? Math.abs(calc.ucSurplus) : 0;
+      const modeTag = calc.doublePayday ? '⚠️ DOUBLE TESCO PAYDAY MONTH' : '💷 PAYDAY ACTION PLAN';
+      let msg = `${modeTag}\n`;
+      msg += `━━━━━━━━━━━━━━━━━━━━\n`;
+      msg += `🛒 *1. ON TESCO PAYDAY*\n`;
+      msg += `• Cian In: £${currentCianPay.toFixed(2)}${calc.doublePayday ? ' (x2)' : ''}\n`;
+      msg += `• Maegan In: £${currentMaeganPay.toFixed(2)}${calc.doublePayday ? ' (x2)' : ''}\n`;
+      msg += `• Combined Tesco: *£${calc.totalTescoPay.toFixed(2)}*\n\n`;
+      msg += `📌 *Set Aside Immediately:*\n`;
+      msg += `• Groceries Pot: *£200.00*\n`;
+      msg += `• Joint Savings (£${calc.savingsPerPerson.toFixed(0)} each): *£${calc.totalMonthlySavings.toFixed(2)}*\n`;
+      msg += `• Leave in Bills Pot: *£${billsTopUpNeeded.toFixed(2)}*\n`;
+      msg += `• Cian Driving: *£70.00*\n`;
+      msg += `• Maegan Student Loan (1st): *£${calc.slcDebt.toFixed(2)}*\n`;
+      if (calc.debtAmount > 0) {
+        msg += `• Extra Card Payment: *£${calc.debtAmount.toFixed(2)}*\n`;
+      }
+      if (calc.oneTimeAmount > 0) {
+        msg += `• One-Time Payment: *£${calc.oneTimeAmount.toFixed(2)}*\n`;
+      }
+      msg += `\n✨ *50/50 POCKET MONEY (Phone £30 & Savings sorted!):*\n`;
+      msg += `🟢 *Cian Gets:* £${calc.cianTotal.toFixed(2)} (£${(calc.cianTotal / 4).toFixed(2)}/wk)\n`;
+      msg += `🟢 *Maegan Gets:* £${calc.maeganTotal.toFixed(2)} (£${(calc.maeganTotal / 4).toFixed(2)}/wk)\n`;
+      msg += `━━━━━━━━━━━━━━━━━━━━\n`;
+      msg += `🏛️ *2. ON UNIVERSAL CREDIT DAY*\n`;
+      msg += `• UC Cash Landing: *£${calc.ucCashReceived.toFixed(2)}*\n`;
+      msg += `• Action: *Leave 100% in Bills Account* (Joins £${billsTopUpNeeded.toFixed(2)} Tesco top-up = *£479.99* for all household bills! ✅)`;
+      return msg;
+    }
+
+    function toggleWhatsAppPreview() {
+      const drawer = document.getElementById('whatsapp-preview-drawer');
+      drawer.classList.toggle('hidden');
+    }
+
+    function copyWhatsAppCard() {
+      const calc = calculateBudget(currentCianPay, currentMaeganPay, maeganSlcDebt, currentDebt, debtPayer);
+      const text = buildWhatsAppCardText(calc);
+      const tempTextArea = document.createElement('textarea');
+      tempTextArea.value = text;
+      document.body.appendChild(tempTextArea);
+      tempTextArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempTextArea);
+      showToast('📱 WhatsApp Card copied! Paste to Maegan');
+    }
+
+    function syncCianInput(val) {
+      let num = parseFloat(val);
+      if (isNaN(num) || num < 0) num = 0;
+      currentCianPay = num;
+      document.getElementById('cian-pay-slider').value = Math.min(num, 1500);
+      saveState();
+      updateDOM(calculateBudget(currentCianPay, currentMaeganPay, maeganSlcDebt, currentDebt, debtPayer));
+    }
+
+    function syncCianSlider(val) {
+      let num = parseFloat(val);
+      currentCianPay = num;
+      document.getElementById('cian-pay-input').value = num.toFixed(2);
+      saveState();
+      updateDOM(calculateBudget(currentCianPay, currentMaeganPay, maeganSlcDebt, currentDebt, debtPayer));
+    }
+
+    function syncMaeganInput(val) {
+      let num = parseFloat(val);
+      if (isNaN(num) || num < 0) num = 0;
+      currentMaeganPay = num;
+      document.getElementById('maegan-pay-slider').value = Math.min(num, 1500);
+      saveState();
+      updateDOM(calculateBudget(currentCianPay, currentMaeganPay, maeganSlcDebt, currentDebt, debtPayer));
+    }
+
+    function syncMaeganSlider(val) {
+      let num = parseFloat(val);
+      currentMaeganPay = num;
+      document.getElementById('maegan-pay-input').value = num.toFixed(2);
+      saveState();
+      updateDOM(calculateBudget(currentCianPay, currentMaeganPay, maeganSlcDebt, currentDebt, debtPayer));
+    }
+
+    function updateMaeganSlcDebt(val) {
+      let num = parseFloat(val);
+      if (isNaN(num) || num < 0) num = 0;
+      maeganSlcDebt = num;
+      saveState();
+      updateDebtTrackers();
+      updateDOM(calculateBudget(currentCianPay, currentMaeganPay, maeganSlcDebt, currentDebt, debtPayer));
+    }
+
+    function updateDebt(val) {
+      let num = parseFloat(val);
+      if (isNaN(num) || num < 0) num = 0;
+      currentDebt = num;
+      saveState();
+      updateDOM(calculateBudget(currentCianPay, currentMaeganPay, maeganSlcDebt, currentDebt, debtPayer));
+    }
+
+    function updateDebtPayer(val) {
+      debtPayer = val;
+      saveState();
+      updateDOM(calculateBudget(currentCianPay, currentMaeganPay, maeganSlcDebt, currentDebt, debtPayer));
+    }
+
+    function updateOneTime(val) {
+      let num = parseFloat(val);
+      if (isNaN(num) || num < 0) num = 0;
+      currentOneTime = num;
+      saveState();
+      updateDOM(calculateBudget());
+    }
+
+    function updateOneTimePayer(val) {
+      oneTimePayer = val;
+      saveState();
+      updateDOM(calculateBudget());
+    }
+
+    function saveCurrentMonth() {
+      const calc = calculateBudget(currentCianPay, currentMaeganPay, maeganSlcDebt, currentDebt, debtPayer);
+      const history = JSON.parse(localStorage.getItem('budgetHistory') || '[]');
+      
+      const monthName = new Date().toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+      const record = {
+        date: monthName,
+        timestamp: new Date().toISOString(),
+        cianTotal: calc.cianTotal.toFixed(2),
+        maeganTotal: calc.maeganTotal.toFixed(2),
+        combinedWages: calc.totalTescoPay.toFixed(2),
+        ucCash: calc.ucCashReceived.toFixed(2)
+      };
+
+      history.unshift(record);
+      localStorage.setItem('budgetHistory', JSON.stringify(history));
+      renderHistory();
+      showToast('Month saved to history!');
+    }
+
+    function renderHistory() {
+      const history = JSON.parse(localStorage.getItem('budgetHistory') || '[]');
+      const section = document.getElementById('history-section');
+      const list = document.getElementById('history-list');
+
+      if (history.length === 0) {
+        section.classList.add('hidden');
+        return;
+      }
+
+      section.classList.remove('hidden');
+      list.innerHTML = '';
+
+      history.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'p-4 rounded-2xl bg-[#FDF4F7] border border-[#EBD4DC] flex items-center justify-between text-xs shadow-sm';
+        div.innerHTML = `
+          <div>
+            <strong class="text-[#1F191C] font-extrabold text-sm">${item.date}</strong>
+            <span class="block text-xs font-bold font-mono-num text-[#7D6E75] mt-0.5">Wages: £${item.combinedWages} • UC: £${item.ucCash}</span>
+          </div>
+          <div class="text-right font-mono-num font-extrabold">
+            <span class="text-[#1F191C] text-sm block">Cian: £${item.cianTotal}</span>
+            <span class="text-[#14855C] text-sm block">Maegan: £${item.maeganTotal}</span>
+          </div>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    function clearHistory() {
+      localStorage.removeItem('budgetHistory');
+      renderHistory();
+      showToast('History cleared.');
+    }
+
+    function copySummary() {
+      const calc = calculateBudget(currentCianPay, currentMaeganPay, maeganSlcDebt, currentDebt, debtPayer);
+      let text = `📊 MONTHLY BUDGET PLAN SUMMARY
+Cian Pay: £${currentCianPay.toFixed(2)} | Maegan Pay: £${currentMaeganPay.toFixed(2)}
+Total Assessed: £${calc.totalTescoPay.toFixed(2)}
+
+- UC Cash Received: £${calc.ucCashReceived.toFixed(2)}
+- Fixed Bills: £479.99
+- Cian Pocket Money: £${calc.cianTotal.toFixed(2)}
+- Maegan Pocket Money: £${calc.maeganTotal.toFixed(2)}`;
+
+      const tempTextArea = document.createElement('textarea');
+      tempTextArea.value = text;
+      document.body.appendChild(tempTextArea);
+      tempTextArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempTextArea);
+      showToast('Summary copied!');
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-text').innerText = msg;
+      toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+      toast.classList.add('opacity-100', 'translate-y-0');
+      setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+      }, 2500);
+    }
+
+    // Initial load
+    switchPage(currentPage);
+    updatePaydayCalendar();
+    updateDebtTrackers();
+    updateDOM(calculateBudget(currentCianPay, currentMaeganPay, maeganSlcDebt, currentDebt, debtPayer));
+    renderHistory();
+  </script>
+</body>
+</html>
