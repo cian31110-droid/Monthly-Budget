@@ -7,29 +7,40 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Quicksand:wght@500;600;700&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-blush: #FAF3F5;
-      --bg-blush-deep: #F5E6EB;
+      --bg-blush: #FDF0F5;
+      --bg-blush-deep: #FBE0EC;
       --bg-card: #FFFFFF;
-      --bg-subcard: #FDF7F9;
-      --bg-subcard-tint: #F9EBF0;
-      --border-soft: #F0DCE3;
-      --border-rose: #E8C5D1;
-      --pennli-rose: #E05A80;
-      --pennli-rose-dark: #C84369;
-      --pennli-rose-light: #FCE8EE;
-      --pennli-ink: #1F191C;
-      --pennli-muted: #7D6E75;
+      --bg-subcard: #FFF7FA;
+      --bg-subcard-tint: #FDEEF5;
+      --border-soft: #F6D5E2;
+      --border-rose: #EFB9CE;
+      --pennli-rose: #EC5E8A;
+      --pennli-rose-dark: #D63D73;
+      --pennli-rose-light: #FDE8F0;
+      --pennli-lilac: #B388EB;
+      --pennli-lilac-light: #F3EAFD;
+      --pennli-gold: #E9B44C;
+      --pennli-ink: #2B1E24;
+      --pennli-muted: #8A6E7B;
       --pennli-mint: #169B6C;
       --pennli-mint-bg: #E7F7F0;
     }
+    .font-script { font-family: 'Dancing Script', cursive; }
+    .girly-gradient { background: linear-gradient(135deg, #EC5E8A 0%, #E88BB0 55%, #B388EB 100%); }
+    .extra-bill-paid { opacity: 0.75; }
+    .extra-bill-paid .extra-bill-name { text-decoration: line-through; text-decoration-color: #EC5E8A; }
+    input[type="checkbox"].girly-tick { appearance: none; -webkit-appearance: none; width: 26px; height: 26px; border-radius: 999px; border: 2px solid #EFB9CE; background: #fff; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: all 0.15s ease; }
+    input[type="checkbox"].girly-tick:checked { background: linear-gradient(135deg, #EC5E8A, #B388EB); border-color: #EC5E8A; }
+    input[type="checkbox"].girly-tick:checked::after { content: '♥'; color: #fff; font-size: 14px; line-height: 1; }
+    .extra-amount-input { width: 96px; }
 
     body {
       background-color: var(--bg-blush);
       color: var(--pennli-ink);
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Quicksand', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
     }
@@ -38,24 +49,24 @@
     .ambient-backdrop {
       background-color: var(--bg-blush);
       background-image:
-        radial-gradient(circle at 15% 0%, rgba(235, 148, 174, 0.18) 0%, transparent 48%),
-        radial-gradient(circle at 85% 10%, rgba(246, 195, 68, 0.10) 0%, transparent 42%),
-        radial-gradient(circle at 50% 100%, rgba(224, 90, 128, 0.10) 0%, transparent 55%);
+        radial-gradient(circle at 15% 0%, rgba(236, 94, 138, 0.20) 0%, transparent 48%),
+        radial-gradient(circle at 85% 10%, rgba(179, 136, 235, 0.16) 0%, transparent 42%),
+        radial-gradient(circle at 50% 100%, rgba(233, 180, 76, 0.12) 0%, transparent 55%);
       background-attachment: fixed;
     }
 
     /* Elevated White & Soft Blush Pennli Cards */
     .pennli-panel {
       background: rgba(255, 255, 255, 0.96);
-      border: 1px solid var(--border-soft);
-      border-radius: 28px;
+      border: 1.5px solid var(--border-soft);
+      border-radius: 32px;
       box-shadow: 0 12px 36px -8px rgba(186, 87, 116, 0.10), 0 2px 6px rgba(186, 87, 116, 0.04);
       backdrop-filter: blur(14px);
     }
 
     /* Signature Tinted "Left to Spend" Envelope Card */
     .pennli-hero-card {
-      background: linear-gradient(165deg, #FDF4F7 0%, #F9E9EF 100%);
+      background: linear-gradient(165deg, #FFF0F6 0%, #FDE8F0 55%, #F3EAFD 100%);
       border: 1px solid #F1D4DF;
       border-radius: 28px;
       box-shadow: 0 14px 34px -10px rgba(212, 95, 130, 0.12);
@@ -160,10 +171,11 @@
           </svg>
         </div>
         <div>
-          <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-[#FCE8EE] text-[#D64B73] border border-[#F5CCD8]">Household Finance</span>
+          <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-[#FDE8F0] text-[#D63D73] border border-[#F5CCD8]">💖 Household Finance</span>
           <h1 class="text-2xl sm:text-3xl font-extrabold text-[#1F191C] tracking-tight mt-1">
             Know what’s <span class="text-[#E05A80]">safe to spend</span>
           </h1>
+          <p class="font-script text-2xl text-[#D63D73] leading-tight mt-1">Made with love, for our home 💕</p>
         </div>
       </div>
 
@@ -976,12 +988,16 @@
           </div>
         </div>
 
-        <button type="button" onclick="addExtraBill()" class="w-full sm:w-auto px-6 py-3 rounded-2xl bg-[#E05A80] text-white text-sm font-extrabold shadow-sm hover:bg-[#C84369] transition-colors">+ Add this bill / payment</button>
+        <div class="flex flex-wrap gap-3">
+          <button type="button" onclick="addExtraBill()" class="px-6 py-3 rounded-2xl girly-gradient text-white text-sm font-extrabold shadow-sm transition-all active:scale-95">+ Add this bill / payment</button>
+          <button type="button" onclick="resetExtraBillTicks()" class="px-5 py-3 rounded-2xl bg-white border border-[#EBD4DC] text-[#7D6E75] text-sm font-extrabold shadow-sm transition-all active:scale-95">↺ Untick all for a new month</button>
+        </div>
+        <p class="text-xs font-bold text-[#7D6E75]">Tick a bill once it&apos;s paid — it stays in your totals (the money still went out), it just shows as done. Tap the £ amount to change it in place.</p>
 
         <div class="space-y-2">
           <div class="flex justify-between items-center">
             <span class="text-xs font-extrabold text-[#7D6E75]">Your extra bills &amp; payments</span>
-            <span class="text-xs font-mono-num font-extrabold text-[#1F191C]">Total: <span id="extra-bills-total">£0.00 / month</span></span>
+            <span class="text-xs font-bold text-[#7D6E75]"><span id="extra-bills-paid-summary"></span> • Total: <span id="extra-bills-total" class="font-mono-num font-extrabold text-[#1F191C]">£0.00 / month</span></span>
           </div>
           <div id="extra-bills-list" class="space-y-2"></div>
           <p id="extra-bills-empty" class="text-xs font-bold text-[#7D6E75]">No extra bills added yet — use the form above when a new one comes up.</p>
@@ -1788,10 +1804,10 @@
             : b.paidFrom === 'maegan' ? payerBadge('personal', "👤 Maegan's Cut Only")
             : payerBadge('personal', `👤 Split 50/50 (£${(amt / 2).toFixed(2)} each)`);
           rows.push({
-            item: `➕ ${b.name}`,
+            item: `${b.paid ? '✅' : '⏳'} ${b.name}`,
             amount: `£${amt.toFixed(2)}`,
             source: who,
-            when: 'Monthly • Added by you'
+            when: b.paid ? 'Monthly • Added by you • Paid 💖' : 'Monthly • Added by you • Not paid yet'
           });
         });
       }
@@ -2179,14 +2195,22 @@
       }
       if (empty) empty.style.display = 'none';
       const label = { 'bills-pot': 'Bills Pot', 'split': 'Split 50/50', 'cian': 'Cian Only', 'maegan': 'Maegan Only' };
+      const paidCount = extraBills.filter(b => b.paid).length;
+      const stillToPay = extraBills.filter(b => !b.paid).reduce((sum, b) => sum + (parseFloat(b.amount) || 0), 0);
+      const summaryEl = document.getElementById('extra-bills-paid-summary');
+      if (summaryEl) summaryEl.innerText = extraBills.length ? `${paidCount} of ${extraBills.length} paid • £${stillToPay.toFixed(2)} still to pay` : '';
       list.innerHTML = extraBills.map(b => `
-        <div class="p-3 rounded-2xl bg-white border border-[#EBD4DC] flex items-center justify-between gap-3 shadow-sm">
-          <div class="min-w-0">
-            <strong class="text-[#1F191C] font-extrabold text-sm block truncate">${escapeHtml(b.name)}</strong>
-            <span class="text-[11px] font-bold text-[#7D6E75]">${label[b.paidFrom] || 'Bills Pot'} • Monthly</span>
-          </div>
-          <div class="flex items-center gap-3 shrink-0">
-            <span class="font-mono-num font-extrabold text-sm text-[#1F191C]">£${(parseFloat(b.amount) || 0).toFixed(2)}</span>
+        <div class="p-3 rounded-2xl bg-white border border-[#EBD4DC] flex items-center justify-between gap-3 shadow-sm ${b.paid ? 'extra-bill-paid' : ''}">
+          <label class="flex items-center gap-3 min-w-0 cursor-pointer">
+            <input type="checkbox" class="girly-tick" ${b.paid ? 'checked' : ''} onchange="toggleExtraBillPaid(${b.id}, this.checked)" aria-label="Mark ${escapeHtml(b.name)} as paid" />
+            <span class="min-w-0">
+              <strong class="extra-bill-name text-[#1F191C] font-extrabold text-sm block truncate">${escapeHtml(b.name)}</strong>
+              <span class="text-[11px] font-bold text-[#7D6E75]">${label[b.paidFrom] || 'Bills Pot'} • Monthly ${b.paid ? '• 💖 Paid' : ''}</span>
+            </span>
+          </label>
+          <div class="flex items-center gap-2 shrink-0">
+            <span class="font-mono-num font-extrabold text-sm text-[#7D6E75]">£</span>
+            <input type="number" step="0.01" min="0" value="${(parseFloat(b.amount) || 0).toFixed(2)}" onchange="updateExtraBillAmount(${b.id}, this.value)" aria-label="Amount for ${escapeHtml(b.name)}" class="extra-amount-input px-2.5 py-1.5 pennli-input text-sm font-mono-num font-extrabold text-[#1F191C]" />
             <button type="button" onclick="removeExtraBill(${b.id})" class="px-3 py-1.5 rounded-full bg-[#FCE8EE] text-[#C84369] border border-[#F3C6D4] text-[11px] font-extrabold">Remove</button>
           </div>
         </div>
@@ -2201,12 +2225,40 @@
       const amount = parseFloat(amountEl.value);
       if (!name) { showToast('Give the bill a name first.'); nameEl.focus(); return; }
       if (isNaN(amount) || amount <= 0) { showToast('Enter an amount over £0.'); amountEl.focus(); return; }
-      extraBills.push({ id: Date.now(), name, amount: amount.toFixed(2), paidFrom: payerEl.value || 'bills-pot' });
+      extraBills.push({ id: Date.now(), name, amount: amount.toFixed(2), paidFrom: payerEl.value || 'bills-pot', paid: false });
       nameEl.value = '';
       amountEl.value = '';
       saveState();
       updateDOM(calculateBudget());
       showToast('Bill added — totals updated.');
+    }
+
+    function toggleExtraBillPaid(id, isPaid) {
+      const bill = extraBills.find(b => b.id === id);
+      if (!bill) return;
+      bill.paid = !!isPaid;
+      saveState();
+      updateDOM(calculateBudget());
+      if (isPaid) showToast('Marked as paid 💖');
+    }
+
+    function updateExtraBillAmount(id, val) {
+      const num = parseFloat(val);
+      if (isNaN(num) || num < 0) { showToast('Enter an amount of £0 or more.'); renderExtraBills(calculateBudget()); return; }
+      const bill = extraBills.find(b => b.id === id);
+      if (!bill) return;
+      bill.amount = num.toFixed(2);
+      saveState();
+      updateDOM(calculateBudget());
+      showToast('Amount updated.');
+    }
+
+    function resetExtraBillTicks() {
+      if (!extraBills.length) { showToast('No extra bills to untick yet.'); return; }
+      extraBills.forEach(b => { b.paid = false; });
+      saveState();
+      updateDOM(calculateBudget());
+      showToast('All extra bills unticked for the new month.');
     }
 
     function removeExtraBill(id) {
