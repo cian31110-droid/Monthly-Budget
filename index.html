@@ -942,6 +942,52 @@
         </div>
       </section>
 
+      <!-- NEW SECTION: Extra Bills & Payments (add your own, no recoding) -->
+      <section class="pennli-panel p-6 space-y-5">
+        <div class="flex items-center justify-between border-b border-[#F2E2E8] pb-4">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-[#E05A80] block">➕ Extra Bills &amp; Payments</span>
+            <h2 class="text-lg font-extrabold text-[#1F191C] tracking-tight mt-0.5">Add a Bill or Payment</h2>
+            <p class="text-xs font-bold text-[#7D6E75] mt-1 leading-relaxed">Add any new monthly bill or payment here — no recoding needed. It is saved on this device and the totals update automatically. Bills paid from the Bills Pot add to your fixed bills; ones paid by Cian or Maegan come off their pocket money instead.</p>
+          </div>
+          <span class="text-xs font-extrabold text-[#C84369] bg-[#FCE8EE] border border-[#F3C6D4] px-3.5 py-1.5 rounded-full shadow-sm">Monthly • Saved</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="p-4 pennli-subcard space-y-2 shadow-sm lg:col-span-2">
+            <label for="extra-bill-name" class="block text-xs font-extrabold text-[#7D6E75]">Bill / payment name</label>
+            <input type="text" id="extra-bill-name" placeholder="e.g. New subscription" class="w-full px-3.5 py-2.5 pennli-input text-sm font-extrabold" />
+          </div>
+          <div class="p-4 pennli-subcard space-y-2 shadow-sm">
+            <label for="extra-bill-amount" class="block text-xs font-extrabold text-[#7D6E75]">Amount per month</label>
+            <div class="relative flex items-center">
+              <span class="absolute left-3 text-[#7D6E75] font-mono-num font-extrabold text-sm">£</span>
+              <input type="number" id="extra-bill-amount" step="0.01" min="0" placeholder="0.00" class="w-full pl-8 pr-3 py-2.5 pennli-input text-sm font-mono-num font-extrabold" />
+            </div>
+          </div>
+          <div class="p-4 pennli-subcard space-y-2 shadow-sm">
+            <label for="extra-bill-payer" class="block text-xs font-extrabold text-[#7D6E75]">Paid from</label>
+            <select id="extra-bill-payer" class="w-full px-3.5 py-2.5 pennli-input text-sm font-extrabold cursor-pointer">
+              <option value="bills-pot" selected>Bills Pot (adds to fixed bills)</option>
+              <option value="split">Split 50 / 50 (Cian + Maegan)</option>
+              <option value="cian">Cian Only</option>
+              <option value="maegan">Maegan Only</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="button" onclick="addExtraBill()" class="w-full sm:w-auto px-6 py-3 rounded-2xl bg-[#E05A80] text-white text-sm font-extrabold shadow-sm hover:bg-[#C84369] transition-colors">+ Add this bill / payment</button>
+
+        <div class="space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="text-xs font-extrabold text-[#7D6E75]">Your extra bills &amp; payments</span>
+            <span class="text-xs font-mono-num font-extrabold text-[#1F191C]">Total: <span id="extra-bills-total">£0.00 / month</span></span>
+          </div>
+          <div id="extra-bills-list" class="space-y-2"></div>
+          <p id="extra-bills-empty" class="text-xs font-bold text-[#7D6E75]">No extra bills added yet — use the form above when a new one comes up.</p>
+        </div>
+      </section>
+
       <!-- SECTION 05: Personal Spending Breakdown (Receipt View) -->
       <section class="pennli-panel p-6 space-y-5">
         <div class="flex items-center justify-between border-b border-[#F2E2E8] pb-4">
@@ -990,6 +1036,10 @@
                 <div id="cian-onetime-row" class="hidden justify-between items-center px-3 py-2 rounded-2xl bg-[#FCE8EE] border border-[#F3C6D4]">
                   <span class="text-[#B83B60]">- One-Time Payment</span>
                   <span id="cian-onetime-display" class="font-mono-num font-extrabold text-[#D64B73]">-£0.00</span>
+                </div>
+                <div id="cian-extra-bill-row" class="hidden justify-between items-center px-3 py-2 rounded-2xl bg-[#FCE8EE] border border-[#F3C6D4]">
+                  <span class="text-[#B83B60]">- Extra Bills &amp; Payments</span>
+                  <span id="cian-extra-bill-display" class="font-mono-num font-extrabold text-[#D64B73]">-£0.00</span>
                 </div>
                 
                 <div class="flex justify-between items-center px-3 py-2 bg-[#E7F7F0] rounded-2xl border border-[#BCE8D6]">
@@ -1042,6 +1092,10 @@
                 <div id="maegan-onetime-row" class="hidden justify-between items-center px-3 py-2 rounded-2xl bg-[#FCE8EE] border border-[#F3C6D4]">
                   <span class="text-[#B83B60]">- One-Time Payment</span>
                   <span id="maegan-onetime-display" class="font-mono-num font-extrabold text-[#D64B73]">-£0.00</span>
+                </div>
+                <div id="maegan-extra-bill-row" class="hidden justify-between items-center px-3 py-2 rounded-2xl bg-[#FCE8EE] border border-[#F3C6D4]">
+                  <span class="text-[#B83B60]">- Extra Bills &amp; Payments</span>
+                  <span id="maegan-extra-bill-display" class="font-mono-num font-extrabold text-[#D64B73]">-£0.00</span>
                 </div>
                 
                 <div class="flex justify-between items-center px-3 py-2 bg-white/50 rounded-xl">
@@ -1212,6 +1266,7 @@
     let debtPayer = localStorage.getItem('debtPayer') || 'split';
     let currentOneTime = parseFloat(localStorage.getItem('oneTimeAmount')) || 0.00;
     let oneTimePayer = localStorage.getItem('oneTimePayer') || 'split';
+    let extraBills = JSON.parse(localStorage.getItem('extraBills') || '[]');
     let isDoublePayday = localStorage.getItem('isDoublePayday') === 'true';
     let slcMonthsPaid = parseInt(localStorage.getItem('slcMonths')) || 1;
     let cpStartingTotal = parseFloat(localStorage.getItem('cpTotal')) || 500.00;
@@ -1252,6 +1307,7 @@
       localStorage.setItem('debtPayer', debtPayer);
       localStorage.setItem('oneTimeAmount', currentOneTime);
       localStorage.setItem('oneTimePayer', oneTimePayer);
+      localStorage.setItem('extraBills', JSON.stringify(extraBills));
       localStorage.setItem('isDoublePayday', isDoublePayday);
       localStorage.setItem('slcMonths', slcMonthsPaid);
       localStorage.setItem('cpTotal', cpStartingTotal);
@@ -1437,7 +1493,22 @@
       const taperDeduction = earningsOverAllowance * TAPER_RATE;
       const ucCashReceived = Math.max(0, BASE_UC - taperDeduction);
 
-      const ucSurplus = ucCashReceived - FIXED_BILLS;
+      const extraPotTotal = extraBills.filter(b => b.paidFrom === 'bills-pot').reduce((sum, b) => sum + (parseFloat(b.amount) || 0), 0);
+      const extraBillsTotal = extraBills.reduce((sum, b) => sum + (parseFloat(b.amount) || 0), 0);
+      const extraCianShare = extraBills.reduce((sum, b) => {
+        const amt = parseFloat(b.amount) || 0;
+        if (b.paidFrom === 'cian') return sum + amt;
+        if (b.paidFrom === 'split') return sum + amt / 2;
+        return sum;
+      }, 0);
+      const extraMaeganShare = extraBills.reduce((sum, b) => {
+        const amt = parseFloat(b.amount) || 0;
+        if (b.paidFrom === 'maegan') return sum + amt;
+        if (b.paidFrom === 'split') return sum + amt / 2;
+        return sum;
+      }, 0);
+      const effectiveFixedBills = FIXED_BILLS + extraPotTotal;
+      const ucSurplus = ucCashReceived - effectiveFixedBills;
       const jointTescoAfterGroceries = Math.max(0, totalTescoPay - GROCERIES);
       const distributedUC = ucSurplus < 0 ? ucSurplus : 0;
       const totalHouseholdCash = jointTescoAfterGroceries + distributedUC;
@@ -1460,14 +1531,15 @@
       const halfShortfall = distributedUC < 0 ? Math.abs(distributedUC / 2) : 0;
       const totalMonthlySavings = savingsPerPerson * 2;
 
-      const cianTotal = tescoHalf - DRIVING_LESSONS - savingsPerPerson - halfShortfall - cianDebtShare - cianOneTimeShare + MAEGAN_PHONE;
-      const maeganTotal = tescoHalf - slcDebt - savingsPerPerson - halfShortfall - maeganDebtShare - maeganOneTimeShare - MAEGAN_PHONE;
+      const cianTotal = tescoHalf - DRIVING_LESSONS - savingsPerPerson - halfShortfall - cianDebtShare - cianOneTimeShare - extraCianShare + MAEGAN_PHONE;
+      const maeganTotal = tescoHalf - slcDebt - savingsPerPerson - halfShortfall - maeganDebtShare - maeganOneTimeShare - extraMaeganShare - MAEGAN_PHONE;
       const extraBoostPerPerson = tescoHalf - (Math.max(0, singleMonthCombined - GROCERIES) / 2);
 
       return {
         singleMonthCombined, totalTescoPay, taperDeduction, ucCashReceived, ucSurplus, distributedUC, totalHouseholdCash,
         slcDebt, savingsPerPerson, totalMonthlySavings, debtAmount, payer, cianDebtShare, maeganDebtShare,
         oneTimeAmount, onePayer, cianOneTimeShare, maeganOneTimeShare,
+        extraBills, extraPotTotal, extraBillsTotal, extraCianShare, extraMaeganShare, effectiveFixedBills,
         tescoHalf, halfShortfall, cianTotal, maeganTotal, doublePayday, normalUcCash, extraBoostPerPerson
       };
     }
@@ -1708,6 +1780,22 @@
         });
       }
 
+      if (calc.extraBills && calc.extraBills.length > 0) {
+        calc.extraBills.forEach(b => {
+          const amt = parseFloat(b.amount) || 0;
+          const who = b.paidFrom === 'bills-pot' ? payerBadge('bills-pot', '🏛️ Bills Pot (UC + Tesco Top-Up)')
+            : b.paidFrom === 'cian' ? payerBadge('personal', "👤 Cian's Cut Only")
+            : b.paidFrom === 'maegan' ? payerBadge('personal', "👤 Maegan's Cut Only")
+            : payerBadge('personal', `👤 Split 50/50 (£${(amt / 2).toFixed(2)} each)`);
+          rows.push({
+            item: `➕ ${b.name}`,
+            amount: `£${amt.toFixed(2)}`,
+            source: who,
+            when: 'Monthly • Added by you'
+          });
+        });
+      }
+
       if (calc.oneTimeAmount > 0) {
         const whoOneTime = calc.onePayer === 'cian' ? "👤 Cian's Cut Only" : (calc.onePayer === 'maegan' ? "👤 Maegan's Cut Only" : `👤 Split 50/50 (£${calc.cianOneTimeShare.toFixed(2)} each)`);
         rows.push({
@@ -1770,7 +1858,7 @@
       document.getElementById('uc-taper-display').innerText = `Base: £790.36 (-£${calc.taperDeduction.toFixed(2)} taper)`;
       
       document.getElementById('uc-surplus-display').innerText = calc.ucSurplus < 0 ? `-£${Math.abs(calc.ucSurplus).toFixed(2)}` : `£${calc.ucSurplus.toFixed(2)}`;
-      document.getElementById('uc-surplus-desc').innerText = calc.ucSurplus < 0 ? "Shortfall to cover £479.99 bills" : "Leftover after £479.99 bills";
+      document.getElementById('uc-surplus-desc').innerText = calc.ucSurplus < 0 ? `Shortfall to cover £${calc.effectiveFixedBills.toFixed(2)} bills` : `Leftover after £${calc.effectiveFixedBills.toFixed(2)} bills`;
       
       document.getElementById('total-cash-display').innerText = `£${calc.totalHouseholdCash.toFixed(2)}`;
 
@@ -1836,6 +1924,28 @@
         maeganOneTimeRow.classList.remove('flex');
       }
 
+      const cianExtraBillRow = document.getElementById('cian-extra-bill-row');
+      if (calc.extraCianShare > 0) {
+        cianExtraBillRow.classList.remove('hidden');
+        cianExtraBillRow.classList.add('flex');
+        document.getElementById('cian-extra-bill-display').innerText = `-£${calc.extraCianShare.toFixed(2)}`;
+      } else {
+        cianExtraBillRow.classList.add('hidden');
+        cianExtraBillRow.classList.remove('flex');
+      }
+
+      const maeganExtraBillRow = document.getElementById('maegan-extra-bill-row');
+      if (calc.extraMaeganShare > 0) {
+        maeganExtraBillRow.classList.remove('hidden');
+        maeganExtraBillRow.classList.add('flex');
+        document.getElementById('maegan-extra-bill-display').innerText = `-£${calc.extraMaeganShare.toFixed(2)}`;
+      } else {
+        maeganExtraBillRow.classList.add('hidden');
+        maeganExtraBillRow.classList.remove('flex');
+      }
+
+      renderExtraBills(calc);
+
       document.getElementById('cian-total-display').innerText = `£${calc.cianTotal.toFixed(2)}`;
       document.getElementById('maegan-total-display').innerText = `£${calc.maeganTotal.toFixed(2)}`;
 
@@ -1866,9 +1976,9 @@
       document.getElementById('action-uc-topup-inline').innerText = `£${billsTopUpNeeded.toFixed(2)}`;
 
       if (calc.ucSurplus >= 0) {
-        document.getElementById('action-uc-surplus-note').innerText = `UC covers all £479.99 bills on its own AND leaves +£${calc.ucSurplus.toFixed(2)} extra buffer in the bank!`;
+        document.getElementById('action-uc-surplus-note').innerText = `UC covers all £${calc.effectiveFixedBills.toFixed(2)} bills on its own AND leaves +£${calc.ucSurplus.toFixed(2)} extra buffer in the bank!`;
       } else {
-        document.getElementById('action-uc-surplus-note').innerText = `£${calc.ucCashReceived.toFixed(2)} UC + £${billsTopUpNeeded.toFixed(2)} from Tesco = Exact £479.99 ready for every bill!`;
+        document.getElementById('action-uc-surplus-note').innerText = `£${calc.ucCashReceived.toFixed(2)} UC + £${billsTopUpNeeded.toFixed(2)} from Tesco = Exact £${calc.effectiveFixedBills.toFixed(2)} ready for every bill!`;
       }
 
       // Update WhatsApp Payday Card Preview (#7)
@@ -1973,7 +2083,7 @@
       msg += `━━━━━━━━━━━━━━━━━━━━\n`;
       msg += `🏛️ *2. ON UNIVERSAL CREDIT DAY*\n`;
       msg += `• UC Cash Landing: *£${calc.ucCashReceived.toFixed(2)}*\n`;
-      msg += `• Action: *Leave 100% in Bills Account* (Joins £${billsTopUpNeeded.toFixed(2)} Tesco top-up = *£479.99* for all household bills! ✅)`;
+      msg += `• Action: *Leave 100% in Bills Account* (Joins £${billsTopUpNeeded.toFixed(2)} Tesco top-up = *£${calc.effectiveFixedBills.toFixed(2)}* for all household bills! ✅)`;
       return msg;
     }
 
@@ -2049,6 +2159,61 @@
       debtPayer = val;
       saveState();
       updateDOM(calculateBudget(currentCianPay, currentMaeganPay, maeganSlcDebt, currentDebt, debtPayer));
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    function renderExtraBills(calc) {
+      const list = document.getElementById('extra-bills-list');
+      const empty = document.getElementById('extra-bills-empty');
+      const totalEl = document.getElementById('extra-bills-total');
+      if (!list) return;
+      const total = (calc ? calc.extraBillsTotal : extraBills.reduce((sum, b) => sum + (parseFloat(b.amount) || 0), 0));
+      if (totalEl) totalEl.innerText = `£${total.toFixed(2)} / month`;
+      if (!extraBills.length) {
+        list.innerHTML = '';
+        if (empty) empty.style.display = 'block';
+        return;
+      }
+      if (empty) empty.style.display = 'none';
+      const label = { 'bills-pot': 'Bills Pot', 'split': 'Split 50/50', 'cian': 'Cian Only', 'maegan': 'Maegan Only' };
+      list.innerHTML = extraBills.map(b => `
+        <div class="p-3 rounded-2xl bg-white border border-[#EBD4DC] flex items-center justify-between gap-3 shadow-sm">
+          <div class="min-w-0">
+            <strong class="text-[#1F191C] font-extrabold text-sm block truncate">${escapeHtml(b.name)}</strong>
+            <span class="text-[11px] font-bold text-[#7D6E75]">${label[b.paidFrom] || 'Bills Pot'} • Monthly</span>
+          </div>
+          <div class="flex items-center gap-3 shrink-0">
+            <span class="font-mono-num font-extrabold text-sm text-[#1F191C]">£${(parseFloat(b.amount) || 0).toFixed(2)}</span>
+            <button type="button" onclick="removeExtraBill(${b.id})" class="px-3 py-1.5 rounded-full bg-[#FCE8EE] text-[#C84369] border border-[#F3C6D4] text-[11px] font-extrabold">Remove</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function addExtraBill() {
+      const nameEl = document.getElementById('extra-bill-name');
+      const amountEl = document.getElementById('extra-bill-amount');
+      const payerEl = document.getElementById('extra-bill-payer');
+      const name = (nameEl.value || '').trim();
+      const amount = parseFloat(amountEl.value);
+      if (!name) { showToast('Give the bill a name first.'); nameEl.focus(); return; }
+      if (isNaN(amount) || amount <= 0) { showToast('Enter an amount over £0.'); amountEl.focus(); return; }
+      extraBills.push({ id: Date.now(), name, amount: amount.toFixed(2), paidFrom: payerEl.value || 'bills-pot' });
+      nameEl.value = '';
+      amountEl.value = '';
+      saveState();
+      updateDOM(calculateBudget());
+      showToast('Bill added — totals updated.');
+    }
+
+    function removeExtraBill(id) {
+      extraBills = extraBills.filter(b => b.id !== id);
+      saveState();
+      updateDOM(calculateBudget());
+      showToast('Bill removed.');
     }
 
     function updateOneTime(val) {
@@ -2128,7 +2293,7 @@ Cian Pay: £${currentCianPay.toFixed(2)} | Maegan Pay: £${currentMaeganPay.toFi
 Total Assessed: £${calc.totalTescoPay.toFixed(2)}
 
 - UC Cash Received: £${calc.ucCashReceived.toFixed(2)}
-- Fixed Bills: £479.99
+- Fixed Bills: £${calc.effectiveFixedBills.toFixed(2)}
 - Cian Pocket Money: £${calc.cianTotal.toFixed(2)}
 - Maegan Pocket Money: £${calc.maeganTotal.toFixed(2)}`;
 
