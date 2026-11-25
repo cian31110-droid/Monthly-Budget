@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#FDF0F5">
+  <meta name="theme-color" content="#050505">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Budget Planner">
@@ -11,38 +11,37 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Quicksand:wght@500;600;700&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@1,500;1,600;1,700&display=swap&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-blush: #FDF0F5;
-      --bg-blush-deep: #FBE0EC;
-      --bg-card: #FFFFFF;
-      --bg-subcard: #FFF7FA;
-      --bg-subcard-tint: #FDEEF5;
-      --border-soft: #F6D5E2;
-      --border-rose: #EFB9CE;
-      --pennli-rose: #EC5E8A;
-      --pennli-rose-dark: #D63D73;
-      --pennli-rose-light: #FDE8F0;
-      --pennli-lilac: #B388EB;
-      --pennli-lilac-light: #F3EAFD;
-      --pennli-gold: #E9B44C;
-      --pennli-ink: #2B1E24;
-      --pennli-muted: #8A6E7B;
-      --pennli-mint: #169B6C;
-      --pennli-mint-bg: #E7F7F0;
+      --bg-blush: #050505;
+      --bg-blush-deep: #0B0B0D;
+      --bg-card: #14141A;
+      --bg-subcard: #101014;
+      --bg-subcard-tint: #101014;
+      --border-soft: #2A2226;
+      --border-rose: #C98A9E;
+      --pennli-rose: #F472A6;
+      --pennli-rose-dark: #EC5E8A;
+      --pennli-rose-light: #1A1216;
+      --pennli-gold: #D4AF37;
+      --pennli-gold-light: #E9C46A;
+      --pennli-ink: #F7EDEF;
+      --pennli-muted: #C4AEB6;
+      --pennli-mint: #34D399;
+      --pennli-mint-bg: #0F1F18;
     }
-    .font-script { font-family: 'Dancing Script', cursive; }
-    .girly-gradient { background: linear-gradient(135deg, #EC5E8A 0%, #E88BB0 55%, #B388EB 100%); }
+    .font-script { font-family: 'Playfair Display', Georgia, serif; font-style: italic; }
+    .girly-gradient { background: linear-gradient(135deg, #F472A6 0%, #EC5E8A 45%, #D4AF37 100%); }
     .extra-bill-paid { opacity: 0.75; }
     .extra-bill-paid .extra-bill-name { text-decoration: line-through; text-decoration-color: #EC5E8A; }
     .fixed-bill-paid { opacity: 0.75; }
     .fixed-bill-paid .fixed-bill-name { text-decoration: line-through; text-decoration-color: #EC5E8A; }
     .fixed-amount-input { width: 120px; min-height: 44px; }
     /* Liquid glass: floating pink/lilac orbs behind the glass cards */
-    .glass-orb { position: fixed; border-radius: 9999px; filter: blur(70px); pointer-events: none; z-index: 0; }
-    .glass-orb-1 { width: 340px; height: 340px; top: -80px; left: -90px; background: radial-gradient(circle, rgba(236,94,138,0.45), transparent 70%); animation: orbFloat 14s ease-in-out infinite; }
-    .glass-orb-2 { width: 300px; height: 300px; top: 32%; right: -110px; background: radial-gradient(circle, rgba(179,136,235,0.42), transparent 70%); animation: orbFloat 18s ease-in-out infinite reverse; }
+    .glass-orb { position: absolute; border-radius: 9999px; filter: blur(70px); pointer-events: none; z-index: 0; }
+    .glass-orb-1 { width: 340px; height: 340px; top: -80px; left: -90px; background: radial-gradient(circle, rgba(244,114,166,0.35), transparent 70%); animation: orbFloat 14s ease-in-out infinite; }
+    .glass-orb-2 { width: 300px; height: 300px; top: 32%; right: -110px; background: radial-gradient(circle, rgba(212,175,55,0.32), transparent 70%); animation: orbFloat 18s ease-in-out infinite reverse; }
     .glass-orb-3 { width: 280px; height: 280px; bottom: -60px; left: 28%; background: radial-gradient(circle, rgba(233,180,76,0.28), transparent 70%); animation: orbFloat 16s ease-in-out infinite; }
     @keyframes orbFloat { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(24px,-28px) scale(1.08); } }
     @keyframes cardIn { from { opacity: 0; transform: translateY(14px) scale(0.985); } to { opacity: 1; transform: translateY(0) scale(1); } }
@@ -53,15 +52,15 @@
     .total-bump { display: inline-block; animation: totalBump 0.45s ease; }
     .bill-row-in { animation: billSlideIn 0.35s ease both; }
     @media (prefers-reduced-motion: reduce) { .glass-orb, .pennli-panel, .bill-row-in, .total-bump { animation: none !important; } }
-    input[type="checkbox"].girly-tick { appearance: none; -webkit-appearance: none; width: 44px; height: 44px; border-radius: 999px; border: 2px solid #EFB9CE; background: #fff; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: all 0.15s ease; }
-    input[type="checkbox"].girly-tick:checked { background: linear-gradient(135deg, #EC5E8A, #B388EB); border-color: #EC5E8A; animation: tickPop 0.35s ease; box-shadow: 0 0 0 4px rgba(236, 94, 138, 0.18); }
-    input[type="checkbox"].girly-tick:checked::after { content: '♥'; color: #fff; font-size: 20px; line-height: 1; }
+    input[type="checkbox"].girly-tick { appearance: none; -webkit-appearance: none; width: 44px; height: 44px; border-radius: 999px; border: 2px solid #D4AF37; background: #0B0B0D; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: all 0.15s ease; }
+    input[type="checkbox"].girly-tick:checked { background: linear-gradient(135deg, #F472A6, #D4AF37); border-color: #D4AF37; animation: tickPop 0.35s ease; box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.25), 0 0 18px rgba(244, 114, 166, 0.35); }
+    input[type="checkbox"].girly-tick:checked::after { content: '♥'; color: #FFF7D6; font-size: 20px; line-height: 1; }
     .extra-amount-input { width: 120px; min-height: 44px; }
 
     body {
       background-color: var(--bg-blush);
       color: var(--pennli-ink);
-      font-family: 'Quicksand', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
     }
@@ -70,54 +69,55 @@
     .ambient-backdrop {
       background-color: var(--bg-blush);
       background-image:
-        linear-gradient(160deg, #FDEAF2 0%, #FBE0EC 38%, #F3EAFD 72%, #FDF0F5 100%),
-        radial-gradient(circle at 15% 0%, rgba(236, 94, 138, 0.22) 0%, transparent 48%),
-        radial-gradient(circle at 85% 10%, rgba(179, 136, 235, 0.18) 0%, transparent 42%);
-      background-attachment: fixed;
+        radial-gradient(circle at 15% 0%, rgba(244, 114, 166, 0.20) 0%, transparent 48%),
+        radial-gradient(circle at 85% 10%, rgba(212, 175, 55, 0.16) 0%, transparent 42%),
+        radial-gradient(circle at 50% 100%, rgba(236, 94, 138, 0.10) 0%, transparent 55%),
+        linear-gradient(180deg, #050505 0%, #0A0A0C 100%);
+      background-attachment: scroll;
     }
 
     /* Liquid glass cards: frosted, translucent, iOS-style */
     .pennli-panel {
-      background: linear-gradient(150deg, rgba(255,255,255,0.62), rgba(255,240,246,0.48) 55%, rgba(243,234,253,0.52));
-      border: 1px solid rgba(255, 255, 255, 0.75);
+      background: linear-gradient(150deg, rgba(255,255,255,0.07), rgba(244,114,166,0.05) 55%, rgba(212,175,55,0.04));
+      border: 1px solid rgba(212, 175, 55, 0.35);
       border-radius: 32px;
-      box-shadow: 0 18px 44px -12px rgba(186, 87, 116, 0.22), 0 2px 6px rgba(186, 87, 116, 0.05), inset 0 1px 0 rgba(255,255,255,0.9), inset 0 -1px 0 rgba(236,94,138,0.08);
+      box-shadow: 0 18px 44px -12px rgba(0, 0, 0, 0.7), 0 2px 6px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.12), inset 0 -1px 0 rgba(212,175,55,0.12);
       backdrop-filter: blur(24px) saturate(180%);
       -webkit-backdrop-filter: blur(24px) saturate(180%);
       animation: cardIn 0.6s ease both;
       transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
     }
-    .pennli-panel:hover { transform: translateY(-1px); box-shadow: 0 22px 48px -12px rgba(186, 87, 116, 0.26), inset 0 1px 0 rgba(255,255,255,0.95); }
+    .pennli-panel:hover { transform: translateY(-1px); box-shadow: 0 22px 48px -12px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255,255,255,0.16); }
 
     /* Signature Tinted "Left to Spend" Envelope Card — liquid glass */
     .pennli-hero-card {
-      background: linear-gradient(165deg, rgba(255,240,246,0.72) 0%, rgba(253,232,240,0.58) 55%, rgba(243,234,253,0.66) 100%);
-      border: 1px solid rgba(255, 255, 255, 0.8);
+      background: linear-gradient(165deg, rgba(244,114,166,0.14) 0%, rgba(255,255,255,0.05) 55%, rgba(212,175,55,0.10) 100%);
+      border: 1px solid rgba(212, 175, 55, 0.45);
       border-radius: 28px;
-      box-shadow: 0 14px 34px -10px rgba(212, 95, 130, 0.16), inset 0 1px 0 rgba(255,255,255,0.9);
+      box-shadow: 0 14px 34px -10px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255,255,255,0.14);
       backdrop-filter: blur(20px) saturate(170%);
       -webkit-backdrop-filter: blur(20px) saturate(170%);
       transition: transform 0.25s ease, box-shadow 0.25s ease;
     }
 
     .pennli-subcard {
-      background: rgba(255, 255, 255, 0.55);
-      border: 1px solid rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(212, 175, 55, 0.25);
       border-radius: 20px;
       backdrop-filter: blur(16px) saturate(160%);
       -webkit-backdrop-filter: blur(16px) saturate(160%);
       transition: all 0.25s ease;
     }
     .pennli-subcard:hover {
-      border-color: var(--border-rose);
-      background: rgba(255, 255, 255, 0.72);
-      box-shadow: 0 8px 22px -6px rgba(186, 87, 116, 0.14);
+      border-color: rgba(212, 175, 55, 0.55);
+      background: rgba(255, 255, 255, 0.09);
+      box-shadow: 0 8px 22px -6px rgba(0, 0, 0, 0.6);
       transform: translateY(-1px);
     }
 
     .pennli-input {
-      background: rgba(255, 255, 255, 0.65);
-      border: 1.5px solid rgba(235, 212, 220, 0.9);
+      background: rgba(0, 0, 0, 0.45);
+      border: 1.5px solid rgba(212, 175, 55, 0.4);
       border-radius: 14px;
       color: var(--pennli-ink);
       backdrop-filter: blur(10px);
@@ -126,8 +126,8 @@
     }
     .pennli-input:focus {
       outline: none;
-      border-color: var(--pennli-rose);
-      box-shadow: 0 0 0 3px rgba(224, 90, 128, 0.16);
+      border-color: var(--pennli-gold);
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.25);
     }
 
     /* Clean Tabular Numbers */
@@ -146,10 +146,10 @@
       height: 22px;
       width: 22px;
       border-radius: 999px;
-      background: var(--pennli-rose);
+      background: var(--pennli-gold);
       cursor: pointer;
       margin-top: -8px;
-      box-shadow: 0 3px 10px rgba(224, 90, 128, 0.45);
+      box-shadow: 0 3px 10px rgba(212, 175, 55, 0.5);
       border: 3px solid #FFFFFF;
       transition: transform 0.15s ease, background-color 0.15s ease;
     }
@@ -161,17 +161,17 @@
       width: 100%;
       height: 6px;
       cursor: pointer;
-      background: #F2D6E0;
+      background: linear-gradient(90deg, #F472A6, #D4AF37);
       border-radius: 999px;
     }
 
     /* Floating iOS Frosted Bottom Tab Bar — liquid glass */
     .ios-frosted-bar {
-      background: linear-gradient(135deg, rgba(255,255,255,0.62), rgba(253,232,240,0.5));
+      background: linear-gradient(135deg, rgba(10,10,12,0.82), rgba(26,18,22,0.78));
       backdrop-filter: blur(28px) saturate(200%);
       -webkit-backdrop-filter: blur(28px) saturate(200%);
-      border: 1px solid rgba(255, 255, 255, 0.8);
-      box-shadow: 0 14px 36px rgba(145, 65, 92, 0.18), inset 0 1px 0 rgba(255,255,255,0.9);
+      border: 1px solid rgba(212, 175, 55, 0.45);
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255,255,255,0.14);
     }
 
     ::-webkit-scrollbar {
@@ -179,16 +179,18 @@
       height: 6px;
     }
     ::-webkit-scrollbar-track {
-      background: #FAF3F5;
+      background: #0A0A0C;
     }
     ::-webkit-scrollbar-thumb {
-      background: #E5C2CE;
+      background: linear-gradient(180deg, #F472A6, #D4AF37);
       border-radius: 9999px;
     }
 
     /* ---- Mobile-first (phone-first): Cian only uses his phone ---- */
-    html { -webkit-text-size-adjust: 100%; }
-    body { touch-action: manipulation; -webkit-tap-highlight-color: transparent; overscroll-behavior-y: none; }
+    html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-bottom: 140px; }
+    html, body { height: auto; min-height: 100%; }
+    body { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+    body { touch-action: manipulation; -webkit-tap-highlight-color: transparent; overscroll-behavior-y: auto; }
     /* Safe area: notch / home indicator. Body already has pb-32; add the inset on top. */
     body { padding-bottom: calc(8rem + env(safe-area-inset-bottom, 0px)); }
     .max-w-3xl { padding-top: env(safe-area-inset-top, 0px); }
@@ -225,23 +227,38 @@
       #tab-page-3 span:last-child { font-size: 0; }
       #tab-page-3 span:last-child::after { content: "Sheet"; font-size: 11px; }
     }
+
+    /* ---- Black & gold theme: overrides for light Tailwind utilities ---- */
+    .bg-white { background-color: rgba(255,255,255,0.06) !important; }
+    .bg-white\/90 { background-color: rgba(20,12,16,0.92) !important; }
+    .bg-white\/50 { background-color: rgba(255,255,255,0.05) !important; }
+    .hover\:bg-\[\#101014\]:hover { background-color: rgba(255,255,255,0.10) !important; }
+    .shadow-sm, .shadow-inner { box-shadow: 0 4px 18px rgba(0,0,0,0.5) !important; }
+    /* selected top/bottom tabs on black */
+    #tab-page-1.bg-white, #tab-page-2.bg-white, #tab-page-3.bg-white { background-color: rgba(212,175,55,0.18) !important; color: #F7EDEF !important; }
+    #bottom-tab-1.bg-\[\#1A1216\], #bottom-tab-2.bg-\[\#1A1216\], #bottom-tab-3.bg-\[\#1A1216\] { background-color: rgba(212,175,55,0.22) !important; color: #F7EDEF !important; }
+    /* gold hairline on the top segmented nav */
+    nav.p-2 { background-color: rgba(255,255,255,0.04) !important; border-color: rgba(212,175,55,0.35) !important; }
+    /* keep the fixed bottom bar above content but never covering the footer */
+    .ios-frosted-bar { pointer-events: auto; }
+
     /* Spreadsheet table becomes stacked cards on a phone (desktop table unchanged). */
     @media (max-width: 640px) {
       input, select, textarea { font-size: 16px !important; }
-      #spreadsheet-tbody tr.bg-\[\#FAF0F4\] { display: block; }
-      #spreadsheet-tbody tr.bg-\[\#FAF0F4\] td { display: block; padding: 12px 16px 4px; }
-      #spreadsheet-tbody tr:not(.bg-\[\#FAF0F4\]) { display: block; margin: 0 12px 12px; border: 1px solid #F2E2E8; border-radius: 18px; background: rgba(255,255,255,0.65); overflow: hidden; }
-      #spreadsheet-tbody tr:not(.bg-\[\#FAF0F4\]) td { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 16px; text-align: right; }
-      #spreadsheet-tbody tr:not(.bg-\[\#FAF0F4\]) td::before { content: attr(data-label); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: #7D6E75; text-align: left; flex-shrink: 0; }
-      #spreadsheet-tbody tr:not(.bg-\[\#FAF0F4\]) td:first-child { justify-content: flex-start; text-align: left; padding-top: 14px; }
-      #spreadsheet-tbody tr:not(.bg-\[\#FAF0F4\]) td:first-child::before { display: none; }
-      #spreadsheet-tbody tr:not(.bg-\[\#FAF0F4\]) td[data-label="When"] { display: flex !important; }
+      #spreadsheet-tbody tr.bg-\[\#14141A\] { display: block; }
+      #spreadsheet-tbody tr.bg-\[\#14141A\] td { display: block; padding: 12px 16px 4px; }
+      #spreadsheet-tbody tr:not(.bg-\[\#14141A\]) { display: block; margin: 0 12px 12px; border: 1px solid #2A2226; border-radius: 18px; background: rgba(255,255,255,0.05); overflow: hidden; }
+      #spreadsheet-tbody tr:not(.bg-\[\#14141A\]) td { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 16px; text-align: right; }
+      #spreadsheet-tbody tr:not(.bg-\[\#14141A\]) td::before { content: attr(data-label); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: #C4AEB6; text-align: left; flex-shrink: 0; }
+      #spreadsheet-tbody tr:not(.bg-\[\#14141A\]) td:first-child { justify-content: flex-start; text-align: left; padding-top: 14px; }
+      #spreadsheet-tbody tr:not(.bg-\[\#14141A\]) td:first-child::before { display: none; }
+      #spreadsheet-tbody tr:not(.bg-\[\#14141A\]) td[data-label="When"] { display: flex !important; }
       #page-3-container .overflow-x-auto { overflow-x: visible; }
       #page-3-container table thead { display: none; }
     }
   </style>
 </head>
-<body class="min-h-screen ambient-backdrop selection:bg-[#FCE8EE] selection:text-[#C84369] pb-32">
+<body class="min-h-screen ambient-backdrop selection:bg-[#D4AF37] selection:text-[#050505] pb-32">
   <div class="glass-orb glass-orb-1" aria-hidden="true"></div>
   <div class="glass-orb glass-orb-2" aria-hidden="true"></div>
   <div class="glass-orb glass-orb-3" aria-hidden="true"></div>
@@ -251,68 +268,66 @@
     <!-- Top Pennli-Inspired App Header -->
     <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2">
       <div class="flex items-center gap-3.5">
-        <div class="w-14 h-14 rounded-[20px] bg-[#FADCE6] border border-[#F2C4D3] shadow-sm flex items-center justify-center shrink-0">
+        <div class="w-14 h-14 rounded-[20px] bg-[#1A1216] border border-[#4A3440] shadow-sm flex items-center justify-center shrink-0">
           <svg class="w-10 h-10" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M21 26V20C21 13.9249 25.9249 9 32 9C38.0751 9 43 13.9249 43 20V26" stroke="#2D2227" stroke-width="3" stroke-linecap="round"/>
-            <circle cx="32" cy="24" r="9.5" fill="#F7C948" stroke="#2D2227" stroke-width="2.8"/>
+            <path d="M21 26V20C21 13.9249 25.9249 9 32 9C38.0751 9 43 13.9249 43 20V26" stroke="#F7EDEF" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="32" cy="24" r="9.5" fill="#F7C948" stroke="#F7EDEF" stroke-width="2.8"/>
             <circle cx="32" cy="24" r="6" stroke="#E0A81E" stroke-width="1.5"/>
-            <path d="M13 25C13 23.3431 14.3431 22 16 22H48C49.6569 22 51 23.3431 51 25L47.8 49.4C47.34 52.8 44.44 55.4 41.01 55.4H22.99C19.56 55.4 16.66 52.8 16.2 49.4L13 25Z" fill="#EA638C" stroke="#2D2227" stroke-width="3" stroke-linejoin="round"/>
+            <path d="M13 25C13 23.3431 14.3431 22 16 22H48C49.6569 22 51 23.3431 51 25L47.8 49.4C47.34 52.8 44.44 55.4 41.01 55.4H22.99C19.56 55.4 16.66 52.8 16.2 49.4L13 25Z" fill="#EA638C" stroke="#F7EDEF" stroke-width="3" stroke-linejoin="round"/>
             <path d="M20 29L21.5 46" stroke="#F69BB7" stroke-width="2.5" stroke-linecap="round"/>
           </svg>
         </div>
         <div>
-          <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-[#FDE8F0] text-[#D63D73] border border-[#F5CCD8]">💖 Household Finance</span>
-          <h1 class="text-2xl sm:text-3xl font-extrabold text-[#1F191C] tracking-tight mt-1">
-            Know what’s <span class="text-[#E05A80]">safe to spend</span>
+          <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-[#1A1216] text-[#D63D73] border border-[#4A3440]">Household Finance</span>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-[#F7EDEF] tracking-tight mt-1"> Know what’s <span class="text-[#E05A80]">safe to spend</span>
           </h1>
-          <p class="font-script text-2xl text-[#D63D73] leading-tight mt-1">Made with love, for our home 💕</p>
+          <p class="font-script text-2xl text-[#D63D73] leading-tight mt-1">Made with love, for our home </p>
         </div>
       </div>
 
       <!-- Action Buttons -->
       <div class="flex flex-wrap items-center gap-2">
         <button type="button" onclick="copyWhatsAppCard()" class="px-4 py-2.5 rounded-2xl bg-[#E05A80] hover:bg-[#C84369] text-white font-extrabold text-xs shadow-sm transition-all active:scale-95 flex items-center gap-1.5">
-          <span>📱 Send to Maegan</span>
+          <span>Send to Maegan</span>
         </button>
-        <button type="button" onclick="saveCurrentMonth()" class="px-3.5 py-2.5 rounded-2xl bg-white hover:bg-[#FDF4F7] border border-[#EBD4DC] text-[#1F191C] font-extrabold text-xs shadow-sm transition-all active:scale-95">
-          💾 Save Month
+        <button type="button" onclick="saveCurrentMonth()" class="px-3.5 py-2.5 rounded-2xl bg-white hover:bg-[#101014] border border-[#3A2E33] text-[#F7EDEF] font-extrabold text-xs shadow-sm transition-all active:scale-95"> Save Month
         </button>
-        <button type="button" id="copy-summary-btn" onclick="copySummary()" class="px-3.5 py-2.5 rounded-2xl bg-white hover:bg-[#FDF4F7] border border-[#EBD4DC] text-[#7D6E75] hover:text-[#1F191C] font-extrabold text-xs shadow-sm transition-all active:scale-95">
-          <span id="copy-summary-btn-label">📋 Copy</span>
+        <button type="button" id="copy-summary-btn" onclick="copySummary()" class="px-3.5 py-2.5 rounded-2xl bg-white hover:bg-[#101014] border border-[#3A2E33] text-[#C4AEB6] hover:text-[#F7EDEF] font-extrabold text-xs shadow-sm transition-all active:scale-95">
+          <span id="copy-summary-btn-label">Copy</span>
         </button>
-        <button type="button" id="sound-toggle" onclick="toggleSounds()" aria-pressed="false" class="px-3.5 py-2.5 rounded-2xl bg-white hover:bg-[#FDF4F7] border border-[#EBD4DC] text-[#7D6E75] hover:text-[#1F191C] font-extrabold text-xs shadow-sm transition-all active:scale-95">
-          <span id="sound-toggle-label">🔇 Sounds off</span>
+        <button type="button" id="sound-toggle" onclick="toggleSounds()" aria-pressed="false" class="px-3.5 py-2.5 rounded-2xl bg-white hover:bg-[#101014] border border-[#3A2E33] text-[#C4AEB6] hover:text-[#F7EDEF] font-extrabold text-xs shadow-sm transition-all active:scale-95">
+          <span id="sound-toggle-label">Sounds off</span>
         </button>
       </div>
     </header>
 
     <!-- Top Segmented 3-Page Switcher Navigation -->
-    <nav class="p-2 rounded-[22px] bg-[#F3DFE6] border border-[#EBCAD6] grid grid-cols-3 gap-1.5 shadow-inner">
+    <nav class="p-2 rounded-[22px] bg-[#141014] border border-[#3A2E33] grid grid-cols-3 gap-1.5 shadow-inner">
       <button
         type="button"
         id="tab-page-1"
         onclick="switchPage(1)"
-        class="py-3 px-2 sm:px-4 rounded-2xl text-[11px] sm:text-xs font-extrabold transition-all bg-white text-[#1F191C] shadow-sm flex items-center justify-center gap-1.5"
+        class="py-3 px-2 sm:px-4 rounded-2xl text-[11px] sm:text-xs font-extrabold transition-all bg-white text-[#F7EDEF] shadow-sm flex items-center justify-center gap-1.5"
       >
-        <span class="text-sm">👜</span>
+        <span class="text-sm"></span>
         <span>Safe to Spend</span>
       </button>
       <button
         type="button"
         id="tab-page-2"
         onclick="switchPage(2)"
-        class="py-3 px-2 sm:px-4 rounded-2xl text-[11px] sm:text-xs font-extrabold transition-all text-[#7D6E75] hover:text-[#1F191C] flex items-center justify-center gap-1.5"
+        class="py-3 px-2 sm:px-4 rounded-2xl text-[11px] sm:text-xs font-extrabold transition-all text-[#C4AEB6] hover:text-[#F7EDEF] flex items-center justify-center gap-1.5"
       >
-        <span class="text-sm">📊</span>
+        <span class="text-sm"></span>
         <span>Analyze &amp; Setup</span>
       </button>
       <button
         type="button"
         id="tab-page-3"
         onclick="switchPage(3)"
-        class="py-3 px-2 sm:px-4 rounded-2xl text-[11px] sm:text-xs font-extrabold transition-all text-[#7D6E75] hover:text-[#1F191C] flex items-center justify-center gap-1.5"
+        class="py-3 px-2 sm:px-4 rounded-2xl text-[11px] sm:text-xs font-extrabold transition-all text-[#C4AEB6] hover:text-[#F7EDEF] flex items-center justify-center gap-1.5"
       >
-        <span class="text-sm">📑</span>
+        <span class="text-sm"></span>
         <span>Spreadsheet</span>
       </button>
     </nav>
@@ -325,19 +340,19 @@
       <!-- Quick Cycle & Envelope Pills Strip -->
       <section class="pennli-panel p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <span class="text-xs font-extrabold text-[#E05A80] uppercase tracking-wider block">📅 4-Week Tesco Cycle</span>
-          <h2 class="text-lg font-extrabold text-[#1F191C] tracking-tight mt-0.5">Your Weekly Spending Envelopes</h2>
+          <span class="text-xs font-extrabold text-[#E05A80] uppercase tracking-wider block">4-Week Tesco Cycle</span>
+          <h2 class="text-lg font-extrabold text-[#F7EDEF] tracking-tight mt-0.5">Your Weekly Spending Envelopes</h2>
         </div>
         <div class="flex flex-wrap items-center gap-2">
-          <div class="px-4 py-2 rounded-2xl bg-[#FDF4F7] border border-[#F0D5DF] text-xs font-bold">
-            <span class="text-[#7D6E75]">Next Tesco: </span>
-            <strong id="p1-next-tesco" class="text-[#1F191C] font-mono-num font-extrabold">--</strong>
+          <div class="px-4 py-2 rounded-2xl bg-[#101014] border border-[#3A2E33] text-xs font-bold">
+            <span class="text-[#C4AEB6]">Next Tesco: </span>
+            <strong id="p1-next-tesco" class="text-[#F7EDEF] font-mono-num font-extrabold">--</strong>
           </div>
-          <div class="px-4 py-2 rounded-2xl bg-[#E7F7F0] border border-[#BCE8D6] text-xs font-bold">
+          <div class="px-4 py-2 rounded-2xl bg-[#0F1F18] border border-[#1E3A2E] text-xs font-bold">
             <span class="text-[#147A54]">Groceries: </span>
             <strong class="text-[#138A5E] font-mono-num font-extrabold">£50.00 / wk</strong>
           </div>
-          <div class="px-4 py-2 rounded-2xl bg-[#FCE8EE] border border-[#F4C4D3] text-xs font-bold">
+          <div class="px-4 py-2 rounded-2xl bg-[#1A1216] border border-[#4A3440] text-xs font-bold">
             <span class="text-[#B83B60]">Joint Savings: </span>
             <strong id="p1-header-savings" class="text-[#D64B73] font-mono-num font-extrabold">£100.00 / mo</strong>
           </div>
@@ -350,30 +365,30 @@
         <div class="pennli-hero-card p-6 sm:p-7 space-y-6 flex flex-col justify-between relative overflow-hidden">
           <div class="flex items-start justify-between">
             <div>
-              <span class="text-xs font-extrabold uppercase tracking-wider text-[#C84369] block">👤 Cian's Envelope</span>
-              <h3 class="text-2xl font-extrabold text-[#1F191C] mt-1">Left to spend</h3>
+              <span class="text-xs font-extrabold uppercase tracking-wider text-[#C84369] block">Cian's Envelope</span>
+              <h3 class="text-2xl font-extrabold text-[#F7EDEF] mt-1">Left to spend</h3>
             </div>
-            <div class="w-14 h-14 rounded-2xl bg-white/90 border border-[#F1CEDB] flex items-center justify-center shadow-sm shrink-0">
+            <div class="w-14 h-14 rounded-2xl bg-white/90 border border-[#3A2E33] flex items-center justify-center shadow-sm shrink-0">
               <svg class="w-9 h-9" viewBox="0 0 64 64" fill="none">
                 <path d="M22 25V20C22 14.5 26.5 10 32 10C37.5 10 42 14.5 42 20V25" stroke="#8C4A60" stroke-width="3.5" stroke-linecap="round"/>
                 <circle cx="32" cy="24" r="9" fill="#F7C948" stroke="#8C4A60" stroke-width="2.5"/>
                 <path d="M15 25C15 23.3 16.3 22 18 22H46C47.7 22 49 23.3 49 25L46 48C45.5 51.5 42.5 54 39 54H25C21.5 54 18.5 51.5 18 48L15 25Z" fill="#E56B92" stroke="#8C4A60" stroke-width="2.8"/>
-                <circle cx="32" cy="40" r="3.5" fill="#FCE8EE"/>
+                <circle cx="32" cy="40" r="3.5" fill="#1A1216"/>
               </svg>
             </div>
           </div>
 
           <!-- Big Pennli Currency Display -->
-          <div class="p-4 rounded-2xl bg-white/80 border border-[#F1D4DF] space-y-2">
+          <div class="p-4 rounded-2xl bg-white/80 border border-[#3A2E33] space-y-2">
             <div class="flex items-baseline gap-2 flex-wrap">
-              <div id="p1-cian-weekly" class="text-4xl sm:text-5xl font-mono-num font-extrabold text-[#1F191C] tracking-tight">
+              <div id="p1-cian-weekly" class="text-4xl sm:text-5xl font-mono-num font-extrabold text-[#F7EDEF] tracking-tight">
                 £131.35
               </div>
-              <span class="text-xs font-bold text-[#7D6E75] font-mono-num">
-                of <strong id="p1-cian-monthly" class="text-[#1F191C]">£525.38</strong> monthly
+              <span class="text-xs font-bold text-[#C4AEB6] font-mono-num">
+                of <strong id="p1-cian-monthly" class="text-[#F7EDEF]">£525.38</strong> monthly
               </span>
             </div>
-            <p class="text-xs font-bold text-[#7D6E75] pt-1 border-t border-[#F0DCE3] flex items-center justify-between">
+            <p class="text-xs font-bold text-[#C4AEB6] pt-1 border-t border-[#3A2E33] flex items-center justify-between">
               <span>Per week allowance</span>
               <strong id="p1-cian-daily" class="text-[#C84369] font-mono-num font-extrabold">£18.76 / day</strong>
             </p>
@@ -381,12 +396,12 @@
 
           <!-- Pennli Signature Pink Progress Bar -->
           <div class="space-y-2">
-            <div class="w-full h-3 bg-[#F2CEDB] rounded-full overflow-hidden p-0.5 bg-white">
+            <div class="w-full h-3 bg-[#3A2E33] rounded-full overflow-hidden p-0.5 bg-white">
               <div id="p1-cian-progress-bar" class="h-full bg-[#E05A80] rounded-full transition-all duration-300" style="width: 100%"></div>
             </div>
             <div class="flex items-center justify-between text-xs font-bold">
-              <span class="text-[#7D6E75]">Tap a week below as you spend it</span>
-              <span id="p1-cian-remaining-label" class="font-mono-num text-[#C84369] bg-white px-2.5 py-1 rounded-xl border border-[#F1D4DF]">£525.38 left</span>
+              <span class="text-[#C4AEB6]">Tap a week below as you spend it</span>
+              <span id="p1-cian-remaining-label" class="font-mono-num text-[#C84369] bg-white px-2.5 py-1 rounded-xl border border-[#3A2E33]">£525.38 left</span>
             </div>
           </div>
 
@@ -398,30 +413,30 @@
         <div class="pennli-hero-card p-6 sm:p-7 space-y-6 flex flex-col justify-between relative overflow-hidden">
           <div class="flex items-start justify-between">
             <div>
-              <span class="text-xs font-extrabold uppercase tracking-wider text-[#14855C] block">👤 Maegan's Envelope</span>
-              <h3 class="text-2xl font-extrabold text-[#1F191C] mt-1">Left to spend</h3>
+              <span class="text-xs font-extrabold uppercase tracking-wider text-[#14855C] block">Maegan's Envelope</span>
+              <h3 class="text-2xl font-extrabold text-[#F7EDEF] mt-1">Left to spend</h3>
             </div>
-            <div class="w-14 h-14 rounded-2xl bg-white/90 border border-[#F1CEDB] flex items-center justify-center shadow-sm shrink-0">
+            <div class="w-14 h-14 rounded-2xl bg-white/90 border border-[#3A2E33] flex items-center justify-center shadow-sm shrink-0">
               <svg class="w-9 h-9" viewBox="0 0 64 64" fill="none">
                 <path d="M22 25V20C22 14.5 26.5 10 32 10C37.5 10 42 14.5 42 20V25" stroke="#8C4A60" stroke-width="3.5" stroke-linecap="round"/>
                 <circle cx="32" cy="24" r="9" fill="#F7C948" stroke="#8C4A60" stroke-width="2.5"/>
                 <path d="M15 25C15 23.3 16.3 22 18 22H46C47.7 22 49 23.3 49 25L46 48C45.5 51.5 42.5 54 39 54H25C21.5 54 18.5 51.5 18 48L15 25Z" fill="#E56B92" stroke="#8C4A60" stroke-width="2.8"/>
-                <circle cx="32" cy="40" r="3.5" fill="#FCE8EE"/>
+                <circle cx="32" cy="40" r="3.5" fill="#1A1216"/>
               </svg>
             </div>
           </div>
 
           <!-- Big Pennli Currency Display -->
-          <div class="p-4 rounded-2xl bg-white/80 border border-[#F1D4DF] space-y-2">
+          <div class="p-4 rounded-2xl bg-white/80 border border-[#3A2E33] space-y-2">
             <div class="flex items-baseline gap-2 flex-wrap">
-              <div id="p1-maegan-weekly" class="text-4xl sm:text-5xl font-mono-num font-extrabold text-[#1F191C] tracking-tight">
+              <div id="p1-maegan-weekly" class="text-4xl sm:text-5xl font-mono-num font-extrabold text-[#F7EDEF] tracking-tight">
                 £107.85
               </div>
-              <span class="text-xs font-bold text-[#7D6E75] font-mono-num">
-                of <strong id="p1-maegan-monthly" class="text-[#1F191C]">£431.38</strong> monthly
+              <span class="text-xs font-bold text-[#C4AEB6] font-mono-num">
+                of <strong id="p1-maegan-monthly" class="text-[#F7EDEF]">£431.38</strong> monthly
               </span>
             </div>
-            <p class="text-xs font-bold text-[#7D6E75] pt-1 border-t border-[#F0DCE3] flex items-center justify-between">
+            <p class="text-xs font-bold text-[#C4AEB6] pt-1 border-t border-[#3A2E33] flex items-center justify-between">
               <span>Per week allowance</span>
               <strong id="p1-maegan-daily" class="text-[#14855C] font-mono-num font-extrabold">£15.41 / day</strong>
             </p>
@@ -429,12 +444,12 @@
 
           <!-- Pennli Signature Pink Progress Bar -->
           <div class="space-y-2">
-            <div class="w-full h-3 bg-[#F2CEDB] rounded-full overflow-hidden p-0.5 bg-white">
+            <div class="w-full h-3 bg-[#3A2E33] rounded-full overflow-hidden p-0.5 bg-white">
               <div id="p1-maegan-progress-bar" class="h-full bg-[#E05A80] rounded-full transition-all duration-300" style="width: 100%"></div>
             </div>
             <div class="flex items-center justify-between text-xs font-bold">
-              <span class="text-[#7D6E75]">Tap a week below as you spend it</span>
-              <span id="p1-maegan-remaining-label" class="font-mono-num text-[#14855C] bg-white px-2.5 py-1 rounded-xl border border-[#F1D4DF]">£431.38 left</span>
+              <span class="text-[#C4AEB6]">Tap a week below as you spend it</span>
+              <span id="p1-maegan-remaining-label" class="font-mono-num text-[#14855C] bg-white px-2.5 py-1 rounded-xl border border-[#3A2E33]">£431.38 left</span>
             </div>
           </div>
 
@@ -445,41 +460,40 @@
 
       <!-- Essential Payday Hold-Back Summary ("Coming up this month") -->
       <section class="pennli-panel p-6 space-y-5">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#F2E2E8] pb-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#2A2226] pb-4">
           <div>
-            <span class="text-xs font-extrabold text-[#E05A80] uppercase tracking-wider block">🛡️ Protected Envelopes</span>
-            <h3 class="text-lg font-extrabold text-[#1F191C] mt-0.5">Essential Money Aside This Month</h3>
+            <span class="text-xs font-extrabold text-[#E05A80] uppercase tracking-wider block">Protected Envelopes</span>
+            <h3 class="text-lg font-extrabold text-[#F7EDEF] mt-0.5">Essential Money Aside This Month</h3>
           </div>
-          <button type="button" onclick="resetWeeksTracker()" class="px-3.5 py-2 rounded-xl bg-[#FDF4F7] hover:bg-[#FCE8EE] border border-[#EBD4DC] text-xs font-extrabold text-[#C84369] transition-all active:scale-95">
-            🔄 Reset 4-Week Tracker
+          <button type="button" onclick="resetWeeksTracker()" class="px-3.5 py-2 rounded-xl bg-[#101014] hover:bg-[#1A1216] border border-[#3A2E33] text-xs font-extrabold text-[#C84369] transition-all active:scale-95"> Reset 4-Week Tracker
           </button>
         </div>
 
         <div class="grid grid-cols-2 sm:grid-cols-5 gap-3.5">
           <div class="p-4 pennli-subcard space-y-1">
-            <span class="text-[11px] font-extrabold text-[#7D6E75] block">🛒 Groceries</span>
-            <span class="text-xs font-bold text-[#7D6E75] block">£50/wk</span>
-            <span class="text-base font-mono-num font-extrabold text-[#1F191C] pt-1 block">£200.00</span>
+            <span class="text-[11px] font-extrabold text-[#C4AEB6] block">Groceries</span>
+            <span class="text-xs font-bold text-[#C4AEB6] block">£50/wk</span>
+            <span class="text-base font-mono-num font-extrabold text-[#F7EDEF] pt-1 block">£200.00</span>
           </div>
-          <div class="p-4 rounded-[22px] bg-[#E7F7F0] border border-[#BDE8D6] space-y-1">
-            <span class="text-[11px] font-extrabold text-[#147A54] block">🐷 Joint Savings</span>
+          <div class="p-4 rounded-[22px] bg-[#0F1F18] border border-[#1E3A2E] space-y-1">
+            <span class="text-[11px] font-extrabold text-[#147A54] block">Joint Savings</span>
             <span class="text-xs font-bold text-[#147A54] block">£50 ea</span>
             <span id="p1-savings-pot" class="text-base font-mono-num font-extrabold text-[#14855C] pt-1 block">£100.00</span>
           </div>
-          <div class="p-4 rounded-[22px] bg-[#FFF6E5] border border-[#F5DFB3] space-y-1">
-            <span class="text-[11px] font-extrabold text-[#9E6B14] block">💡 Bills Pot Top-Up</span>
-            <span class="text-xs font-bold text-[#9E6B14] block">From Tesco</span>
-            <span id="p1-bills-topup" class="text-base font-mono-num font-extrabold text-[#B87914] pt-1 block">£100.77</span>
+          <div class="p-4 rounded-[22px] bg-[#1E1710] border border-[#4A3A1E] space-y-1">
+            <span class="text-[11px] font-extrabold text-[#E9C46A] block">Bills Pot Top-Up</span>
+            <span class="text-xs font-bold text-[#E9C46A] block">From Tesco</span>
+            <span id="p1-bills-topup" class="text-base font-mono-num font-extrabold text-[#E9C46A] pt-1 block">£100.77</span>
           </div>
-          <div class="p-4 rounded-[22px] bg-[#FCE8EE] border border-[#F3C6D4] space-y-1">
-            <span class="text-[11px] font-extrabold text-[#B83B60] block">🏛️ UC Cash</span>
+          <div class="p-4 rounded-[22px] bg-[#1A1216] border border-[#4A3440] space-y-1">
+            <span class="text-[11px] font-extrabold text-[#B83B60] block">UC Cash</span>
             <span class="text-xs font-bold text-[#B83B60] block">For Bills</span>
             <span id="p1-uc-cash" class="text-base font-mono-num font-extrabold text-[#D64B73] pt-1 block">£379.22</span>
           </div>
           <div class="p-4 pennli-subcard col-span-2 sm:col-span-1 space-y-1">
-            <span class="text-[11px] font-extrabold text-[#7D6E75] block">📝 Commitments</span>
-            <span class="text-xs font-bold text-[#7D6E75] block">Driving + SLC</span>
-            <span id="p1-commitments" class="text-base font-mono-num font-extrabold text-[#1F191C] pt-1 block">£174.00</span>
+            <span class="text-[11px] font-extrabold text-[#C4AEB6] block">Commitments</span>
+            <span class="text-xs font-bold text-[#C4AEB6] block">Driving + SLC</span>
+            <span id="p1-commitments" class="text-base font-mono-num font-extrabold text-[#F7EDEF] pt-1 block">£174.00</span>
           </div>
         </div>
 
@@ -487,14 +501,14 @@
           <button
             type="button"
             onclick="switchPage(3)"
-            class="px-5 py-3 rounded-2xl bg-white hover:bg-[#FDF4F7] border border-[#EBD4DC] text-[#1F191C] text-xs font-extrabold transition-all flex items-center gap-2 active:scale-95 shadow-sm"
+            class="px-5 py-3 rounded-2xl bg-white hover:bg-[#101014] border border-[#3A2E33] text-[#F7EDEF] text-xs font-extrabold transition-all flex items-center gap-2 active:scale-95 shadow-sm"
           >
-            <span>📑 View Full Money Spreadsheet</span>
+            <span>View Full Money Spreadsheet</span>
           </button>
           <button
             type="button"
             onclick="switchPage(2)"
-            class="px-5 py-3 rounded-2xl bg-[#FCE8EE] hover:bg-[#F7D4E0] border border-[#F3C6D4] text-[#C84369] text-xs font-extrabold transition-all flex items-center gap-2 active:scale-95 shadow-sm"
+            class="px-5 py-3 rounded-2xl bg-[#1A1216] hover:bg-[#3A2E33] border border-[#4A3440] text-[#C84369] text-xs font-extrabold transition-all flex items-center gap-2 active:scale-95 shadow-sm"
           >
             <span>Open Analyze &amp; Setup</span>
             <span class="text-sm">→</span>
@@ -512,24 +526,24 @@
 
       <!-- SECTION: Fixed Bills — tick them off, add your own -->
       <section class="pennli-panel p-6 space-y-5">
-        <div class="flex items-center justify-between border-b border-[#F2E2E8] pb-4">
+        <div class="flex items-center justify-between border-b border-[#2A2226] pb-4">
           <div>
-            <span class="text-xs font-extrabold uppercase tracking-wider text-[#E05A80] block">🏠 Fixed Bills</span>
-            <h2 class="text-lg font-extrabold text-[#1F191C] tracking-tight mt-0.5">Fixed Bills This Month</h2>
-            <p class="text-xs font-bold text-[#7D6E75] mt-1 leading-relaxed">Tick a bill once it&apos;s paid — it stays in your totals (the money still went out), it just shows as done. Add a new fixed bill below and it joins the Bills Pot maths automatically, no recoding needed.</p>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-[#E05A80] block">Fixed Bills</span>
+            <h2 class="text-lg font-extrabold text-[#F7EDEF] tracking-tight mt-0.5">Fixed Bills This Month</h2>
+            <p class="text-xs font-bold text-[#C4AEB6] mt-1 leading-relaxed">Tick a bill once it&apos;s paid — it stays in your totals (the money still went out), it just shows as done. Add a new fixed bill below and it joins the Bills Pot maths automatically, no recoding needed.</p>
           </div>
-          <span class="text-xs font-extrabold text-[#C84369] bg-[#FCE8EE] border border-[#F3C6D4] px-3.5 py-1.5 rounded-full shadow-sm">Monthly • Saved</span>
+          <span class="text-xs font-extrabold text-[#C84369] bg-[#1A1216] border border-[#4A3440] px-3.5 py-1.5 rounded-full shadow-sm">Monthly • Saved</span>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div class="p-4 pennli-subcard space-y-2 shadow-sm">
-            <label for="fixed-bill-name" class="block text-xs font-extrabold text-[#7D6E75]">Fixed bill name</label>
+            <label for="fixed-bill-name" class="block text-xs font-extrabold text-[#C4AEB6]">Fixed bill name</label>
             <input type="text" id="fixed-bill-name" enterkeyhint="next" autocomplete="off" placeholder="e.g. New fixed bill" class="w-full px-3.5 py-2.5 pennli-input text-sm font-extrabold" />
           </div>
           <div class="p-4 pennli-subcard space-y-2 shadow-sm">
-            <label for="fixed-bill-amount" class="block text-xs font-extrabold text-[#7D6E75]">Amount per month</label>
+            <label for="fixed-bill-amount" class="block text-xs font-extrabold text-[#C4AEB6]">Amount per month</label>
             <div class="relative flex items-center">
-              <span class="absolute left-3 text-[#7D6E75] font-mono-num font-extrabold text-sm">£</span>
+              <span class="absolute left-3 text-[#C4AEB6] font-mono-num font-extrabold text-sm">£</span>
               <input type="number" inputmode="decimal" id="fixed-bill-amount" step="0.01" min="0" placeholder="0.00" class="w-full pl-8 pr-3 py-2.5 pennli-input text-sm font-mono-num font-extrabold" />
             </div>
           </div>
@@ -537,44 +551,44 @@
 
         <div class="flex flex-wrap gap-3">
           <button type="button" onclick="addFixedBill()" class="px-6 py-3 rounded-2xl girly-gradient text-white text-sm font-extrabold shadow-sm transition-all active:scale-95">+ Add this fixed bill</button>
-          <button type="button" onclick="resetFixedBillTicks()" class="px-5 py-3 rounded-2xl bg-white border border-[#EBD4DC] text-[#7D6E75] text-sm font-extrabold shadow-sm transition-all active:scale-95">↺ Untick all for a new month</button>
+          <button type="button" onclick="resetFixedBillTicks()" class="px-5 py-3 rounded-2xl bg-white border border-[#3A2E33] text-[#C4AEB6] text-sm font-extrabold shadow-sm transition-all active:scale-95">↺ Untick all for a new month</button>
         </div>
 
         <div class="space-y-2">
           <div class="flex justify-between items-center">
-            <span class="text-xs font-extrabold text-[#7D6E75]">Your fixed bills</span>
-            <span class="text-xs font-bold text-[#7D6E75]"><span id="fixed-bills-paid-summary"></span> • Total: <span id="fixed-bills-total" class="font-mono-num font-extrabold text-[#1F191C]">£939.99 / month</span></span>
+            <span class="text-xs font-extrabold text-[#C4AEB6]">Your fixed bills</span>
+            <span class="text-xs font-bold text-[#C4AEB6]"><span id="fixed-bills-paid-summary"></span> • Total: <span id="fixed-bills-total" class="font-mono-num font-extrabold text-[#F7EDEF]">£939.99 / month</span></span>
           </div>
           <div id="fixed-bills-list" class="space-y-2"></div>
-          <p class="text-xs font-bold text-[#7D6E75]">Rent (£460) is paid direct to your landlord by UC, so it isn&apos;t counted in the &ldquo;still to pay&rdquo; total — the other fixed bills are paid from the Bills Pot.</p>
+          <p class="text-xs font-bold text-[#C4AEB6]">Rent (£460) is paid direct to your landlord by UC, so it isn&apos;t counted in the &ldquo;still to pay&rdquo; total — the other fixed bills are paid from the Bills Pot.</p>
         </div>
       </section>
 
       <!-- NEW SECTION: Extra Bills & Payments (add your own, no recoding) -->
       <section class="pennli-panel p-6 space-y-5">
-        <div class="flex items-center justify-between border-b border-[#F2E2E8] pb-4">
+        <div class="flex items-center justify-between border-b border-[#2A2226] pb-4">
           <div>
-            <span class="text-xs font-extrabold uppercase tracking-wider text-[#E05A80] block">➕ Extra Bills &amp; Payments</span>
-            <h2 class="text-lg font-extrabold text-[#1F191C] tracking-tight mt-0.5">Add a Bill or Payment</h2>
-            <p class="text-xs font-bold text-[#7D6E75] mt-1 leading-relaxed">Add any new monthly bill or payment here — no recoding needed. It is saved on this device and the totals update automatically. Bills paid from the Bills Pot add to your fixed bills; ones paid by Cian or Maegan come off their pocket money instead.</p>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-[#E05A80] block">Extra Bills &amp; Payments</span>
+            <h2 class="text-lg font-extrabold text-[#F7EDEF] tracking-tight mt-0.5">Add a Bill or Payment</h2>
+            <p class="text-xs font-bold text-[#C4AEB6] mt-1 leading-relaxed">Add any new monthly bill or payment here — no recoding needed. It is saved on this device and the totals update automatically. Bills paid from the Bills Pot add to your fixed bills; ones paid by Cian or Maegan come off their pocket money instead.</p>
           </div>
-          <span class="text-xs font-extrabold text-[#C84369] bg-[#FCE8EE] border border-[#F3C6D4] px-3.5 py-1.5 rounded-full shadow-sm">Monthly • Saved</span>
+          <span class="text-xs font-extrabold text-[#C84369] bg-[#1A1216] border border-[#4A3440] px-3.5 py-1.5 rounded-full shadow-sm">Monthly • Saved</span>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div class="p-4 pennli-subcard space-y-2 shadow-sm lg:col-span-2">
-            <label for="extra-bill-name" class="block text-xs font-extrabold text-[#7D6E75]">Bill / payment name</label>
+            <label for="extra-bill-name" class="block text-xs font-extrabold text-[#C4AEB6]">Bill / payment name</label>
             <input type="text" id="extra-bill-name" enterkeyhint="next" autocomplete="off" placeholder="e.g. New subscription" class="w-full px-3.5 py-2.5 pennli-input text-sm font-extrabold" />
           </div>
           <div class="p-4 pennli-subcard space-y-2 shadow-sm">
-            <label for="extra-bill-amount" class="block text-xs font-extrabold text-[#7D6E75]">Amount per month</label>
+            <label for="extra-bill-amount" class="block text-xs font-extrabold text-[#C4AEB6]">Amount per month</label>
             <div class="relative flex items-center">
-              <span class="absolute left-3 text-[#7D6E75] font-mono-num font-extrabold text-sm">£</span>
+              <span class="absolute left-3 text-[#C4AEB6] font-mono-num font-extrabold text-sm">£</span>
               <input type="number" inputmode="decimal" id="extra-bill-amount" step="0.01" min="0" placeholder="0.00" class="w-full pl-8 pr-3 py-2.5 pennli-input text-sm font-mono-num font-extrabold" />
             </div>
           </div>
           <div class="p-4 pennli-subcard space-y-2 shadow-sm">
-            <label for="extra-bill-payer" class="block text-xs font-extrabold text-[#7D6E75]">Paid from</label>
+            <label for="extra-bill-payer" class="block text-xs font-extrabold text-[#C4AEB6]">Paid from</label>
             <select id="extra-bill-payer" class="w-full px-3.5 py-2.5 pennli-input text-sm font-extrabold cursor-pointer">
               <option value="bills-pot" selected>Bills Pot (adds to fixed bills)</option>
               <option value="split">Split 50 / 50 (Cian + Maegan)</option>
@@ -586,51 +600,51 @@
 
         <div class="flex flex-wrap gap-3">
           <button type="button" onclick="addExtraBill()" class="px-6 py-3 rounded-2xl girly-gradient text-white text-sm font-extrabold shadow-sm transition-all active:scale-95">+ Add this bill / payment</button>
-          <button type="button" onclick="resetExtraBillTicks()" class="px-5 py-3 rounded-2xl bg-white border border-[#EBD4DC] text-[#7D6E75] text-sm font-extrabold shadow-sm transition-all active:scale-95">↺ Untick all for a new month</button>
+          <button type="button" onclick="resetExtraBillTicks()" class="px-5 py-3 rounded-2xl bg-white border border-[#3A2E33] text-[#C4AEB6] text-sm font-extrabold shadow-sm transition-all active:scale-95">↺ Untick all for a new month</button>
         </div>
-        <p class="text-xs font-bold text-[#7D6E75]">Tick a bill once it&apos;s paid — it stays in your totals (the money still went out), it just shows as done. Tap the £ amount to change it in place.</p>
+        <p class="text-xs font-bold text-[#C4AEB6]">Tick a bill once it&apos;s paid — it stays in your totals (the money still went out), it just shows as done. Tap the £ amount to change it in place.</p>
 
         <div class="space-y-2">
           <div class="flex justify-between items-center">
-            <span class="text-xs font-extrabold text-[#7D6E75]">Your extra bills &amp; payments</span>
-            <span class="text-xs font-bold text-[#7D6E75]"><span id="extra-bills-paid-summary"></span> • Total: <span id="extra-bills-total" class="font-mono-num font-extrabold text-[#1F191C]">£0.00 / month</span></span>
+            <span class="text-xs font-extrabold text-[#C4AEB6]">Your extra bills &amp; payments</span>
+            <span class="text-xs font-bold text-[#C4AEB6]"><span id="extra-bills-paid-summary"></span> • Total: <span id="extra-bills-total" class="font-mono-num font-extrabold text-[#F7EDEF]">£0.00 / month</span></span>
           </div>
           <div id="extra-bills-list" class="space-y-2"></div>
-          <p id="extra-bills-empty" class="text-xs font-bold text-[#7D6E75]">No extra bills added yet — use the form above when a new one comes up.</p>
+          <p id="extra-bills-empty" class="text-xs font-bold text-[#C4AEB6]">No extra bills added yet — use the form above when a new one comes up.</p>
         </div>
 
       <!-- High-level Summary Metrics (Pennli "Analyze" Top Cards) -->
       <section class="pennli-panel p-6 space-y-5">
-        <div class="flex items-center justify-between border-b border-[#F2E2E8] pb-4">
+        <div class="flex items-center justify-between border-b border-[#2A2226] pb-4">
           <div>
-            <span class="text-xs font-extrabold uppercase tracking-wider text-[#E05A80] block">📊 Analyze</span>
-            <h2 class="text-xl font-extrabold text-[#1F191C] tracking-tight mt-0.5">Monthly Overview</h2>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-[#E05A80] block">Analyze</span>
+            <h2 class="text-xl font-extrabold text-[#F7EDEF] tracking-tight mt-0.5">Monthly Overview</h2>
           </div>
-          <span class="text-xs font-extrabold px-3.5 py-1.5 rounded-full bg-[#E7F7F0] text-[#14855C] border border-[#BCE8D6]">⚡ Live Math Active</span>
+          <span class="text-xs font-extrabold px-3.5 py-1.5 rounded-full bg-[#0F1F18] text-[#14855C] border border-[#1E3A2E]">Live Math Active</span>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div class="p-5 rounded-2xl bg-[#E7F7F0] border border-[#C2EBD9] flex flex-col justify-between space-y-3">
-            <span class="text-xs font-extrabold text-[#147A54] block">🏛️ UC Cash Received</span>
+          <div class="p-5 rounded-2xl bg-[#0F1F18] border border-[#1E3A2E] flex flex-col justify-between space-y-3">
+            <span class="text-xs font-extrabold text-[#147A54] block">UC Cash Received</span>
             <div>
               <div id="uc-cash-display" class="text-2xl font-mono-num font-extrabold text-[#128058]">£379.22</div>
               <div id="uc-taper-display" class="text-xs font-bold text-[#3E8E70] mt-1 font-mono-num">Base: £790.36 (-£411.14 taper)</div>
             </div>
           </div>
 
-          <div class="p-5 rounded-2xl bg-[#FDF4F7] border border-[#F1D4DF] flex flex-col justify-between space-y-3">
-            <span class="text-xs font-extrabold text-[#7D6E75] block">📋 UC vs Fixed Bills</span>
+          <div class="p-5 rounded-2xl bg-[#101014] border border-[#3A2E33] flex flex-col justify-between space-y-3">
+            <span class="text-xs font-extrabold text-[#C4AEB6] block">UC vs Fixed Bills</span>
             <div>
-              <div id="uc-surplus-display" class="text-2xl font-mono-num font-extrabold text-[#1F191C]">-£100.77</div>
-              <div id="uc-surplus-desc" class="text-xs font-bold text-[#7D6E75] mt-1">Shortfall to cover £479.99 bills</div>
+              <div id="uc-surplus-display" class="text-2xl font-mono-num font-extrabold text-[#F7EDEF]">-£100.77</div>
+              <div id="uc-surplus-desc" class="text-xs font-bold text-[#C4AEB6] mt-1">Shortfall to cover £479.99 bills</div>
             </div>
           </div>
 
-          <div class="p-5 rounded-2xl bg-[#FDF4F7] border border-[#F1D4DF] flex flex-col justify-between space-y-3">
-            <span class="text-xs font-extrabold text-[#7D6E75] block">💰 Joint Cash Left to Split</span>
+          <div class="p-5 rounded-2xl bg-[#101014] border border-[#3A2E33] flex flex-col justify-between space-y-3">
+            <span class="text-xs font-extrabold text-[#C4AEB6] block">Joint Cash Left to Split</span>
             <div>
               <div id="total-cash-display" class="text-2xl font-mono-num font-extrabold text-[#E05A80]">£1,130.76</div>
-              <div class="text-xs font-bold text-[#7D6E75] mt-1">After Groceries &amp; Shortfall</div>
+              <div class="text-xs font-bold text-[#C4AEB6] mt-1">After Groceries &amp; Shortfall</div>
             </div>
           </div>
         </div>
@@ -638,22 +652,22 @@
 
       <!-- SECTION 01 (#4): Payday Radar & Double-Month Detector -->
       <section class="pennli-panel p-6 space-y-5">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#F2E2E8] pb-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#2A2226] pb-4">
           <div>
-            <span class="text-xs font-extrabold text-[#7D6E75] block">📅 Coming Up This Month</span>
-            <h2 class="text-lg font-extrabold text-[#1F191C] tracking-tight mt-0.5">Upcoming Paydays &amp; Double-Month Detector</h2>
+            <span class="text-xs font-extrabold text-[#C4AEB6] block">Coming Up This Month</span>
+            <h2 class="text-lg font-extrabold text-[#F7EDEF] tracking-tight mt-0.5">Upcoming Paydays &amp; Double-Month Detector</h2>
           </div>
-          <span id="radar-status-badge" class="text-xs font-extrabold px-3.5 py-1.5 rounded-full bg-[#FCE8EE] text-[#C84369] border border-[#F4C4D3] self-start sm:self-center">Live Cycle</span>
+          <span id="radar-status-badge" class="text-xs font-extrabold px-3.5 py-1.5 rounded-full bg-[#1A1216] text-[#C84369] border border-[#4A3440] self-start sm:self-center">Live Cycle</span>
         </div>
 
         <!-- Date Inputs -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div class="p-4 pennli-subcard space-y-2">
-            <label for="anchor-tesco-date" class="text-xs font-extrabold text-[#7D6E75] block">Known Tesco Payday (Friday)</label>
+            <label for="anchor-tesco-date" class="text-xs font-extrabold text-[#C4AEB6] block">Known Tesco Payday (Friday)</label>
             <input type="date" id="anchor-tesco-date" onchange="updatePaydayCalendar()" class="w-full px-3.5 py-2.5 pennli-input text-sm font-mono-num font-extrabold" />
           </div>
           <div class="p-4 pennli-subcard space-y-2">
-            <label for="uc-pay-day" class="text-xs font-extrabold text-[#7D6E75] block">UC Payment Day of Month (1–31)</label>
+            <label for="uc-pay-day" class="text-xs font-extrabold text-[#C4AEB6] block">UC Payment Day of Month (1–31)</label>
             <input type="number" inputmode="decimal" id="uc-pay-day" min="1" max="31" value="15" oninput="updatePaydayCalendar()" class="w-full px-3.5 py-2.5 pennli-input text-sm font-mono-num font-extrabold" />
           </div>
         </div>
@@ -661,30 +675,30 @@
         <!-- Countdown & Double Month Alert Row -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div class="p-4 pennli-subcard flex flex-col justify-between space-y-2">
-            <span class="text-xs font-extrabold text-[#7D6E75]">⏳ Next Tesco Payday</span>
-            <div id="next-tesco-date-display" class="text-lg font-extrabold text-[#1F191C] font-mono-num">--</div>
+            <span class="text-xs font-extrabold text-[#C4AEB6]">⏳ Next Tesco Payday</span>
+            <div id="next-tesco-date-display" class="text-lg font-extrabold text-[#F7EDEF] font-mono-num">--</div>
             <span id="next-tesco-countdown" class="text-xs font-extrabold text-[#14855C]">-- days away</span>
           </div>
 
           <div class="p-4 pennli-subcard flex flex-col justify-between space-y-2">
-            <span class="text-xs font-extrabold text-[#7D6E75]">⏳ Next Universal Credit</span>
-            <div id="next-uc-date-display" class="text-lg font-extrabold text-[#1F191C] font-mono-num">--</div>
+            <span class="text-xs font-extrabold text-[#C4AEB6]">⏳ Next Universal Credit</span>
+            <div id="next-uc-date-display" class="text-lg font-extrabold text-[#F7EDEF] font-mono-num">--</div>
             <span id="next-uc-countdown" class="text-xs font-extrabold text-[#E05A80]">-- days away</span>
           </div>
 
-          <div id="double-month-alert-box" class="p-4 rounded-[22px] bg-[#FFF6E5] border border-[#F5DFB3] flex flex-col justify-between space-y-2">
+          <div id="double-month-alert-box" class="p-4 rounded-[22px] bg-[#1E1710] border border-[#4A3A1E] flex flex-col justify-between space-y-2">
             <div class="flex items-center justify-between">
-              <span class="text-xs font-extrabold text-[#9E6B14]">⚠️ Next 2-Payday Month</span>
-              <button type="button" onclick="applyDetectedDoubleMonth()" class="text-[11px] font-extrabold px-3 py-1 rounded-full bg-white text-[#9E6B14] border border-[#ECCB8B] hover:bg-[#FFFDF9] transition-colors shadow-sm">Preview</button>
+              <span class="text-xs font-extrabold text-[#E9C46A]">Next 2-Payday Month</span>
+              <button type="button" onclick="applyDetectedDoubleMonth()" class="text-[11px] font-extrabold px-3 py-1 rounded-full bg-white text-[#E9C46A] border border-[#4A3A1E] hover:bg-[#101014] transition-colors shadow-sm">Preview</button>
             </div>
-            <div id="next-double-month-display" class="text-lg font-extrabold text-[#1F191C]">--</div>
-            <span id="next-double-month-dates" class="text-xs font-mono-num font-bold text-[#7D6E75]">--</span>
+            <div id="next-double-month-display" class="text-lg font-extrabold text-[#F7EDEF]">--</div>
+            <span id="next-double-month-dates" class="text-xs font-mono-num font-bold text-[#C4AEB6]">--</span>
           </div>
         </div>
 
         <!-- Upcoming 8-Payday Timeline Pills -->
         <div class="pt-2">
-          <span class="text-xs font-extrabold text-[#7D6E75] block mb-3">Upcoming 4-Weekly Tesco Paydays (Double Months Highlighted):</span>
+          <span class="text-xs font-extrabold text-[#C4AEB6] block mb-3">Upcoming 4-Weekly Tesco Paydays (Double Months Highlighted):</span>
           <div id="upcoming-paydays-pills" class="flex flex-wrap gap-2.5"></div>
         </div>
       </section>
@@ -693,15 +707,15 @@
       <section id="double-payday-card" class="pennli-panel p-6 transition-all duration-300">
         <div class="flex items-center justify-between gap-4">
           <div class="flex items-center gap-4">
-            <div class="w-12 h-12 rounded-2xl bg-[#FCE8EE] border border-[#F3C6D4] text-[#C84369] flex items-center justify-center font-extrabold text-base shrink-0">
+            <div class="w-12 h-12 rounded-2xl bg-[#1A1216] border border-[#4A3440] text-[#C84369] flex items-center justify-center font-extrabold text-base shrink-0">
               2×
             </div>
             <div>
               <div class="flex flex-wrap items-center gap-2">
-                <h2 class="text-base font-extrabold text-[#1F191C]">Double Tesco Payday Mode</h2>
-                <span id="double-payday-badge" class="text-[11px] font-bold px-3 py-1 rounded-full bg-[#FDF4F7] text-[#7D6E75] border border-[#EBD4DC]">Off • Normal Month</span>
+                <h2 class="text-base font-extrabold text-[#F7EDEF]">Double Tesco Payday Mode</h2>
+                <span id="double-payday-badge" class="text-[11px] font-bold px-3 py-1 rounded-full bg-[#101014] text-[#C4AEB6] border border-[#3A2E33]">Off • Normal Month</span>
               </div>
-              <p class="text-xs font-medium text-[#7D6E75] mt-1">Turn on when two 4-weekly Tesco paychecks land inside the same Universal Credit period</p>
+              <p class="text-xs font-medium text-[#C4AEB6] mt-1">Turn on when two 4-weekly Tesco paychecks land inside the same Universal Credit period</p>
             </div>
           </div>
 
@@ -710,7 +724,7 @@
             id="double-payday-toggle" 
             onclick="toggleDoublePayday()" 
             aria-pressed="false"
-            class="relative inline-flex shrink-0 cursor-pointer rounded-full border-2 border-[#E8C5D1] bg-[#F3DFE6] transition-colors duration-200 ease-in-out focus:outline-none p-0.5"
+            class="relative inline-flex shrink-0 cursor-pointer rounded-full border-2 border-[#4A3440] bg-[#141014] transition-colors duration-200 ease-in-out focus:outline-none p-0.5"
             style="width: 56px; height: 30px;"
           >
             <span id="double-payday-knob" class="pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow-md transition duration-200 ease-in-out translate-x-0"></span>
@@ -718,25 +732,24 @@
         </div>
 
         <!-- Expandable Double Payday Breakdown Alert -->
-        <div id="double-payday-details" class="hidden mt-5 pt-5 border-t border-[#F2E2E8] space-y-4">
-          <div class="p-5 rounded-2xl bg-[#FFF8EB] border border-[#F3D79B] text-xs space-y-4">
-            <div class="flex items-center justify-between font-extrabold text-[#9E6B14] text-sm">
-              <span>⚠️ Two-Paycheck UC Assessment Active</span>
-              <span id="dp-total-wages" class="text-[#1F191C] font-mono-num font-extrabold">£2,863.06 Assessed</span>
+        <div id="double-payday-details" class="hidden mt-5 pt-5 border-t border-[#2A2226] space-y-4">
+          <div class="p-5 rounded-2xl bg-[#1E1710] border border-[#E9C46A] text-xs space-y-4">
+            <div class="flex items-center justify-between font-extrabold text-[#E9C46A] text-sm">
+              <span>Two-Paycheck UC Assessment Active</span>
+              <span id="dp-total-wages" class="text-[#F7EDEF] font-mono-num font-extrabold">£2,863.06 Assessed</span>
             </div>
-            <p class="text-xs font-medium text-[#5C4D54] leading-relaxed">
-              Because two Tesco paydays land inside one UC period, your assessed earnings double—reducing Universal Credit down to <strong id="dp-new-uc" class="text-[#1F191C] font-mono-num font-extrabold">£0.00</strong>.
+            <p class="text-xs font-medium text-[#C4AEB6] leading-relaxed"> Because two Tesco paydays land inside one UC period, your assessed earnings double—reducing Universal Credit down to <strong id="dp-new-uc" class="text-[#F7EDEF] font-mono-num font-extrabold">£0.00</strong>.
             </p>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
-              <div class="p-3.5 rounded-xl bg-white border border-[#F2E2E8] space-y-1">
-                <span class="text-[11px] font-extrabold text-[#7D6E75] block">UC Cash Drop</span>
+              <div class="p-3.5 rounded-xl bg-white border border-[#2A2226] space-y-1">
+                <span class="text-[11px] font-extrabold text-[#C4AEB6] block">UC Cash Drop</span>
                 <span id="dp-uc-drop" class="text-sm font-mono-num font-extrabold text-[#D64B73] block">-£379.22</span>
               </div>
-              <div class="p-3.5 rounded-xl bg-white border border-[#F2E2E8] space-y-1">
-                <span class="text-[11px] font-extrabold text-[#7D6E75] block">Hold Back for Bills</span>
-                <span id="dp-hold-back" class="text-sm font-mono-num font-extrabold text-[#B87914] block">£479.99</span>
+              <div class="p-3.5 rounded-xl bg-white border border-[#2A2226] space-y-1">
+                <span class="text-[11px] font-extrabold text-[#C4AEB6] block">Hold Back for Bills</span>
+                <span id="dp-hold-back" class="text-sm font-mono-num font-extrabold text-[#E9C46A] block">£479.99</span>
               </div>
-              <div class="p-3.5 rounded-xl bg-[#E7F7F0] border border-[#BCE8D6] space-y-1">
+              <div class="p-3.5 rounded-xl bg-[#0F1F18] border border-[#1E3A2E] space-y-1">
                 <span class="text-[11px] font-extrabold text-[#147A54] block">Extra Pocket Boost</span>
                 <span id="dp-extra-boost" class="text-sm font-mono-num font-extrabold text-[#14855C] block">+£526.16 each</span>
               </div>
@@ -747,72 +760,70 @@
 
       <!-- SECTION 02: 2-Payday Action Plan -->
       <section class="pennli-panel p-6 space-y-6">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#F2E2E8] pb-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#2A2226] pb-4">
           <div>
-            <span class="text-xs font-extrabold uppercase tracking-wider text-[#E05A80] block">📝 Step-by-Step Guide</span>
-            <h2 class="text-xl font-extrabold text-[#1F191C] tracking-tight mt-0.5">The 2-Payday Action Plan</h2>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-[#E05A80] block">Step-by-Step Guide</span>
+            <h2 class="text-xl font-extrabold text-[#F7EDEF] tracking-tight mt-0.5">The 2-Payday Action Plan</h2>
           </div>
-          <p class="text-xs font-bold text-[#7D6E75] max-w-xs">
-            Tesco and Universal Credit arrive on different dates. Just follow the card for whichever payday lands today.
+          <p class="text-xs font-bold text-[#C4AEB6] max-w-xs"> Tesco and Universal Credit arrive on different dates. Just follow the card for whichever payday lands today.
           </p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
           <!-- Box 1: TESCO PAYDAY -->
-          <div class="p-6 rounded-[24px] bg-[#FDF5F8] border border-[#F0D5DF] space-y-5 flex flex-col justify-between shadow-sm">
+          <div class="p-6 rounded-[24px] bg-[#101014] border border-[#3A2E33] space-y-5 flex flex-col justify-between shadow-sm">
             <div class="space-y-4">
-              <div class="flex items-start justify-between border-b border-[#F0D5DF] pb-3.5">
+              <div class="flex items-start justify-between border-b border-[#3A2E33] pb-3.5">
                 <div>
-                  <span class="text-xs font-extrabold text-[#E05A80] uppercase tracking-wider block">🛒 Every 4 Weeks</span>
-                  <h3 class="text-lg font-extrabold text-[#1F191C] mt-0.5">1. On Tesco Payday</h3>
+                  <span class="text-xs font-extrabold text-[#E05A80] uppercase tracking-wider block">Every 4 Weeks</span>
+                  <h3 class="text-lg font-extrabold text-[#F7EDEF] mt-0.5">1. On Tesco Payday</h3>
                 </div>
                 <div class="text-right">
-                  <span class="text-[11px] font-extrabold text-[#7D6E75] block">Combined Pay In</span>
-                  <span id="action-tesco-in" class="text-lg font-mono-num font-extrabold text-[#1F191C]">£1,431.53</span>
+                  <span class="text-[11px] font-extrabold text-[#C4AEB6] block">Combined Pay In</span>
+                  <span id="action-tesco-in" class="text-lg font-mono-num font-extrabold text-[#F7EDEF]">£1,431.53</span>
                 </div>
               </div>
 
-              <p class="text-xs font-bold text-[#7D6E75] leading-relaxed">
-                Both Tesco payslips land together. Do these <strong class="text-[#1F191C]">5 quick steps</strong> straight away:
+              <p class="text-xs font-bold text-[#C4AEB6] leading-relaxed"> Both Tesco payslips land together. Do these <strong class="text-[#F7EDEF]">5 quick steps</strong> straight away:
               </p>
 
               <div class="space-y-2.5 text-xs">
-                <div class="flex items-center justify-between p-3.5 rounded-2xl bg-white border border-[#F0DCE3] shadow-sm">
-                  <span class="font-extrabold text-[#1F191C]">1. Move to Groceries Pot</span>
-                  <span class="font-mono-num font-extrabold text-[#1F191C]">£200.00</span>
+                <div class="flex items-center justify-between p-3.5 rounded-2xl bg-white border border-[#3A2E33] shadow-sm">
+                  <span class="font-extrabold text-[#F7EDEF]">1. Move to Groceries Pot</span>
+                  <span class="font-mono-num font-extrabold text-[#F7EDEF]">£200.00</span>
                 </div>
-                <div class="flex items-center justify-between p-3.5 rounded-2xl bg-[#E7F7F0] border border-[#BCE8D6] shadow-sm">
+                <div class="flex items-center justify-between p-3.5 rounded-2xl bg-[#0F1F18] border border-[#1E3A2E] shadow-sm">
                   <div>
                     <span class="font-extrabold text-[#147A54] block">2. Move to Joint Savings Pot</span>
                     <span id="action-savings-desc" class="text-[11px] font-bold text-[#3E8E70]">£50 from Cian + £50 from Maegan</span>
                   </div>
                   <span id="action-savings-total" class="font-mono-num font-extrabold text-[#14855C]">£100.00</span>
                 </div>
-                <div class="flex items-center justify-between p-3.5 rounded-2xl bg-[#FFF6E5] border border-[#F5DFB3] shadow-sm">
+                <div class="flex items-center justify-between p-3.5 rounded-2xl bg-[#1E1710] border border-[#4A3A1E] shadow-sm">
                   <div>
-                    <span class="font-extrabold text-[#9E6B14] block">3. Leave in Bills Pot (Top-Up)</span>
-                    <span class="text-[11px] font-bold text-[#9E7830]">Covers what UC doesn't reach</span>
+                    <span class="font-extrabold text-[#E9C46A] block">3. Leave in Bills Pot (Top-Up)</span>
+                    <span class="text-[11px] font-bold text-[#D4AF37]">Covers what UC doesn't reach</span>
                   </div>
-                  <span id="action-bills-topup" class="font-mono-num font-extrabold text-[#B87914]">£100.77</span>
+                  <span id="action-bills-topup" class="font-mono-num font-extrabold text-[#E9C46A]">£100.77</span>
                 </div>
-                <div class="flex items-center justify-between p-3.5 rounded-2xl bg-white border border-[#F0DCE3] shadow-sm">
+                <div class="flex items-center justify-between p-3.5 rounded-2xl bg-white border border-[#3A2E33] shadow-sm">
                   <div>
-                    <span class="font-extrabold text-[#1F191C] block">4. Hold for Monthly Commitments</span>
-                    <span id="action-commitments-desc" class="text-[11px] font-bold text-[#7D6E75]">£70 Driving + £104 Maegan SLC</span>
+                    <span class="font-extrabold text-[#F7EDEF] block">4. Hold for Monthly Commitments</span>
+                    <span id="action-commitments-desc" class="text-[11px] font-bold text-[#C4AEB6]">£70 Driving + £104 Maegan SLC</span>
                   </div>
-                  <span id="action-commitments-total" class="font-mono-num font-extrabold text-[#1F191C]">£174.00</span>
+                  <span id="action-commitments-total" class="font-mono-num font-extrabold text-[#F7EDEF]">£174.00</span>
                 </div>
               </div>
             </div>
 
-            <div class="pt-4 border-t border-[#F0D5DF] space-y-3">
-              <span class="text-xs font-extrabold text-[#7D6E75] block">5. Send 50/50 Pocket Money (£30 Phone &amp; Savings Included):</span>
+            <div class="pt-4 border-t border-[#3A2E33] space-y-3">
+              <span class="text-xs font-extrabold text-[#C4AEB6] block">5. Send 50/50 Pocket Money (£30 Phone &amp; Savings Included):</span>
               <div class="grid grid-cols-2 gap-3">
-                <div class="p-3.5 rounded-2xl bg-white border border-[#F0DCE3] shadow-sm space-y-1">
-                  <span class="text-[11px] font-extrabold text-[#7D6E75] block">Cian Gets</span>
-                  <span id="action-cian-pocket" class="text-lg font-mono-num font-extrabold text-[#1F191C] block">£475.38</span>
+                <div class="p-3.5 rounded-2xl bg-white border border-[#3A2E33] shadow-sm space-y-1">
+                  <span class="text-[11px] font-extrabold text-[#C4AEB6] block">Cian Gets</span>
+                  <span id="action-cian-pocket" class="text-lg font-mono-num font-extrabold text-[#F7EDEF] block">£475.38</span>
                 </div>
-                <div class="p-3.5 rounded-2xl bg-[#FCE8EE] border border-[#F3C6D4] shadow-sm space-y-1">
+                <div class="p-3.5 rounded-2xl bg-[#1A1216] border border-[#4A3440] shadow-sm space-y-1">
                   <span class="text-[11px] font-extrabold text-[#B83B60] block">Maegan Gets</span>
                   <span id="action-maegan-pocket" class="text-lg font-mono-num font-extrabold text-[#D64B73] block">£381.38</span>
                 </div>
@@ -821,87 +832,83 @@
           </div>
 
           <!-- Box 2: UNIVERSAL CREDIT DAY -->
-          <div class="p-6 rounded-[24px] bg-[#FDF5F8] border border-[#F0D5DF] space-y-5 flex flex-col justify-between shadow-sm">
+          <div class="p-6 rounded-[24px] bg-[#101014] border border-[#3A2E33] space-y-5 flex flex-col justify-between shadow-sm">
             <div class="space-y-4">
-              <div class="flex items-start justify-between border-b border-[#F0D5DF] pb-3.5">
+              <div class="flex items-start justify-between border-b border-[#3A2E33] pb-3.5">
                 <div>
-                  <span class="text-xs font-extrabold text-[#14855C] uppercase tracking-wider block">🏛️ Once a Month</span>
-                  <h3 class="text-lg font-extrabold text-[#1F191C] mt-0.5">2. On Universal Credit Day</h3>
+                  <span class="text-xs font-extrabold text-[#14855C] uppercase tracking-wider block">Once a Month</span>
+                  <h3 class="text-lg font-extrabold text-[#F7EDEF] mt-0.5">2. On Universal Credit Day</h3>
                 </div>
                 <div class="text-right">
-                  <span class="text-[11px] font-extrabold text-[#7D6E75] block">UC Cash In</span>
+                  <span class="text-[11px] font-extrabold text-[#C4AEB6] block">UC Cash In</span>
                   <span id="action-uc-in" class="text-lg font-mono-num font-extrabold text-[#14855C]">£379.22</span>
                 </div>
               </div>
 
-              <p class="text-xs font-bold text-[#7D6E75] leading-relaxed">
-                When Universal Credit lands on its separate date, <strong class="text-[#1F191C]">you don't need to split or move anything</strong>.
+              <p class="text-xs font-bold text-[#C4AEB6] leading-relaxed"> When Universal Credit lands on its separate date, <strong class="text-[#F7EDEF]">you don't need to split or move anything</strong>.
               </p>
 
               <div class="space-y-3 text-xs">
-                <div class="flex items-center justify-between p-4 rounded-2xl bg-[#E7F7F0] border border-[#BCE8D6] shadow-sm">
+                <div class="flex items-center justify-between p-4 rounded-2xl bg-[#0F1F18] border border-[#1E3A2E] shadow-sm">
                   <div>
                     <span class="font-extrabold text-[#147A54] block">1. Leave 100% in Bills Account</span>
-                    <span class="text-[11px] font-bold text-[#3E8E70]">Joins the <strong id="action-uc-topup-inline" class="text-[#1F191C] font-mono-num">£100.77</strong> left from Tesco</span>
+                    <span class="text-[11px] font-bold text-[#3E8E70]">Joins the <strong id="action-uc-topup-inline" class="text-[#F7EDEF] font-mono-num">£100.77</strong> left from Tesco</span>
                   </div>
                   <span id="action-uc-keep" class="font-mono-num font-extrabold text-[#14855C]">£379.22</span>
                 </div>
 
-                <div class="p-4 rounded-2xl bg-white border border-[#F0DCE3] shadow-sm space-y-2">
-                  <div class="flex justify-between items-center text-xs font-extrabold text-[#1F191C]">
+                <div class="p-4 rounded-2xl bg-white border border-[#3A2E33] shadow-sm space-y-2">
+                  <div class="flex justify-between items-center text-xs font-extrabold text-[#F7EDEF]">
                     <span>Total Ready in Bills Pot:</span>
                     <span class="text-[#E05A80] font-mono-num font-extrabold text-sm">£479.99</span>
                   </div>
-                  <p class="text-[11px] font-bold text-[#7D6E75] leading-relaxed">
-                    Automatically covers Council Tax (£145), Gas/Elec (£100), Water (£80), Internet (£50), Dad (£76), Google One (£18.99) &amp; YouTube (£10).
+                  <p class="text-[11px] font-bold text-[#C4AEB6] leading-relaxed"> Automatically covers Council Tax (£145), Gas/Elec (£100), Water (£80), Internet (£50), Dad (£76), Google One (£18.99) &amp; YouTube (£10).
                   </p>
                 </div>
               </div>
             </div>
 
-            <div class="p-4 rounded-2xl bg-white border border-[#F0DCE3] shadow-sm space-y-1">
-              <span class="text-[11px] font-extrabold text-[#E05A80] block">✅ All Bills Covered</span>
-              <p id="action-uc-surplus-note" class="text-xs font-bold text-[#7D6E75] mt-1 leading-relaxed">
-                Rent (£460) goes direct to landlord. Your Bills Pot holds the exact £479.99 required.
+            <div class="p-4 rounded-2xl bg-white border border-[#3A2E33] shadow-sm space-y-1">
+              <span class="text-[11px] font-extrabold text-[#E05A80] block">All Bills Covered</span>
+              <p id="action-uc-surplus-note" class="text-xs font-bold text-[#C4AEB6] mt-1 leading-relaxed"> Rent (£460) goes direct to landlord. Your Bills Pot holds the exact £479.99 required.
               </p>
             </div>
           </div>
         </div>
 
         <!-- (#7): One-Tap "Send to Maegan" WhatsApp Payday Card -->
-        <div class="pt-4 border-t border-[#F2E2E8] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="pt-4 border-t border-[#2A2226] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h3 class="text-sm font-extrabold text-[#1F191C]">WhatsApp Payday Summary</h3>
-            <p class="text-xs font-bold text-[#7D6E75]">Copy a clean message with today's exact numbers to send straight to Maegan</p>
+            <h3 class="text-sm font-extrabold text-[#F7EDEF]">WhatsApp Payday Summary</h3>
+            <p class="text-xs font-bold text-[#C4AEB6]">Copy a clean message with today's exact numbers to send straight to Maegan</p>
           </div>
           <div class="flex items-center gap-2.5 shrink-0">
-            <button type="button" onclick="toggleWhatsAppPreview()" class="px-4 py-2.5 rounded-2xl bg-[#FDF4F7] hover:bg-[#FCE8EE] border border-[#EBD4DC] text-[#7D6E75] hover:text-[#1F191C] font-extrabold text-xs transition-all active:scale-95">
-              👁️ Preview Message
+            <button type="button" onclick="toggleWhatsAppPreview()" class="px-4 py-2.5 rounded-2xl bg-[#101014] hover:bg-[#1A1216] border border-[#3A2E33] text-[#C4AEB6] hover:text-[#F7EDEF] font-extrabold text-xs transition-all active:scale-95"> Preview Message
             </button>
             <button type="button" onclick="copyWhatsAppCard()" class="px-4 py-2.5 rounded-2xl bg-[#E05A80] hover:bg-[#C84369] text-white font-extrabold text-xs shadow-sm transition-all flex items-center gap-1.5 active:scale-95">
-              <span>📋 Copy for WhatsApp</span>
+              <span>Copy for WhatsApp</span>
             </button>
           </div>
         </div>
 
         <!-- Expandable WhatsApp Message Preview -->
         <div id="whatsapp-preview-drawer" class="hidden pt-2">
-          <div class="p-5 rounded-2xl bg-[#FDF4F7] border border-[#EBD4DC] space-y-3 shadow-inner">
-            <div class="flex items-center justify-between border-b border-[#EBD4DC] pb-2">
-              <span class="text-xs font-extrabold text-[#1F191C]">WhatsApp Message Preview</span>
-              <span class="text-[11px] font-bold text-[#7D6E75]">Tap copy above to share</span>
+          <div class="p-5 rounded-2xl bg-[#101014] border border-[#3A2E33] space-y-3 shadow-inner">
+            <div class="flex items-center justify-between border-b border-[#3A2E33] pb-2">
+              <span class="text-xs font-extrabold text-[#F7EDEF]">WhatsApp Message Preview</span>
+              <span class="text-[11px] font-bold text-[#C4AEB6]">Tap copy above to share</span>
             </div>
-            <pre id="whatsapp-preview-text" class="text-xs font-mono-num text-[#1F191C] whitespace-pre-wrap leading-relaxed select-all"></pre>
+            <pre id="whatsapp-preview-text" class="text-xs font-mono-num text-[#F7EDEF] whitespace-pre-wrap leading-relaxed select-all"></pre>
           </div>
         </div>
       </section>
 
       <!-- SECTION 03: Household Wages Input -->
       <section class="pennli-panel p-6 space-y-5">
-        <div class="flex items-center justify-between border-b border-[#F2E2E8] pb-4">
+        <div class="flex items-center justify-between border-b border-[#2A2226] pb-4">
           <div>
-            <span class="text-xs font-extrabold uppercase tracking-wider text-[#7D6E75] block">💷 Monthly Earnings</span>
-            <h2 class="text-lg font-extrabold text-[#1F191C] tracking-tight mt-0.5">Tesco Take-Home Pay</h2>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-[#C4AEB6] block">Monthly Earnings</span>
+            <h2 class="text-lg font-extrabold text-[#F7EDEF] tracking-tight mt-0.5">Tesco Take-Home Pay</h2>
           </div>
           <span id="pay-multiplier-pill" class="hidden text-xs font-extrabold bg-[#E05A80] text-white px-3.5 py-1.5 rounded-full shadow-sm">2× Paydays</span>
         </div>
@@ -911,11 +918,11 @@
           <div class="p-5 pennli-subcard space-y-4 shadow-sm">
             <div class="flex items-center justify-between">
               <div>
-                <label for="cian-pay-input" class="text-sm font-extrabold text-[#1F191C] block">Cian's Pay</label>
-                <span class="text-xs font-bold text-[#7D6E75]">16 hrs / week</span>
+                <label for="cian-pay-input" class="text-sm font-extrabold text-[#F7EDEF] block">Cian's Pay</label>
+                <span class="text-xs font-bold text-[#C4AEB6]">16 hrs / week</span>
               </div>
               <div class="relative flex items-center">
-                <span class="absolute left-3 text-[#7D6E75] font-mono-num font-extrabold text-sm">£</span>
+                <span class="absolute left-3 text-[#C4AEB6] font-mono-num font-extrabold text-sm">£</span>
                 <input type="number" inputmode="decimal" id="cian-pay-input" step="0.01" value="806.98" oninput="syncCianInput(this.value)" class="w-full sm:w-32 pl-7 pr-3 py-2 pennli-input text-base font-mono-num font-extrabold text-right" />
               </div>
             </div>
@@ -926,11 +933,11 @@
           <div class="p-5 pennli-subcard space-y-4 shadow-sm">
             <div class="flex items-center justify-between">
               <div>
-                <label for="maegan-pay-input" class="text-sm font-extrabold text-[#1F191C] block">Maegan's Pay</label>
-                <span class="text-xs font-bold text-[#7D6E75]">12 hrs / week</span>
+                <label for="maegan-pay-input" class="text-sm font-extrabold text-[#F7EDEF] block">Maegan's Pay</label>
+                <span class="text-xs font-bold text-[#C4AEB6]">12 hrs / week</span>
               </div>
               <div class="relative flex items-center">
-                <span class="absolute left-3 text-[#7D6E75] font-mono-num font-extrabold text-sm">£</span>
+                <span class="absolute left-3 text-[#C4AEB6] font-mono-num font-extrabold text-sm">£</span>
                 <input type="number" inputmode="decimal" id="maegan-pay-input" step="0.01" value="624.55" oninput="syncMaeganInput(this.value)" class="w-full sm:w-32 pl-7 pr-3 py-2 pennli-input text-base font-mono-num font-extrabold text-right" />
               </div>
             </div>
@@ -938,20 +945,20 @@
           </div>
         </div>
         
-        <div class="pt-3.5 border-t border-[#F2E2E8] flex justify-between items-center text-xs font-extrabold">
-          <span id="total-wages-label" class="text-[#7D6E75]">Combined Wages Assessed by UC:</span>
-          <span id="total-wages-display" class="text-base font-mono-num text-[#1F191C]">£1,431.53</span>
+        <div class="pt-3.5 border-t border-[#2A2226] flex justify-between items-center text-xs font-extrabold">
+          <span id="total-wages-label" class="text-[#C4AEB6]">Combined Wages Assessed by UC:</span>
+          <span id="total-wages-display" class="text-base font-mono-num text-[#F7EDEF]">£1,431.53</span>
         </div>
       </section>
 
       <!-- Joint Savings Contribution (£50 Each) -->
       <section class="pennli-panel p-6 space-y-5">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#F2E2E8] pb-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#2A2226] pb-4">
           <div>
-            <span class="text-xs font-extrabold uppercase tracking-wider text-[#14855C] block">🐷 Building Your Buffer</span>
-            <h2 class="text-lg font-extrabold text-[#1F191C] tracking-tight mt-0.5">Joint Savings Pot (£50 Each)</h2>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-[#14855C] block">Building Your Buffer</span>
+            <h2 class="text-lg font-extrabold text-[#F7EDEF] tracking-tight mt-0.5">Joint Savings Pot (£50 Each)</h2>
           </div>
-          <span id="savings-monthly-badge" class="text-xs font-mono-num font-extrabold px-4 py-1.5 rounded-full bg-[#E7F7F0] text-[#14855C] border border-[#BCE8D6] self-start sm:self-center shadow-sm">
+          <span id="savings-monthly-badge" class="text-xs font-mono-num font-extrabold px-4 py-1.5 rounded-full bg-[#0F1F18] text-[#14855C] border border-[#1E3A2E] self-start sm:self-center shadow-sm">
             +£100.00 / month
           </span>
         </div>
@@ -960,11 +967,11 @@
           <!-- Per-Person Input -->
           <div class="p-5 pennli-subcard space-y-3 flex flex-col justify-between shadow-sm">
             <div>
-              <label for="savings-per-person-input" class="text-xs font-extrabold text-[#7D6E75] block">Taken From Each of You</label>
-              <p class="text-[11px] font-bold text-[#9A8991] mt-0.5">Deducted equally from Cian &amp; Maegan</p>
+              <label for="savings-per-person-input" class="text-xs font-extrabold text-[#C4AEB6] block">Taken From Each of You</label>
+              <p class="text-[11px] font-bold text-[#A98F99] mt-0.5">Deducted equally from Cian &amp; Maegan</p>
             </div>
             <div class="relative flex items-center pt-1">
-              <span class="absolute left-3 text-[#7D6E75] font-mono-num font-extrabold text-sm">£</span>
+              <span class="absolute left-3 text-[#C4AEB6] font-mono-num font-extrabold text-sm">£</span>
               <input
                 type="number"
                 inputmode="decimal"
@@ -979,19 +986,19 @@
 
           <!-- Monthly Total Going Into Savings -->
           <div class="p-5 pennli-subcard space-y-2 flex flex-col justify-between shadow-sm">
-            <span class="text-xs font-extrabold text-[#7D6E75]">Added Every Payday</span>
-            <div id="savings-combined-display" class="text-2xl font-mono-num font-extrabold text-[#1F191C]">£100.00</div>
-            <span id="savings-split-note" class="text-xs font-mono-num font-extrabold text-[#14855C] bg-[#E7F7F0] px-3 py-1.5 rounded-xl border border-[#BCE8D6]">£50.00 Cian + £50.00 Maegan</span>
+            <span class="text-xs font-extrabold text-[#C4AEB6]">Added Every Payday</span>
+            <div id="savings-combined-display" class="text-2xl font-mono-num font-extrabold text-[#F7EDEF]">£100.00</div>
+            <span id="savings-split-note" class="text-xs font-mono-num font-extrabold text-[#14855C] bg-[#0F1F18] px-3 py-1.5 rounded-xl border border-[#1E3A2E]">£50.00 Cian + £50.00 Maegan</span>
           </div>
 
           <!-- Total Saved Tracker -->
-          <div class="p-5 rounded-[22px] bg-[#E7F7F0] border border-[#BCE8D6] space-y-3 flex flex-col justify-between shadow-sm">
+          <div class="p-5 rounded-[22px] bg-[#0F1F18] border border-[#1E3A2E] space-y-3 flex flex-col justify-between shadow-sm">
             <div class="flex items-center justify-between">
               <span class="text-xs font-extrabold text-[#147A54]">Total Pot Saved</span>
               <div class="flex items-center gap-1.5">
-                <button type="button" onclick="adjustSavingsMonths(-1)" class="w-7 h-7 rounded-full bg-white border border-[#BCE8D6] text-[#147A54] font-mono-num font-extrabold text-xs flex items-center justify-center hover:bg-[#F2FBF7] active:scale-95 transition-all shadow-sm">-</button>
+                <button type="button" onclick="adjustSavingsMonths(-1)" class="w-7 h-7 rounded-full bg-white border border-[#1E3A2E] text-[#147A54] font-mono-num font-extrabold text-xs flex items-center justify-center hover:bg-[#0F1F18] active:scale-95 transition-all shadow-sm">-</button>
                 <span id="savings-months-badge" class="text-xs font-mono-num font-extrabold text-[#147A54] px-1.5">1 mo</span>
-                <button type="button" onclick="adjustSavingsMonths(1)" class="w-7 h-7 rounded-full bg-white border border-[#BCE8D6] text-[#147A54] font-mono-num font-extrabold text-xs flex items-center justify-center hover:bg-[#F2FBF7] active:scale-95 transition-all shadow-sm">+</button>
+                <button type="button" onclick="adjustSavingsMonths(1)" class="w-7 h-7 rounded-full bg-white border border-[#1E3A2E] text-[#147A54] font-mono-num font-extrabold text-xs flex items-center justify-center hover:bg-[#0F1F18] active:scale-95 transition-all shadow-sm">+</button>
               </div>
             </div>
             <div id="savings-accumulated-display" class="text-3xl font-mono-num font-extrabold text-[#128058]">£100.00</div>
@@ -1002,12 +1009,12 @@
 
       <!-- SECTION 04: Live Debt Payoff Trackers -->
       <section class="pennli-panel p-6 space-y-5">
-        <div class="flex items-center justify-between border-b border-[#F2E2E8] pb-4">
+        <div class="flex items-center justify-between border-b border-[#2A2226] pb-4">
           <div>
-            <span class="text-xs font-extrabold uppercase tracking-wider text-[#C84369] block">🎯 Repayment Progress</span>
-            <h2 class="text-lg font-extrabold text-[#1F191C] tracking-tight mt-0.5">Debt Payoff Trackers</h2>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-[#C84369] block">Repayment Progress</span>
+            <h2 class="text-lg font-extrabold text-[#F7EDEF] tracking-tight mt-0.5">Debt Payoff Trackers</h2>
           </div>
-          <span class="text-xs font-extrabold text-[#C84369] bg-[#FCE8EE] border border-[#F3C6D4] px-3.5 py-1.5 rounded-full shadow-sm">Live Balance</span>
+          <span class="text-xs font-extrabold text-[#C84369] bg-[#1A1216] border border-[#4A3440] px-3.5 py-1.5 rounded-full shadow-sm">Live Balance</span>
         </div>
 
         <!-- Tracker 1: Maegan's Debt (Student Loans Company) -->
@@ -1015,34 +1022,33 @@
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div class="space-y-1">
               <div class="flex flex-wrap items-center gap-2">
-                <span class="text-sm font-extrabold text-[#1F191C]">Maegan's Debt • Student Loans Company</span>
-                <span class="text-[11px] font-extrabold bg-[#FCE8EE] text-[#C84369] px-3 py-0.5 rounded-full border border-[#F3C6D4]">1st of Month</span>
+                <span class="text-sm font-extrabold text-[#F7EDEF]">Maegan's Debt • Student Loans Company</span>
+                <span class="text-[11px] font-extrabold bg-[#1A1216] text-[#C84369] px-3 py-0.5 rounded-full border border-[#4A3440]">1st of Month</span>
               </div>
-              <p class="text-xs font-bold text-[#7D6E75]">
-                Starting Balance: <strong class="text-[#1F191C] font-mono-num">£2,400.00</strong> • Target Payoff: <strong class="text-[#1F191C]">November 2028</strong>
+              <p class="text-xs font-bold text-[#C4AEB6]"> Starting Balance: <strong class="text-[#F7EDEF] font-mono-num">£2,400.00</strong> • Target Payoff: <strong class="text-[#F7EDEF]">November 2028</strong>
               </p>
             </div>
             <div class="relative flex items-center sm:w-36 shrink-0">
-              <span class="absolute left-3 text-[#7D6E75] font-mono-num font-extrabold text-sm">£</span>
+              <span class="absolute left-3 text-[#C4AEB6] font-mono-num font-extrabold text-sm">£</span>
               <input type="number" inputmode="decimal" id="maegan-slc-input" step="0.01" value="104.00" oninput="updateMaeganSlcDebt(this.value)" class="w-full pl-7 pr-3 py-2 pennli-input text-sm font-mono-num font-extrabold text-[#D64B73] text-right" />
             </div>
           </div>
 
           <div class="space-y-2.5">
             <div class="flex justify-between text-xs font-mono-num font-extrabold">
-              <span class="text-[#7D6E75]">Paid: <strong id="slc-paid-amount" class="text-[#1F191C]">£104.00</strong> (<span id="slc-pct-text" class="text-[#E05A80]">4%</span>)</span>
-              <span class="text-[#7D6E75]">Remaining: <strong id="slc-remaining-amount" class="text-[#1F191C]">£2,296.00</strong></span>
+              <span class="text-[#C4AEB6]">Paid: <strong id="slc-paid-amount" class="text-[#F7EDEF]">£104.00</strong> (<span id="slc-pct-text" class="text-[#E05A80]">4%</span>)</span>
+              <span class="text-[#C4AEB6]">Remaining: <strong id="slc-remaining-amount" class="text-[#F7EDEF]">£2,296.00</strong></span>
             </div>
-            <div class="w-full h-3 bg-[#F2CEDB] rounded-full overflow-hidden p-0.5 bg-white">
+            <div class="w-full h-3 bg-[#3A2E33] rounded-full overflow-hidden p-0.5 bg-white">
               <div id="slc-progress-bar" class="h-full bg-[#E05A80] rounded-full transition-all duration-500" style="width: 4.33%"></div>
             </div>
             <div class="flex items-center justify-between pt-1">
-              <span id="slc-months-left" class="text-xs font-mono-num font-extrabold text-[#7D6E75]">23 payments left</span>
+              <span id="slc-months-left" class="text-xs font-mono-num font-extrabold text-[#C4AEB6]">23 payments left</span>
               <div class="flex items-center gap-2">
-                <span class="text-xs font-extrabold text-[#7D6E75] mr-1">Months Paid:</span>
-                <button type="button" onclick="adjustSlcMonths(-1)" class="w-7 h-7 rounded-full bg-white border border-[#E8C5D1] text-[#C84369] font-mono-num font-extrabold text-xs flex items-center justify-center hover:bg-[#FCE8EE] active:scale-95 transition-all shadow-sm">-</button>
-                <span id="slc-months-paid-badge" class="text-xs font-mono-num font-extrabold text-[#1F191C] w-6 text-center">1</span>
-                <button type="button" onclick="adjustSlcMonths(1)" class="w-7 h-7 rounded-full bg-white border border-[#E8C5D1] text-[#C84369] font-mono-num font-extrabold text-xs flex items-center justify-center hover:bg-[#FCE8EE] active:scale-95 transition-all shadow-sm">+</button>
+                <span class="text-xs font-extrabold text-[#C4AEB6] mr-1">Months Paid:</span>
+                <button type="button" onclick="adjustSlcMonths(-1)" class="w-7 h-7 rounded-full bg-white border border-[#4A3440] text-[#C84369] font-mono-num font-extrabold text-xs flex items-center justify-center hover:bg-[#1A1216] active:scale-95 transition-all shadow-sm">-</button>
+                <span id="slc-months-paid-badge" class="text-xs font-mono-num font-extrabold text-[#F7EDEF] w-6 text-center">1</span>
+                <button type="button" onclick="adjustSlcMonths(1)" class="w-7 h-7 rounded-full bg-white border border-[#4A3440] text-[#C84369] font-mono-num font-extrabold text-xs flex items-center justify-center hover:bg-[#1A1216] active:scale-95 transition-all shadow-sm">+</button>
               </div>
             </div>
           </div>
@@ -1053,52 +1059,52 @@
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div class="space-y-1">
               <div class="flex flex-wrap items-center gap-2">
-                <span class="text-sm font-extrabold text-[#1F191C]">Center Parcs Payoff • To Dad</span>
-                <span class="text-[11px] font-extrabold bg-[#E7F7F0] text-[#147A54] px-3 py-0.5 rounded-full border border-[#BCE8D6]">£50/mo inside £76 Dad Bill</span>
+                <span class="text-sm font-extrabold text-[#F7EDEF]">Center Parcs Payoff • To Dad</span>
+                <span class="text-[11px] font-extrabold bg-[#0F1F18] text-[#147A54] px-3 py-0.5 rounded-full border border-[#1E3A2E]">£50/mo inside £76 Dad Bill</span>
               </div>
-              <p class="text-xs font-bold text-[#7D6E75]">Covered inside UC Fixed Bills (£50 Center Parcs + £26 mobile contracts)</p>
+              <p class="text-xs font-bold text-[#C4AEB6]">Covered inside UC Fixed Bills (£50 Center Parcs + £26 mobile contracts)</p>
             </div>
             <div class="flex items-center gap-2.5 shrink-0">
-              <label for="cp-total-input" class="text-xs font-extrabold text-[#7D6E75]">Total:</label>
+              <label for="cp-total-input" class="text-xs font-extrabold text-[#C4AEB6]">Total:</label>
               <div class="relative flex items-center w-32">
-                <span class="absolute left-3 text-[#7D6E75] font-mono-num font-extrabold text-xs">£</span>
-                <input type="number" inputmode="decimal" id="cp-total-input" step="10" value="500.00" oninput="updateCenterParcsTotal(this.value)" class="w-full pl-7 pr-3 py-2 pennli-input text-sm font-mono-num font-extrabold text-[#1F191C] text-right" />
+                <span class="absolute left-3 text-[#C4AEB6] font-mono-num font-extrabold text-xs">£</span>
+                <input type="number" inputmode="decimal" id="cp-total-input" step="10" value="500.00" oninput="updateCenterParcsTotal(this.value)" class="w-full pl-7 pr-3 py-2 pennli-input text-sm font-mono-num font-extrabold text-[#F7EDEF] text-right" />
               </div>
             </div>
           </div>
 
           <div class="space-y-2.5">
             <div class="flex justify-between text-xs font-mono-num font-extrabold">
-              <span class="text-[#7D6E75]">Paid: <strong id="cp-paid-amount" class="text-[#1F191C]">£100.00</strong> (<span id="cp-pct-text" class="text-[#14855C]">20%</span>)</span>
-              <span class="text-[#7D6E75]">Remaining: <strong id="cp-remaining-amount" class="text-[#1F191C]">£400.00</strong></span>
+              <span class="text-[#C4AEB6]">Paid: <strong id="cp-paid-amount" class="text-[#F7EDEF]">£100.00</strong> (<span id="cp-pct-text" class="text-[#14855C]">20%</span>)</span>
+              <span class="text-[#C4AEB6]">Remaining: <strong id="cp-remaining-amount" class="text-[#F7EDEF]">£400.00</strong></span>
             </div>
-            <div class="w-full h-3 bg-[#F2CEDB] rounded-full overflow-hidden p-0.5 bg-white">
+            <div class="w-full h-3 bg-[#3A2E33] rounded-full overflow-hidden p-0.5 bg-white">
               <div id="cp-progress-bar" class="h-full bg-[#E05A80] rounded-full transition-all duration-500" style="width: 20%"></div>
             </div>
             <div class="flex items-center justify-between pt-1">
-              <span id="cp-months-left" class="text-xs font-mono-num font-extrabold text-[#7D6E75]">8 payments left (£50/mo)</span>
+              <span id="cp-months-left" class="text-xs font-mono-num font-extrabold text-[#C4AEB6]">8 payments left (£50/mo)</span>
               <div class="flex items-center gap-2">
-                <span class="text-xs font-extrabold text-[#7D6E75] mr-1">Months Paid:</span>
-                <button type="button" onclick="adjustCpMonths(-1)" class="w-7 h-7 rounded-full bg-white border border-[#E8C5D1] text-[#C84369] font-mono-num font-extrabold text-xs flex items-center justify-center hover:bg-[#FCE8EE] active:scale-95 transition-all shadow-sm">-</button>
-                <span id="cp-months-paid-badge" class="text-xs font-mono-num font-extrabold text-[#1F191C] w-6 text-center">2</span>
-                <button type="button" onclick="adjustCpMonths(1)" class="w-7 h-7 rounded-full bg-white border border-[#E8C5D1] text-[#C84369] font-mono-num font-extrabold text-xs flex items-center justify-center hover:bg-[#FCE8EE] active:scale-95 transition-all shadow-sm">+</button>
+                <span class="text-xs font-extrabold text-[#C4AEB6] mr-1">Months Paid:</span>
+                <button type="button" onclick="adjustCpMonths(-1)" class="w-7 h-7 rounded-full bg-white border border-[#4A3440] text-[#C84369] font-mono-num font-extrabold text-xs flex items-center justify-center hover:bg-[#1A1216] active:scale-95 transition-all shadow-sm">-</button>
+                <span id="cp-months-paid-badge" class="text-xs font-mono-num font-extrabold text-[#F7EDEF] w-6 text-center">2</span>
+                <button type="button" onclick="adjustCpMonths(1)" class="w-7 h-7 rounded-full bg-white border border-[#4A3440] text-[#C84369] font-mono-num font-extrabold text-xs flex items-center justify-center hover:bg-[#1A1216] active:scale-95 transition-all shadow-sm">+</button>
               </div>
             </div>
           </div>
         </div>
 
         <!-- Optional Extra Card / Debt -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3.5 border-t border-[#F2E2E8]">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3.5 border-t border-[#2A2226]">
           <div class="p-4 pennli-subcard space-y-2 shadow-sm">
-            <label for="debt-input" class="block text-xs font-extrabold text-[#7D6E75]">Extra Credit Card Payment (Optional)</label>
+            <label for="debt-input" class="block text-xs font-extrabold text-[#C4AEB6]">Extra Credit Card Payment (Optional)</label>
             <div class="relative flex items-center">
-              <span class="absolute left-3 text-[#7D6E75] font-mono-num font-extrabold text-sm">£</span>
+              <span class="absolute left-3 text-[#C4AEB6] font-mono-num font-extrabold text-sm">£</span>
               <input type="number" inputmode="decimal" id="debt-input" step="0.01" value="0.00" placeholder="0.00" oninput="updateDebt(this.value)" class="w-full pl-8 pr-3 py-2.5 pennli-input text-sm font-mono-num font-extrabold" />
             </div>
           </div>
 
           <div class="p-4 pennli-subcard space-y-2 shadow-sm">
-            <label for="debt-payer-select" class="block text-xs font-extrabold text-[#7D6E75]">Deduct Extra Card From</label>
+            <label for="debt-payer-select" class="block text-xs font-extrabold text-[#C4AEB6]">Deduct Extra Card From</label>
             <select id="debt-payer-select" onchange="updateDebtPayer(this.value)" class="w-full px-3.5 py-2.5 pennli-input text-sm font-extrabold cursor-pointer">
               <option value="cian">Cian Only</option>
               <option value="maegan">Maegan Only</option>
@@ -1110,25 +1116,25 @@
 
       <!-- NEW SECTION: One-Time Payments (Ad-hoc) -->
       <section class="pennli-panel p-6 space-y-5">
-        <div class="flex items-center justify-between border-b border-[#F2E2E8] pb-4">
+        <div class="flex items-center justify-between border-b border-[#2A2226] pb-4">
           <div>
-            <span class="text-xs font-extrabold uppercase tracking-wider text-[#E05A80] block">💸 Ad-hoc Expenses</span>
-            <h2 class="text-lg font-extrabold text-[#1F191C] tracking-tight mt-0.5">One-Time Payments</h2>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-[#E05A80] block">Ad-hoc Expenses</span>
+            <h2 class="text-lg font-extrabold text-[#F7EDEF] tracking-tight mt-0.5">One-Time Payments</h2>
           </div>
-          <span class="text-xs font-extrabold text-[#C84369] bg-[#FCE8EE] border border-[#F3C6D4] px-3.5 py-1.5 rounded-full shadow-sm">This Month</span>
+          <span class="text-xs font-extrabold text-[#C84369] bg-[#1A1216] border border-[#4A3440] px-3.5 py-1.5 rounded-full shadow-sm">This Month</span>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div class="p-5 pennli-subcard space-y-2 shadow-sm">
-            <label for="onetime-input" class="block text-xs font-extrabold text-[#7D6E75]">Amount (e.g. paying someone back)</label>
+            <label for="onetime-input" class="block text-xs font-extrabold text-[#C4AEB6]">Amount (e.g. paying someone back)</label>
             <div class="relative flex items-center">
-              <span class="absolute left-3 text-[#7D6E75] font-mono-num font-extrabold text-sm">£</span>
+              <span class="absolute left-3 text-[#C4AEB6] font-mono-num font-extrabold text-sm">£</span>
               <input type="number" inputmode="decimal" id="onetime-input" step="0.01" value="0.00" placeholder="0.00" oninput="updateOneTime(this.value)" class="w-full pl-8 pr-3 py-2.5 pennli-input text-base font-mono-num font-extrabold text-[#D64B73]" />
             </div>
           </div>
 
           <div class="p-5 pennli-subcard space-y-2 shadow-sm">
-            <label for="onetime-payer-select" class="block text-xs font-extrabold text-[#7D6E75]">Deduct One-Time Payment From</label>
+            <label for="onetime-payer-select" class="block text-xs font-extrabold text-[#C4AEB6]">Deduct One-Time Payment From</label>
             <select id="onetime-payer-select" onchange="updateOneTimePayer(this.value)" class="w-full px-3.5 py-2.5 pennli-input text-sm font-extrabold cursor-pointer">
               <option value="split" selected>Split 50 / 50</option>
               <option value="cian">Cian Only</option>
@@ -1142,42 +1148,42 @@
 
       <!-- SECTION 05: Personal Spending Breakdown (Receipt View) -->
       <section class="pennli-panel p-6 space-y-5">
-        <div class="flex items-center justify-between border-b border-[#F2E2E8] pb-4">
+        <div class="flex items-center justify-between border-b border-[#2A2226] pb-4">
           <div>
-            <span class="text-xs font-extrabold uppercase tracking-wider text-[#7D6E75] block">🧾 Personal Breakdown</span>
-            <h2 class="text-lg font-extrabold text-[#1F191C] tracking-tight mt-0.5">50/50 Pocket Money Split</h2>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-[#C4AEB6] block">Personal Breakdown</span>
+            <h2 class="text-lg font-extrabold text-[#F7EDEF] tracking-tight mt-0.5">50/50 Pocket Money Split</h2>
           </div>
-          <span class="text-xs px-3.5 py-1.5 rounded-full bg-[#FCE8EE] text-[#C84369] border border-[#F3C6D4] font-extrabold shadow-sm">Itemised</span>
+          <span class="text-xs px-3.5 py-1.5 rounded-full bg-[#1A1216] text-[#C84369] border border-[#4A3440] font-extrabold shadow-sm">Itemised</span>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
           <!-- Cian's Receipt -->
           <div class="p-6 pennli-hero-card space-y-5 flex flex-col justify-between shadow-sm">
             <div class="space-y-4">
-              <div class="flex items-center justify-between border-b border-[#F0D5DF] pb-3">
-                <span class="text-base font-extrabold text-[#1F191C]">👤 Cian's Share</span>
-                <span id="cian-deductions-badge" class="text-[11px] font-extrabold bg-white text-[#7D6E75] px-3 py-1 rounded-full border border-[#EBD4DC] shadow-sm">16 hrs/wk • -£70 Driving • -£50 Save</span>
+              <div class="flex items-center justify-between border-b border-[#3A2E33] pb-3">
+                <span class="text-base font-extrabold text-[#F7EDEF]">Cian's Share</span>
+                <span id="cian-deductions-badge" class="text-[11px] font-extrabold bg-white text-[#C4AEB6] px-3 py-1 rounded-full border border-[#3A2E33] shadow-sm">16 hrs/wk • -£70 Driving • -£50 Save</span>
               </div>
               
               <div class="space-y-2 text-xs font-bold">
-                <div class="flex justify-between items-center bg-white rounded-2xl border border-[#F0DCE3] p-3 shadow-sm">
-                  <span class="text-[#1F191C]">+ 50% Tesco Wage Cut</span>
-                  <span id="cian-tesco-display" class="font-mono-num font-extrabold text-[#1F191C] text-sm">£615.77</span>
+                <div class="flex justify-between items-center bg-white rounded-2xl border border-[#3A2E33] p-3 shadow-sm">
+                  <span class="text-[#F7EDEF]">+ 50% Tesco Wage Cut</span>
+                  <span id="cian-tesco-display" class="font-mono-num font-extrabold text-[#F7EDEF] text-sm">£615.77</span>
                 </div>
 
                 <div class="flex justify-between items-center px-3 py-2 bg-white/50 rounded-xl">
-                  <span class="text-[#7D6E75]">- Driving Lessons</span>
+                  <span class="text-[#C4AEB6]">- Driving Lessons</span>
                   <span class="font-mono-num font-extrabold text-[#D64B73]">-£70.00</span>
                 </div>
 
-                <div id="cian-savings-row" class="flex justify-between items-center px-3 py-2 rounded-2xl bg-[#E7F7F0] border border-[#BCE8D6]">
-                  <span class="text-[#147A54]">🐷 Joint Savings Contribution</span>
+                <div id="cian-savings-row" class="flex justify-between items-center px-3 py-2 rounded-2xl bg-[#0F1F18] border border-[#1E3A2E]">
+                  <span class="text-[#147A54]">Joint Savings Contribution</span>
                   <span id="cian-savings-receipt" class="font-mono-num font-extrabold text-[#14855C]">-£50.00</span>
                 </div>
                 
                 <div id="cian-uc-row" class="flex justify-between items-center px-3 py-2 bg-white/50 rounded-xl">
-                  <span id="cian-uc-label" class="text-[#7D6E75]">- Bill Shortfall Cut</span>
-                  <span id="cian-uc-surplus-display" class="font-mono-num font-extrabold text-[#5C4D54]">-£50.39</span>
+                  <span id="cian-uc-label" class="text-[#C4AEB6]">- Bill Shortfall Cut</span>
+                  <span id="cian-uc-surplus-display" class="font-mono-num font-extrabold text-[#C4AEB6]">-£50.39</span>
                 </div>
 
                 <div id="cian-extra-debt-row" class="hidden justify-between items-center px-3 py-2 bg-white/50 rounded-xl">
@@ -1185,55 +1191,55 @@
                   <span id="cian-extra-debt-display" class="font-mono-num font-extrabold text-[#D64B73]">-£0.00</span>
                 </div>
 
-                <div id="cian-onetime-row" class="hidden justify-between items-center px-3 py-2 rounded-2xl bg-[#FCE8EE] border border-[#F3C6D4]">
+                <div id="cian-onetime-row" class="hidden justify-between items-center px-3 py-2 rounded-2xl bg-[#1A1216] border border-[#4A3440]">
                   <span class="text-[#B83B60]">- One-Time Payment</span>
                   <span id="cian-onetime-display" class="font-mono-num font-extrabold text-[#D64B73]">-£0.00</span>
                 </div>
-                <div id="cian-extra-bill-row" class="hidden justify-between items-center px-3 py-2 rounded-2xl bg-[#FCE8EE] border border-[#F3C6D4]">
+                <div id="cian-extra-bill-row" class="hidden justify-between items-center px-3 py-2 rounded-2xl bg-[#1A1216] border border-[#4A3440]">
                   <span class="text-[#B83B60]">- Extra Bills &amp; Payments</span>
                   <span id="cian-extra-bill-display" class="font-mono-num font-extrabold text-[#D64B73]">-£0.00</span>
                 </div>
                 
-                <div class="flex justify-between items-center px-3 py-2 bg-[#E7F7F0] rounded-2xl border border-[#BCE8D6]">
+                <div class="flex justify-between items-center px-3 py-2 bg-[#0F1F18] rounded-2xl border border-[#1E3A2E]">
                   <span class="text-[#14855C]">+ Phone (From Maegan)</span>
                   <span class="font-mono-num font-extrabold text-[#14855C]">+£30.00</span>
                 </div>
               </div>
             </div>
             
-            <div class="flex justify-between items-end pt-4 border-t border-[#F0D5DF] mt-2">
-              <span class="text-xs font-extrabold text-[#7D6E75]">Final Pocket Money</span>
-              <div id="cian-total-display" class="text-3xl sm:text-4xl font-mono-num font-extrabold text-[#1F191C]">£475.38</div>
+            <div class="flex justify-between items-end pt-4 border-t border-[#3A2E33] mt-2">
+              <span class="text-xs font-extrabold text-[#C4AEB6]">Final Pocket Money</span>
+              <div id="cian-total-display" class="text-3xl sm:text-4xl font-mono-num font-extrabold text-[#F7EDEF]">£475.38</div>
             </div>
           </div>
 
           <!-- Maegan's Receipt -->
           <div class="p-6 pennli-hero-card space-y-5 flex flex-col justify-between shadow-sm">
             <div class="space-y-4">
-              <div class="flex items-center justify-between border-b border-[#F0D5DF] pb-3">
-                <span class="text-base font-extrabold text-[#1F191C]">👤 Maegan's Share</span>
-                <span id="maegan-deductions-badge" class="text-[11px] font-extrabold bg-white text-[#C84369] px-3 py-1 rounded-full border border-[#F3C6D4] shadow-sm">12 hrs/wk • -£104 SLC • -£50 Save</span>
+              <div class="flex items-center justify-between border-b border-[#3A2E33] pb-3">
+                <span class="text-base font-extrabold text-[#F7EDEF]">Maegan's Share</span>
+                <span id="maegan-deductions-badge" class="text-[11px] font-extrabold bg-white text-[#C84369] px-3 py-1 rounded-full border border-[#4A3440] shadow-sm">12 hrs/wk • -£104 SLC • -£50 Save</span>
               </div>
               
               <div class="space-y-2 text-xs font-bold">
-                <div class="flex justify-between items-center bg-white rounded-2xl border border-[#F0DCE3] p-3 shadow-sm">
-                  <span class="text-[#1F191C]">+ 50% Tesco Wage Cut</span>
-                  <span id="maegan-tesco-display" class="font-mono-num font-extrabold text-[#1F191C] text-sm">£615.77</span>
+                <div class="flex justify-between items-center bg-white rounded-2xl border border-[#3A2E33] p-3 shadow-sm">
+                  <span class="text-[#F7EDEF]">+ 50% Tesco Wage Cut</span>
+                  <span id="maegan-tesco-display" class="font-mono-num font-extrabold text-[#F7EDEF] text-sm">£615.77</span>
                 </div>
 
-                <div class="flex justify-between items-center px-3 py-2 rounded-2xl bg-[#FCE8EE] border border-[#F3C6D4]">
+                <div class="flex justify-between items-center px-3 py-2 rounded-2xl bg-[#1A1216] border border-[#4A3440]">
                   <span class="text-[#B83B60]">- Maegan's Debt (SLC)</span>
                   <span id="maegan-slc-receipt" class="font-mono-num font-extrabold text-[#D64B73]">-£104.00</span>
                 </div>
 
-                <div id="maegan-savings-row" class="flex justify-between items-center px-3 py-2 rounded-2xl bg-[#E7F7F0] border border-[#BCE8D6]">
-                  <span class="text-[#147A54]">🐷 Joint Savings Contribution</span>
+                <div id="maegan-savings-row" class="flex justify-between items-center px-3 py-2 rounded-2xl bg-[#0F1F18] border border-[#1E3A2E]">
+                  <span class="text-[#147A54]">Joint Savings Contribution</span>
                   <span id="maegan-savings-receipt" class="font-mono-num font-extrabold text-[#14855C]">-£50.00</span>
                 </div>
                 
                 <div id="maegan-uc-row" class="flex justify-between items-center px-3 py-2 bg-white/50 rounded-xl">
-                  <span id="maegan-uc-label" class="text-[#7D6E75]">- Bill Shortfall Cut</span>
-                  <span id="maegan-uc-surplus-display" class="font-mono-num font-extrabold text-[#5C4D54]">-£50.39</span>
+                  <span id="maegan-uc-label" class="text-[#C4AEB6]">- Bill Shortfall Cut</span>
+                  <span id="maegan-uc-surplus-display" class="font-mono-num font-extrabold text-[#C4AEB6]">-£50.39</span>
                 </div>
 
                 <div id="maegan-extra-debt-row" class="hidden justify-between items-center px-3 py-2 bg-white/50 rounded-xl">
@@ -1241,11 +1247,11 @@
                   <span id="maegan-extra-debt-display" class="font-mono-num font-extrabold text-[#D64B73]">-£0.00</span>
                 </div>
 
-                <div id="maegan-onetime-row" class="hidden justify-between items-center px-3 py-2 rounded-2xl bg-[#FCE8EE] border border-[#F3C6D4]">
+                <div id="maegan-onetime-row" class="hidden justify-between items-center px-3 py-2 rounded-2xl bg-[#1A1216] border border-[#4A3440]">
                   <span class="text-[#B83B60]">- One-Time Payment</span>
                   <span id="maegan-onetime-display" class="font-mono-num font-extrabold text-[#D64B73]">-£0.00</span>
                 </div>
-                <div id="maegan-extra-bill-row" class="hidden justify-between items-center px-3 py-2 rounded-2xl bg-[#FCE8EE] border border-[#F3C6D4]">
+                <div id="maegan-extra-bill-row" class="hidden justify-between items-center px-3 py-2 rounded-2xl bg-[#1A1216] border border-[#4A3440]">
                   <span class="text-[#B83B60]">- Extra Bills &amp; Payments</span>
                   <span id="maegan-extra-bill-display" class="font-mono-num font-extrabold text-[#D64B73]">-£0.00</span>
                 </div>
@@ -1257,8 +1263,8 @@
               </div>
             </div>
             
-            <div class="flex justify-between items-end pt-4 border-t border-[#F0D5DF] mt-2">
-              <span class="text-xs font-extrabold text-[#7D6E75]">Final Pocket Money</span>
+            <div class="flex justify-between items-end pt-4 border-t border-[#3A2E33] mt-2">
+              <span class="text-xs font-extrabold text-[#C4AEB6]">Final Pocket Money</span>
               <div id="maegan-total-display" class="text-3xl sm:text-4xl font-mono-num font-extrabold text-[#E05A80]">£381.38</div>
             </div>
           </div>
@@ -1267,8 +1273,8 @@
 
       <!-- History Log Section -->
       <section id="history-section" class="pennli-panel p-6 space-y-4 hidden">
-        <div class="flex items-center justify-between border-b border-[#F2E2E8] pb-3">
-          <h2 class="text-sm font-extrabold text-[#1F191C]">💾 Saved Monthly History</h2>
+        <div class="flex items-center justify-between border-b border-[#2A2226] pb-3">
+          <h2 class="text-sm font-extrabold text-[#F7EDEF]">Saved Monthly History</h2>
           <button onclick="clearHistory()" class="text-xs text-[#D64B73] font-extrabold hover:underline">Clear History</button>
         </div>
         <div id="history-list" class="space-y-3"></div>
@@ -1283,59 +1289,59 @@
 
       <!-- Top Money In vs Money Out Summary Cards -->
       <section class="pennli-panel p-6 space-y-5">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#F2E2E8] pb-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#2A2226] pb-4">
           <div>
-            <span class="text-xs font-extrabold uppercase tracking-wider text-[#E05A80] block">📑 Clear Spreadsheet View</span>
-            <h2 class="text-xl font-extrabold text-[#1F191C] tracking-tight mt-0.5">Where Every Penny Goes</h2>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-[#E05A80] block">Clear Spreadsheet View</span>
+            <h2 class="text-xl font-extrabold text-[#F7EDEF] tracking-tight mt-0.5">Where Every Penny Goes</h2>
           </div>
-          <span class="text-xs font-extrabold px-3.5 py-1.5 rounded-full bg-[#FCE8EE] text-[#C84369] border border-[#F3C6D4] self-start sm:self-center">
+          <span class="text-xs font-extrabold px-3.5 py-1.5 rounded-full bg-[#1A1216] text-[#C84369] border border-[#4A3440] self-start sm:self-center">
             100% Accounted For
           </span>
         </div>
 
         <!-- 3 Simple Money Source Boxes -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div class="p-4 rounded-2xl bg-[#FDF4F7] border border-[#F1D4DF] space-y-1">
-            <span class="text-xs font-extrabold text-[#7D6E75] block">🛒 1. Tesco Wages In</span>
-            <div id="sheet-tesco-in" class="text-2xl font-mono-num font-extrabold text-[#1F191C]">£1,431.53</div>
-            <span id="sheet-tesco-sub" class="text-[11px] font-bold text-[#7D6E75] block">Cian £806.98 + Maegan £624.55</span>
+          <div class="p-4 rounded-2xl bg-[#101014] border border-[#3A2E33] space-y-1">
+            <span class="text-xs font-extrabold text-[#C4AEB6] block">1. Tesco Wages In</span>
+            <div id="sheet-tesco-in" class="text-2xl font-mono-num font-extrabold text-[#F7EDEF]">£1,431.53</div>
+            <span id="sheet-tesco-sub" class="text-[11px] font-bold text-[#C4AEB6] block">Cian £806.98 + Maegan £624.55</span>
           </div>
 
-          <div class="p-4 rounded-2xl bg-[#E7F7F0] border border-[#C2EBD9] space-y-1">
-            <span class="text-xs font-extrabold text-[#147A54] block">🏛️ 2. Universal Credit In</span>
+          <div class="p-4 rounded-2xl bg-[#0F1F18] border border-[#1E3A2E] space-y-1">
+            <span class="text-xs font-extrabold text-[#147A54] block">2. Universal Credit In</span>
             <div id="sheet-uc-in" class="text-2xl font-mono-num font-extrabold text-[#128058]">£379.22</div>
             <span class="text-[11px] font-bold text-[#3E8E70] block">+ £460.00 Rent Direct to Landlord</span>
           </div>
 
-          <div class="p-4 rounded-2xl bg-[#FFF6E5] border border-[#F5DFB3] space-y-1">
-            <span class="text-xs font-extrabold text-[#9E6B14] block">💰 Total Household Money</span>
-            <div id="sheet-total-income" class="text-2xl font-mono-num font-extrabold text-[#B87914]">£1,810.75</div>
-            <span class="text-[11px] font-bold text-[#9E7830] block">£2,270.75 including £460 Rent</span>
+          <div class="p-4 rounded-2xl bg-[#1E1710] border border-[#4A3A1E] space-y-1">
+            <span class="text-xs font-extrabold text-[#E9C46A] block">Total Household Money</span>
+            <div id="sheet-total-income" class="text-2xl font-mono-num font-extrabold text-[#E9C46A]">£1,810.75</div>
+            <span class="text-[11px] font-bold text-[#D4AF37] block">£2,270.75 including £460 Rent</span>
           </div>
         </div>
       </section>
 
       <!-- Main Spreadsheet Table -->
       <section class="pennli-panel overflow-hidden">
-        <div class="p-6 border-b border-[#F2E2E8] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div class="p-6 border-b border-[#2A2226] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
-            <span class="text-xs font-extrabold uppercase tracking-wider text-[#7D6E75] block">📋 Line-by-Line Table</span>
-            <h3 class="text-lg font-extrabold text-[#1F191C] mt-0.5">What We Spend, How Much &amp; Where It Comes From</h3>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-[#C4AEB6] block">Line-by-Line Table</span>
+            <h3 class="text-lg font-extrabold text-[#F7EDEF] mt-0.5">What We Spend, How Much &amp; Where It Comes From</h3>
           </div>
-          <span class="text-xs font-bold text-[#7D6E75]">Updates automatically with your sliders</span>
+          <span class="text-xs font-bold text-[#C4AEB6]">Updates automatically with your sliders</span>
         </div>
 
         <div class="overflow-x-auto">
           <table class="w-full text-left border-collapse">
             <thead>
-              <tr class="bg-[#FDF4F7] border-b border-[#F0DCE3] text-[11px] font-extrabold uppercase tracking-wider text-[#7D6E75]">
+              <tr class="bg-[#101014] border-b border-[#3A2E33] text-[11px] font-extrabold uppercase tracking-wider text-[#C4AEB6]">
                 <th class="py-3.5 px-4 sm:px-6">What We're Spending On</th>
                 <th class="py-3.5 px-3 text-right">How Much</th>
                 <th class="py-3.5 px-4 sm:px-6">Where It Comes From</th>
                 <th class="py-3.5 px-4 sm:px-6 hidden sm:table-cell">When / How It's Paid</th>
               </tr>
             </thead>
-            <tbody id="spreadsheet-tbody" class="divide-y divide-[#F2E2E8] text-xs font-bold">
+            <tbody id="spreadsheet-tbody" class="divide-y divide-[#2A2226] text-xs font-bold">
               <!-- Populated dynamically via JS -->
             </tbody>
           </table>
@@ -1345,17 +1351,17 @@
       <!-- Bottom Quick Key / Legend -->
       <section class="pennli-panel p-5 flex flex-wrap items-center justify-between gap-3 text-xs font-bold">
         <div class="flex flex-wrap items-center gap-2">
-          <span class="text-[#7D6E75] font-extrabold mr-1">Color Key:</span>
-          <span class="px-3 py-1 rounded-full bg-[#E7F7F0] text-[#147A54] border border-[#BCE8D6]">🏛️ Bills Pot (UC + Tesco Top-Up)</span>
-          <span class="px-3 py-1 rounded-full bg-[#FCE8EE] text-[#C84369] border border-[#F3C6D4]">🛒 Joint Tesco Pay</span>
-          <span class="px-3 py-1 rounded-full bg-[#FFF6E5] text-[#9E6B14] border border-[#F5DFB3]">👤 Personal Share</span>
+          <span class="text-[#C4AEB6] font-extrabold mr-1">Color Key:</span>
+          <span class="px-3 py-1 rounded-full bg-[#0F1F18] text-[#147A54] border border-[#1E3A2E]">Bills Pot (UC + Tesco Top-Up)</span>
+          <span class="px-3 py-1 rounded-full bg-[#1A1216] text-[#C84369] border border-[#4A3440]">Joint Tesco Pay</span>
+          <span class="px-3 py-1 rounded-full bg-[#1E1710] text-[#E9C46A] border border-[#4A3A1E]">Personal Share</span>
         </div>
       </section>
 
     </div> <!-- End Page 3 Container -->
 
     <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-[#1F191C] text-white px-6 py-3 rounded-full font-extrabold text-xs shadow-2xl flex items-center gap-2 opacity-0 pointer-events-none transition-all duration-300 transform translate-y-4 z-50">
+    <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-[#F7EDEF] text-white px-6 py-3 rounded-full font-extrabold text-xs shadow-2xl flex items-center gap-2 opacity-0 pointer-events-none transition-all duration-300 transform translate-y-4 z-50">
       <span id="toast-text">Saved!</span>
     </div>
 
@@ -1367,33 +1373,32 @@
       type="button"
       id="bottom-tab-1"
       onclick="switchPage(1)"
-      class="py-2.5 px-2 rounded-full text-[11px] sm:text-xs font-extrabold transition-all flex items-center justify-center gap-1.5 bg-[#FCE8EE] text-[#C84369] shadow-sm"
+      class="py-2.5 px-2 rounded-full text-[11px] sm:text-xs font-extrabold transition-all flex items-center justify-center gap-1.5 bg-[#1A1216] text-[#C84369] shadow-sm"
     >
-      <span class="text-sm">👜</span>
+      <span class="text-sm"></span>
       <span>Safe Spend</span>
     </button>
     <button
       type="button"
       id="bottom-tab-2"
       onclick="switchPage(2)"
-      class="py-2.5 px-2 rounded-full text-[11px] sm:text-xs font-extrabold transition-all flex items-center justify-center gap-1.5 text-[#7D6E75] hover:text-[#1F191C]"
+      class="py-2.5 px-2 rounded-full text-[11px] sm:text-xs font-extrabold transition-all flex items-center justify-center gap-1.5 text-[#C4AEB6] hover:text-[#F7EDEF]"
     >
-      <span class="text-sm">📊</span>
+      <span class="text-sm"></span>
       <span>Analyze</span>
     </button>
     <button
       type="button"
       id="bottom-tab-3"
       onclick="switchPage(3)"
-      class="py-2.5 px-2 rounded-full text-[11px] sm:text-xs font-extrabold transition-all flex items-center justify-center gap-1.5 text-[#7D6E75] hover:text-[#1F191C]"
+      class="py-2.5 px-2 rounded-full text-[11px] sm:text-xs font-extrabold transition-all flex items-center justify-center gap-1.5 text-[#C4AEB6] hover:text-[#F7EDEF]"
     >
-      <span class="text-sm">📑</span>
+      <span class="text-sm"></span>
       <span>Spreadsheet</span>
     </button>
   </div>
 
-  <footer class="text-center text-xs font-bold text-[#9A8991] py-6 relative z-10" style="padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));">
-    Pennli-Inspired Pastel Edition • Auto-Save Active
+  <footer class="text-center text-xs font-bold text-[#A98F99] py-6 relative z-10" style="padding-bottom: calc(8rem + env(safe-area-inset-bottom, 0px));"> Black &amp; Gold Edition • Auto-Save Active
   </footer>
 
   <script>
@@ -1423,14 +1428,14 @@
     // add up to FIXED_BILLS = £479.99 and come from the Bills Pot), plus any
     // fixed bills Cian adds himself, saved on this device.
     const BUILT_IN_FIXED_BILLS = [
-      { key: 'rent', name: '🏡 Rent', amount: 460.00, when: 'Paid direct to landlord by UC', inBillsPot: false },
-      { key: 'council-tax', name: '🏛️ Council Tax', amount: 145.00, when: 'Monthly Direct Debit', inBillsPot: true },
-      { key: 'gas-electric', name: '🔥 Gas & Electricity', amount: 100.00, when: 'Monthly Direct Debit', inBillsPot: true },
-      { key: 'water', name: '💧 Water Bill', amount: 80.00, when: 'Monthly Direct Debit', inBillsPot: true },
-      { key: 'dad', name: '👨‍👧 Dad (£50 Center Parcs + £26 Phones)', amount: 76.00, when: 'Monthly Transfer to Dad', inBillsPot: true },
-      { key: 'internet', name: '🌐 Internet / Wi-Fi', amount: 50.00, when: 'Monthly Direct Debit', inBillsPot: true },
-      { key: 'google-one', name: '☁️ Google One Storage', amount: 18.99, when: 'Monthly Subscription', inBillsPot: true },
-      { key: 'youtube', name: '▶️ YouTube Subscription', amount: 10.00, when: 'Monthly Subscription', inBillsPot: true }
+      { key: 'rent', name: 'Rent', amount: 460.00, when: 'Paid direct to landlord by UC', inBillsPot: false },
+      { key: 'council-tax', name: 'Council Tax', amount: 145.00, when: 'Monthly Direct Debit', inBillsPot: true },
+      { key: 'gas-electric', name: 'Gas & Electricity', amount: 100.00, when: 'Monthly Direct Debit', inBillsPot: true },
+      { key: 'water', name: 'Water Bill', amount: 80.00, when: 'Monthly Direct Debit', inBillsPot: true },
+      { key: 'dad', name: 'Dad (£50 Center Parcs + £26 Phones)', amount: 76.00, when: 'Monthly Transfer to Dad', inBillsPot: true },
+      { key: 'internet', name: 'Internet / Wi-Fi', amount: 50.00, when: 'Monthly Direct Debit', inBillsPot: true },
+      { key: 'google-one', name: 'Google One Storage', amount: 18.99, when: 'Monthly Subscription', inBillsPot: true },
+      { key: 'youtube', name: '▶ YouTube Subscription', amount: 10.00, when: 'Monthly Subscription', inBillsPot: true }
     ];
     let userFixedBills = JSON.parse(localStorage.getItem('userFixedBills') || '[]');
     let fixedBillsPaid = JSON.parse(localStorage.getItem('fixedBillsPaid') || '{}');
@@ -1460,7 +1465,7 @@
     function updateSoundToggle() {
       const label = document.getElementById('sound-toggle-label');
       const btn = document.getElementById('sound-toggle');
-      if (label) label.innerText = soundsEnabled ? '🔊 Sounds on' : '🔇 Sounds off';
+      if (label) label.innerText = soundsEnabled ? 'Sounds on' : 'Sounds off';
       if (btn) btn.setAttribute('aria-pressed', soundsEnabled ? 'true' : 'false');
     }
     function toggleSounds() {
@@ -1468,7 +1473,7 @@
       localStorage.setItem('budgetSounds', soundsEnabled ? 'on' : 'off');
       updateSoundToggle();
       if (soundsEnabled) playSound('add');
-      showToast(soundsEnabled ? 'Sounds on 🔊' : 'Sounds off 🔇');
+      showToast(soundsEnabled ? 'Sounds on ' : 'Sounds off ');
     }
     let isDoublePayday = localStorage.getItem('isDoublePayday') === 'true';
     let slcMonthsPaid = parseInt(localStorage.getItem('slcMonths')) || 1;
@@ -1526,6 +1531,7 @@
 
     function switchPage(pageNum) {
       currentPage = pageNum;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       const pages = [1, 2, 3];
 
       pages.forEach(num => {
@@ -1535,12 +1541,12 @@
 
         if (num === pageNum) {
           if (container) container.classList.remove('hidden');
-          if (topTab) topTab.className = 'py-3 px-2 sm:px-4 rounded-2xl text-[11px] sm:text-xs font-extrabold transition-all bg-white text-[#1F191C] shadow-sm flex items-center justify-center gap-1.5';
-          if (bottomTab) bottomTab.className = 'py-2.5 px-2 rounded-full text-[11px] sm:text-xs font-extrabold transition-all flex items-center justify-center gap-1.5 bg-[#FCE8EE] text-[#C84369] shadow-sm';
+          if (topTab) topTab.className = 'py-3 px-2 sm:px-4 rounded-2xl text-[11px] sm:text-xs font-extrabold transition-all bg-white text-[#F7EDEF] shadow-sm flex items-center justify-center gap-1.5';
+          if (bottomTab) bottomTab.className = 'py-2.5 px-2 rounded-full text-[11px] sm:text-xs font-extrabold transition-all flex items-center justify-center gap-1.5 bg-[#1A1216] text-[#C84369] shadow-sm';
         } else {
           if (container) container.classList.add('hidden');
-          if (topTab) topTab.className = 'py-3 px-2 sm:px-4 rounded-2xl text-[11px] sm:text-xs font-extrabold transition-all text-[#7D6E75] hover:text-[#1F191C] flex items-center justify-center gap-1.5';
-          if (bottomTab) bottomTab.className = 'py-2.5 px-2 rounded-full text-[11px] sm:text-xs font-extrabold transition-all flex items-center justify-center gap-1.5 text-[#7D6E75] hover:text-[#1F191C]';
+          if (topTab) topTab.className = 'py-3 px-2 sm:px-4 rounded-2xl text-[11px] sm:text-xs font-extrabold transition-all text-[#C4AEB6] hover:text-[#F7EDEF] flex items-center justify-center gap-1.5';
+          if (bottomTab) bottomTab.className = 'py-2.5 px-2 rounded-full text-[11px] sm:text-xs font-extrabold transition-all flex items-center justify-center gap-1.5 text-[#C4AEB6] hover:text-[#F7EDEF]';
         }
       });
 
@@ -1606,7 +1612,7 @@
       const tescoDaysDiff = Math.round((nextTesco - today) / msPerDay);
       const nextTescoFormatted = nextTesco.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
       document.getElementById('next-tesco-date-display').innerText = nextTescoFormatted;
-      document.getElementById('next-tesco-countdown').innerText = tescoDaysDiff === 0 ? '🎉 TODAY!' : (tescoDaysDiff === 1 ? 'Tomorrow!' : `In ${tescoDaysDiff} days`);
+      document.getElementById('next-tesco-countdown').innerText = tescoDaysDiff === 0 ? 'TODAY!' : (tescoDaysDiff === 1 ? 'Tomorrow!' : `In ${tescoDaysDiff} days`);
       const p1NextTesco = document.getElementById('p1-next-tesco');
       if (p1NextTesco) {
         p1NextTesco.innerText = `${nextTescoFormatted} (${tescoDaysDiff === 0 ? 'Today' : tescoDaysDiff + 'd'})`;
@@ -1619,7 +1625,7 @@
       }
       const ucDaysDiff = Math.round((nextUc - today) / msPerDay);
       document.getElementById('next-uc-date-display').innerText = nextUc.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
-      document.getElementById('next-uc-countdown').innerText = ucDaysDiff === 0 ? '🎉 TODAY!' : (ucDaysDiff === 1 ? 'Tomorrow!' : `In ${ucDaysDiff} days`);
+      document.getElementById('next-uc-countdown').innerText = ucDaysDiff === 0 ? 'TODAY!' : (ucDaysDiff === 1 ? 'Tomorrow!' : `In ${ucDaysDiff} days`);
 
       // Group paydays by calendar month to detect 2-payday months
       const monthMap = {};
@@ -1650,11 +1656,11 @@
 
         const isCurrentMonthDouble = firstDoubleMonth[0].getMonth() === today.getMonth() && firstDoubleMonth[0].getFullYear() === today.getFullYear();
         if (isCurrentMonthDouble) {
-          radarBadge.innerText = '⚠️ Double Month Now!';
-          radarBadge.className = 'text-xs font-extrabold px-3.5 py-1.5 rounded-full bg-[#FFF6E5] text-[#9E6B14] border border-[#F5DFB3] self-start sm:self-center shadow-sm';
+          radarBadge.innerText = 'Double Month Now!';
+          radarBadge.className = 'text-xs font-extrabold px-3.5 py-1.5 rounded-full bg-[#1E1710] text-[#E9C46A] border border-[#4A3A1E] self-start sm:self-center shadow-sm';
         } else {
           radarBadge.innerText = `Next Double: ${firstDoubleMonth[0].toLocaleDateString('en-GB', { month: 'short' })}`;
-          radarBadge.className = 'text-xs font-extrabold px-3.5 py-1.5 rounded-full bg-[#FCE8EE] text-[#C84369] border border-[#F4C4D3] self-start sm:self-center shadow-sm';
+          radarBadge.className = 'text-xs font-extrabold px-3.5 py-1.5 rounded-full bg-[#1A1216] text-[#C84369] border border-[#4A3440] self-start sm:self-center shadow-sm';
         }
       } else {
         doubleMonthTitle.innerText = 'None Soon';
@@ -1670,7 +1676,7 @@
         const span = document.createElement('span');
         span.className = isDouble
           ? 'text-xs font-mono-num font-extrabold px-3.5 py-1.5 rounded-2xl bg-[#E05A80] text-white shadow-sm'
-          : (idx === 0 ? 'text-xs font-mono-num font-extrabold px-3.5 py-1.5 rounded-2xl bg-[#FCE8EE] text-[#C84369] border border-[#F3C6D4]' : 'text-xs font-mono-num font-bold px-3.5 py-1.5 rounded-2xl bg-[#FDF4F7] text-[#7D6E75] border border-[#EBD4DC]');
+          : (idx === 0 ? 'text-xs font-mono-num font-extrabold px-3.5 py-1.5 rounded-2xl bg-[#1A1216] text-[#C84369] border border-[#4A3440]' : 'text-xs font-mono-num font-bold px-3.5 py-1.5 rounded-2xl bg-[#101014] text-[#C4AEB6] border border-[#3A2E33]');
         span.innerText = `${isDouble ? '2× ' : ''}${d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}`;
         pillsContainer.appendChild(span);
       });
@@ -1787,7 +1793,7 @@
       document.getElementById('slc-remaining-amount').innerText = `£${slcRemaining.toFixed(2)}`;
       document.getElementById('slc-progress-bar').style.width = `${slcPct}%`;
       document.getElementById('slc-months-paid-badge').innerText = slcMonthsPaid;
-      document.getElementById('slc-months-left').innerText = slcRemaining <= 0 ? `🎉 PAID OFF!` : `${slcPaymentsLeft} payments left`;
+      document.getElementById('slc-months-left').innerText = slcRemaining <= 0 ? `PAID OFF!` : `${slcPaymentsLeft} payments left`;
 
       const cpPaid = Math.min(cpStartingTotal, cpMonthsPaid * CP_MONTHLY_PAYMENT);
       const cpRemaining = Math.max(0, cpStartingTotal - cpPaid);
@@ -1799,7 +1805,7 @@
       document.getElementById('cp-remaining-amount').innerText = `£${cpRemaining.toFixed(2)}`;
       document.getElementById('cp-progress-bar').style.width = `${cpPct}%`;
       document.getElementById('cp-months-paid-badge').innerText = cpMonthsPaid;
-      document.getElementById('cp-months-left').innerText = cpRemaining <= 0 ? `🎉 PAID OFF!` : `${cpPaymentsLeft} payments left (£50/mo)`;
+      document.getElementById('cp-months-left').innerText = cpRemaining <= 0 ? `PAID OFF!` : `${cpPaymentsLeft} payments left (£50/mo)`;
     }
 
     function toggleDoublePayday() {
@@ -1813,7 +1819,7 @@
       toggleBtn.setAttribute('aria-pressed', isDoublePayday);
 
       if (isDoublePayday) {
-        toggleBtn.classList.remove('bg-[#F3DFE6]', 'border-[#E8C5D1]');
+        toggleBtn.classList.remove('bg-[#141014]', 'border-[#4A3440]');
         toggleBtn.classList.add('bg-[#E05A80]', 'border-[#E05A80]');
         knob.classList.remove('translate-x-0');
         knob.classList.add('translate-x-6');
@@ -1822,12 +1828,12 @@
         details.classList.remove('hidden');
         pill.classList.remove('hidden');
       } else {
-        toggleBtn.classList.add('bg-[#F3DFE6]', 'border-[#E8C5D1]');
+        toggleBtn.classList.add('bg-[#141014]', 'border-[#4A3440]');
         toggleBtn.classList.remove('bg-[#E05A80]', 'border-[#E05A80]');
         knob.classList.add('translate-x-0');
         knob.classList.remove('translate-x-6');
         badge.innerText = 'Off • Normal Month';
-        badge.className = 'text-[11px] font-extrabold px-3.5 py-1.5 rounded-full bg-[#FDF4F7] text-[#7D6E75] border border-[#EBD4DC]';
+        badge.className = 'text-[11px] font-extrabold px-3.5 py-1.5 rounded-full bg-[#101014] text-[#C4AEB6] border border-[#3A2E33]';
         details.classList.add('hidden');
         pill.classList.add('hidden');
       }
@@ -1879,107 +1885,107 @@
       if (!tbody) return;
 
       const payerBadge = (type, text) => {
-        if (type === 'uc-direct') return `<span class="inline-block px-2.5 py-1 rounded-full bg-[#E7F7F0] text-[#147A54] border border-[#BCE8D6] text-[11px] font-extrabold">${text}</span>`;
-        if (type === 'bills-pot') return `<span class="inline-block px-2.5 py-1 rounded-full bg-[#E7F7F0] text-[#147A54] border border-[#BCE8D6] text-[11px] font-extrabold">${text}</span>`;
-        if (type === 'tesco-joint') return `<span class="inline-block px-2.5 py-1 rounded-full bg-[#FCE8EE] text-[#C84369] border border-[#F3C6D4] text-[11px] font-extrabold">${text}</span>`;
-        if (type === 'personal') return `<span class="inline-block px-2.5 py-1 rounded-full bg-[#FFF6E5] text-[#9E6B14] border border-[#F5DFB3] text-[11px] font-extrabold">${text}</span>`;
-        if (type === 'pocket') return `<span class="inline-block px-2.5 py-1 rounded-full bg-[#FCE8EE] text-[#E05A80] border border-[#F3C6D4] text-[11px] font-extrabold">${text}</span>`;
+        if (type === 'uc-direct') return `<span class="inline-block px-2.5 py-1 rounded-full bg-[#0F1F18] text-[#147A54] border border-[#1E3A2E] text-[11px] font-extrabold">${text}</span>`;
+        if (type === 'bills-pot') return `<span class="inline-block px-2.5 py-1 rounded-full bg-[#0F1F18] text-[#147A54] border border-[#1E3A2E] text-[11px] font-extrabold">${text}</span>`;
+        if (type === 'tesco-joint') return `<span class="inline-block px-2.5 py-1 rounded-full bg-[#1A1216] text-[#C84369] border border-[#4A3440] text-[11px] font-extrabold">${text}</span>`;
+        if (type === 'personal') return `<span class="inline-block px-2.5 py-1 rounded-full bg-[#1E1710] text-[#E9C46A] border border-[#4A3A1E] text-[11px] font-extrabold">${text}</span>`;
+        if (type === 'pocket') return `<span class="inline-block px-2.5 py-1 rounded-full bg-[#1A1216] text-[#E05A80] border border-[#4A3440] text-[11px] font-extrabold">${text}</span>`;
         return text;
       };
 
       const rows = [
         // Category Header: Housing & Fixed Household Bills
-        { isHeader: true, title: `🏠 1. HOUSING & FIXED HOUSEHOLD BILLS (£${(939.99 + (calc.userFixedTotal || 0)).toFixed(2)} Total)` },
+        { isHeader: true, title: `1. HOUSING & FIXED HOUSEHOLD BILLS (£${(939.99 + (calc.userFixedTotal || 0)).toFixed(2)} Total)` },
         {
-          item: '🏡 Rent (£460.00)',
+          item: 'Rent (£460.00)',
           amount: '£460.00',
-          source: payerBadge('uc-direct', '🏛️ Universal Credit Housing'),
+          source: payerBadge('uc-direct', 'Universal Credit Housing'),
           when: 'Paid direct to landlord by UC',
           tickKey: 'rent'
         },
         {
-          item: '🏛️ Council Tax',
+          item: 'Council Tax',
           amount: '£145.00',
-          source: payerBadge('bills-pot', `🏛️ Bills Pot (£${calc.ucCashReceived.toFixed(2)} UC + £${billsTopUpNeeded.toFixed(2)} Tesco)`),
+          source: payerBadge('bills-pot', `Bills Pot (£${calc.ucCashReceived.toFixed(2)} UC + £${billsTopUpNeeded.toFixed(2)} Tesco)`),
           when: 'Monthly Direct Debit',
           tickKey: 'council-tax'
         },
         {
-          item: '🔥 Gas & Electricity',
+          item: 'Gas & Electricity',
           amount: '£100.00',
-          source: payerBadge('bills-pot', '🏛️ Bills Pot (UC + Tesco Top-Up)'),
+          source: payerBadge('bills-pot', 'Bills Pot (UC + Tesco Top-Up)'),
           when: 'Monthly Direct Debit',
           tickKey: 'gas-electric'
         },
         {
-          item: '💧 Water Bill',
+          item: 'Water Bill',
           amount: '£80.00',
-          source: payerBadge('bills-pot', '🏛️ Bills Pot (UC + Tesco Top-Up)'),
+          source: payerBadge('bills-pot', 'Bills Pot (UC + Tesco Top-Up)'),
           when: 'Monthly Direct Debit',
           tickKey: 'water'
         },
         {
-          item: '👨‍👧 Dad (£50 Center Parcs + £26 Phones)',
+          item: 'Dad (£50 Center Parcs + £26 Phones)',
           amount: '£76.00',
-          source: payerBadge('bills-pot', '🏛️ Bills Pot (UC + Tesco Top-Up)'),
+          source: payerBadge('bills-pot', 'Bills Pot (UC + Tesco Top-Up)'),
           when: 'Monthly Transfer to Dad',
           tickKey: 'dad'
         },
         {
-          item: '🌐 Internet / Wi-Fi',
+          item: 'Internet / Wi-Fi',
           amount: '£50.00',
-          source: payerBadge('bills-pot', '🏛️ Bills Pot (UC + Tesco Top-Up)'),
+          source: payerBadge('bills-pot', 'Bills Pot (UC + Tesco Top-Up)'),
           when: 'Monthly Direct Debit',
           tickKey: 'internet'
         },
         {
-          item: '☁️ Google One Storage',
+          item: 'Google One Storage',
           amount: '£18.99',
-          source: payerBadge('bills-pot', '🏛️ Bills Pot (UC + Tesco Top-Up)'),
+          source: payerBadge('bills-pot', 'Bills Pot (UC + Tesco Top-Up)'),
           when: 'Monthly Subscription',
           tickKey: 'google-one'
         },
         {
-          item: '▶️ YouTube Subscription',
+          item: '▶ YouTube Subscription',
           amount: '£10.00',
-          source: payerBadge('bills-pot', '🏛️ Bills Pot (UC + Tesco Top-Up)'),
+          source: payerBadge('bills-pot', 'Bills Pot (UC + Tesco Top-Up)'),
           when: 'Monthly Subscription',
           tickKey: 'youtube'
         },
 
         // Category Header: Food & Savings
-        { isHeader: true, title: '🛒 2. FOOD & JOINT SAVINGS POTS' },
+        { isHeader: true, title: '2. FOOD & JOINT SAVINGS POTS' },
         {
-          item: '🛍️ Monthly Groceries (£50 / week)',
+          item: 'Monthly Groceries (£50 / week)',
           amount: `£${GROCERIES.toFixed(2)}`,
-          source: payerBadge('tesco-joint', '🛒 Joint Tesco Pay (Taken First)'),
+          source: payerBadge('tesco-joint', 'Joint Tesco Pay (Taken First)'),
           when: 'Moved on Tesco Payday'
         },
         {
-          item: '🐷 Joint Savings Pot',
+          item: 'Joint Savings Pot',
           amount: `£${calc.totalMonthlySavings.toFixed(2)}`,
-          source: payerBadge('tesco-joint', `🛒 Tesco Pay (£${calc.savingsPerPerson.toFixed(2)} Cian + £${calc.savingsPerPerson.toFixed(2)} Maegan)`),
+          source: payerBadge('tesco-joint', `Tesco Pay (£${calc.savingsPerPerson.toFixed(2)} Cian + £${calc.savingsPerPerson.toFixed(2)} Maegan)`),
           when: 'Moved on Tesco Payday'
         },
 
         // Category Header: Personal Commitments & Debt
-        { isHeader: true, title: '🎯 3. PERSONAL COMMITMENTS & DEBT' },
+        { isHeader: true, title: '3. PERSONAL COMMITMENTS & DEBT' },
         {
-          item: '🚗 Cian Driving Lessons',
+          item: 'Cian Driving Lessons',
           amount: `£${DRIVING_LESSONS.toFixed(2)}`,
-          source: payerBadge('personal', "👤 Cian's 50% Tesco Cut"),
+          source: payerBadge('personal', "Cian's 50% Tesco Cut"),
           when: 'Held back on Tesco Payday'
         },
         {
-          item: '🎓 Maegan Student Loan (SLC)',
+          item: 'Maegan Student Loan (SLC)',
           amount: `£${calc.slcDebt.toFixed(2)}`,
-          source: payerBadge('personal', "👤 Maegan's 50% Tesco Cut"),
+          source: payerBadge('personal', "Maegan's 50% Tesco Cut"),
           when: 'Paid 1st of the Month'
         },
         {
-          item: '📱 Maegan Phone Share to Cian',
+          item: 'Maegan Phone Share to Cian',
           amount: `£${MAEGAN_PHONE.toFixed(2)}`,
-          source: payerBadge('personal', "👤 Maegan's Cut → Added to Cian"),
+          source: payerBadge('personal', "Maegan's Cut → Added to Cian"),
           when: 'Built into 50/50 Pocket Split'
         }
       ];
@@ -1988,19 +1994,19 @@
         userFixedBills.forEach(b => {
           const amt = parseFloat(b.amount) || 0;
           rows.push({
-            item: `${fixedBillsPaid['user-' + b.id] ? '✅' : '⏳'} ${b.name} (added by you)`,
+            item: `${fixedBillsPaid['user-' + b.id] ? '' : '⏳'} ${b.name} (added by you)`,
             amount: `£${amt.toFixed(2)}`,
-            source: payerBadge('bills-pot', '🏛️ Bills Pot (UC + Tesco Top-Up)'),
-            when: fixedBillsPaid['user-' + b.id] ? 'Monthly • Added by you • Paid 💖' : 'Monthly • Added by you • Not paid yet',
+            source: payerBadge('bills-pot', 'Bills Pot (UC + Tesco Top-Up)'),
+            when: fixedBillsPaid['user-' + b.id] ? 'Monthly • Added by you • Paid' : 'Monthly • Added by you • Not paid yet',
             tickKey: 'user-' + b.id
           });
         });
       }
 
       if (calc.debtAmount > 0) {
-        const whoCard = calc.payer === 'cian' ? "👤 Cian's Cut Only" : (calc.payer === 'maegan' ? "👤 Maegan's Cut Only" : `👤 Split 50/50 (£${calc.cianDebtShare.toFixed(2)} each)`);
+        const whoCard = calc.payer === 'cian' ? "Cian's Cut Only" : (calc.payer === 'maegan' ? "Maegan's Cut Only" : `Split 50/50 (£${calc.cianDebtShare.toFixed(2)} each)`);
         rows.push({
-          item: '💳 Extra Credit Card Payment',
+          item: 'Extra Credit Card Payment',
           amount: `£${calc.debtAmount.toFixed(2)}`,
           source: payerBadge('personal', whoCard),
           when: 'Held back on Tesco Payday'
@@ -2010,23 +2016,23 @@
       if (calc.extraBills && calc.extraBills.length > 0) {
         calc.extraBills.forEach(b => {
           const amt = parseFloat(b.amount) || 0;
-          const who = b.paidFrom === 'bills-pot' ? payerBadge('bills-pot', '🏛️ Bills Pot (UC + Tesco Top-Up)')
-            : b.paidFrom === 'cian' ? payerBadge('personal', "👤 Cian's Cut Only")
-            : b.paidFrom === 'maegan' ? payerBadge('personal', "👤 Maegan's Cut Only")
-            : payerBadge('personal', `👤 Split 50/50 (£${(amt / 2).toFixed(2)} each)`);
+          const who = b.paidFrom === 'bills-pot' ? payerBadge('bills-pot', 'Bills Pot (UC + Tesco Top-Up)')
+            : b.paidFrom === 'cian' ? payerBadge('personal', "Cian's Cut Only")
+            : b.paidFrom === 'maegan' ? payerBadge('personal', "Maegan's Cut Only")
+            : payerBadge('personal', `Split 50/50 (£${(amt / 2).toFixed(2)} each)`);
           rows.push({
-            item: `${b.paid ? '✅' : '⏳'} ${b.name}`,
+            item: `${b.paid ? '' : '⏳'} ${b.name}`,
             amount: `£${amt.toFixed(2)}`,
             source: who,
-            when: b.paid ? 'Monthly • Added by you • Paid 💖' : 'Monthly • Added by you • Not paid yet'
+            when: b.paid ? 'Monthly • Added by you • Paid' : 'Monthly • Added by you • Not paid yet'
           });
         });
       }
 
       if (calc.oneTimeAmount > 0) {
-        const whoOneTime = calc.onePayer === 'cian' ? "👤 Cian's Cut Only" : (calc.onePayer === 'maegan' ? "👤 Maegan's Cut Only" : `👤 Split 50/50 (£${calc.cianOneTimeShare.toFixed(2)} each)`);
+        const whoOneTime = calc.onePayer === 'cian' ? "Cian's Cut Only" : (calc.onePayer === 'maegan' ? "Maegan's Cut Only" : `Split 50/50 (£${calc.cianOneTimeShare.toFixed(2)} each)`);
         rows.push({
-          item: '💸 One-Time Payment (This Month)',
+          item: 'One-Time Payment (This Month)',
           amount: `£${calc.oneTimeAmount.toFixed(2)}`,
           source: payerBadge('personal', whoOneTime),
           when: 'Held back on Tesco Payday'
@@ -2035,17 +2041,17 @@
 
       // Category Header: Final Safe-to-Spend Pocket Money
       rows.push(
-        { isHeader: true, title: '✨ 4. FINAL SAFE-TO-SPEND POCKET MONEY' },
+        { isHeader: true, title: '4. FINAL SAFE-TO-SPEND POCKET MONEY' },
         {
-          item: `🟢 Cian's Final Pocket Money (£${(calc.cianTotal / 4).toFixed(2)}/wk)`,
+          item: `Cian's Final Pocket Money (£${(calc.cianTotal / 4).toFixed(2)}/wk)`,
           amount: `£${calc.cianTotal.toFixed(2)}`,
-          source: payerBadge('pocket', "👜 Cian's Safe-to-Spend Envelope"),
+          source: payerBadge('pocket', "Cian's Safe-to-Spend Envelope"),
           when: '4 Weekly Envelopes'
         },
         {
-          item: `🟢 Maegan's Final Pocket Money (£${(calc.maeganTotal / 4).toFixed(2)}/wk)`,
+          item: `Maegan's Final Pocket Money (£${(calc.maeganTotal / 4).toFixed(2)}/wk)`,
           amount: `£${calc.maeganTotal.toFixed(2)}`,
-          source: payerBadge('pocket', "👜 Maegan's Safe-to-Spend Envelope"),
+          source: payerBadge('pocket', "Maegan's Safe-to-Spend Envelope"),
           when: '4 Weekly Envelopes'
         }
       );
@@ -2053,7 +2059,7 @@
       tbody.innerHTML = rows.map(r => {
         if (r.isHeader) {
           return `
-            <tr class="bg-[#FAF0F4]">
+            <tr class="bg-[#14141A]">
               <td colspan="4" class="py-2.5 px-4 sm:px-6 text-[11px] font-extrabold uppercase tracking-wider text-[#C84369]">
                 ${r.title}
               </td>
@@ -2063,11 +2069,11 @@
         const ticked = r.tickKey ? !!fixedBillsPaid[r.tickKey] : false;
         const tickHtml = r.tickKey ? `<input type="checkbox" class="girly-tick" ${ticked ? 'checked' : ''} onchange="toggleFixedBillPaid('${r.tickKey}', this.checked)" aria-label="Mark as paid" />` : '';
         return `
-          <tr class="hover:bg-[#FDF7F9] transition-colors">
-            <td data-label="Bill" class="py-3.5 px-4 sm:px-6 font-extrabold text-[#1F191C] ${ticked ? 'fixed-bill-paid' : ''}">${tickHtml}<span class="${ticked ? 'fixed-bill-name' : ''}">${r.item}</span></td>
-            <td data-label="How much" class="py-3.5 px-3 text-right font-mono-num font-extrabold text-sm text-[#1F191C]">${r.amount}</td>
+          <tr class="hover:bg-[#101014] transition-colors">
+            <td data-label="Bill" class="py-3.5 px-4 sm:px-6 font-extrabold text-[#F7EDEF] ${ticked ? 'fixed-bill-paid' : ''}">${tickHtml}<span class="${ticked ? 'fixed-bill-name' : ''}">${r.item}</span></td>
+            <td data-label="How much" class="py-3.5 px-3 text-right font-mono-num font-extrabold text-sm text-[#F7EDEF]">${r.amount}</td>
             <td data-label="From" class="py-3.5 px-4 sm:px-6">${r.source}</td>
-            <td data-label="When" class="py-3.5 px-4 sm:px-6 text-[#7D6E75] hidden sm:table-cell">${r.when}</td>
+            <td data-label="When" class="py-3.5 px-4 sm:px-6 text-[#C4AEB6] hidden sm:table-cell">${r.when}</td>
           </tr>
         `;
       }).join('');
@@ -2268,15 +2274,15 @@
         btn.type = 'button';
         btn.onclick = () => toggleWeekSpent(person, i);
         btn.className = isSpent
-          ? 'p-3.5 rounded-2xl bg-white/40 border border-[#EBD4DC] text-left transition-all opacity-55 shadow-inner'
-          : 'p-3.5 rounded-2xl bg-white hover:bg-[#FFFBFD] border border-[#E8C5D1] shadow-sm text-left transition-all active:scale-95';
+          ? 'p-3.5 rounded-2xl bg-white/40 border border-[#3A2E33] text-left transition-all opacity-55 shadow-inner'
+          : 'p-3.5 rounded-2xl bg-white hover:bg-[#101014] border border-[#4A3440] shadow-sm text-left transition-all active:scale-95';
 
         btn.innerHTML = `
           <div class="flex items-center justify-between">
-            <span class="text-xs font-extrabold ${isSpent ? 'text-[#9A8991] line-through' : 'text-[#7D6E75]'}">Week ${i + 1}</span>
-            <span class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full ${isSpent ? 'bg-[#F3DFE6] text-[#9A8991]' : 'bg-[#E7F7F0] text-[#14855C]'}">${isSpent ? 'Spent' : 'Safe'}</span>
+            <span class="text-xs font-extrabold ${isSpent ? 'text-[#A98F99] line-through' : 'text-[#C4AEB6]'}">Week ${i + 1}</span>
+            <span class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full ${isSpent ? 'bg-[#141014] text-[#A98F99]' : 'bg-[#0F1F18] text-[#14855C]'}">${isSpent ? 'Spent' : 'Safe'}</span>
           </div>
-          <div class="text-base font-mono-num font-extrabold mt-1.5 ${isSpent ? 'text-[#9A8991] line-through' : 'text-[#1F191C]'}">
+          <div class="text-base font-mono-num font-extrabold mt-1.5 ${isSpent ? 'text-[#A98F99] line-through' : 'text-[#F7EDEF]'}">
             £${weeklyAmount.toFixed(2)}
           </div>
         `;
@@ -2293,14 +2299,14 @@
     // (#7) Build WhatsApp Payday Card Message
     function buildWhatsAppCardText(calc) {
       const billsTopUpNeeded = calc.ucSurplus < 0 ? Math.abs(calc.ucSurplus) : 0;
-      const modeTag = calc.doublePayday ? '⚠️ DOUBLE TESCO PAYDAY MONTH' : '💷 PAYDAY ACTION PLAN';
+      const modeTag = calc.doublePayday ? 'DOUBLE TESCO PAYDAY MONTH' : 'PAYDAY ACTION PLAN';
       let msg = `${modeTag}\n`;
       msg += `━━━━━━━━━━━━━━━━━━━━\n`;
-      msg += `🛒 *1. ON TESCO PAYDAY*\n`;
+      msg += `*1. ON TESCO PAYDAY*\n`;
       msg += `• Cian In: £${currentCianPay.toFixed(2)}${calc.doublePayday ? ' (x2)' : ''}\n`;
       msg += `• Maegan In: £${currentMaeganPay.toFixed(2)}${calc.doublePayday ? ' (x2)' : ''}\n`;
       msg += `• Combined Tesco: *£${calc.totalTescoPay.toFixed(2)}*\n\n`;
-      msg += `📌 *Set Aside Immediately:*\n`;
+      msg += `*Set Aside Immediately:*\n`;
       msg += `• Groceries Pot: *£200.00*\n`;
       msg += `• Joint Savings (£${calc.savingsPerPerson.toFixed(0)} each): *£${calc.totalMonthlySavings.toFixed(2)}*\n`;
       msg += `• Leave in Bills Pot: *£${billsTopUpNeeded.toFixed(2)}*\n`;
@@ -2312,13 +2318,13 @@
       if (calc.oneTimeAmount > 0) {
         msg += `• One-Time Payment: *£${calc.oneTimeAmount.toFixed(2)}*\n`;
       }
-      msg += `\n✨ *50/50 POCKET MONEY (Phone £30 & Savings sorted!):*\n`;
-      msg += `🟢 *Cian Gets:* £${calc.cianTotal.toFixed(2)} (£${(calc.cianTotal / 4).toFixed(2)}/wk)\n`;
-      msg += `🟢 *Maegan Gets:* £${calc.maeganTotal.toFixed(2)} (£${(calc.maeganTotal / 4).toFixed(2)}/wk)\n`;
+      msg += `\n*50/50 POCKET MONEY (Phone £30 & Savings sorted!):*\n`;
+      msg += `*Cian Gets:* £${calc.cianTotal.toFixed(2)} (£${(calc.cianTotal / 4).toFixed(2)}/wk)\n`;
+      msg += `*Maegan Gets:* £${calc.maeganTotal.toFixed(2)} (£${(calc.maeganTotal / 4).toFixed(2)}/wk)\n`;
       msg += `━━━━━━━━━━━━━━━━━━━━\n`;
-      msg += `🏛️ *2. ON UNIVERSAL CREDIT DAY*\n`;
+      msg += `*2. ON UNIVERSAL CREDIT DAY*\n`;
       msg += `• UC Cash Landing: *£${calc.ucCashReceived.toFixed(2)}*\n`;
-      msg += `• Action: *Leave 100% in Bills Account* (Joins £${billsTopUpNeeded.toFixed(2)} Tesco top-up = *£${calc.effectiveFixedBills.toFixed(2)}* for all household bills! ✅)`;
+      msg += `• Action: *Leave 100% in Bills Account* (Joins £${billsTopUpNeeded.toFixed(2)} Tesco top-up = *£${calc.effectiveFixedBills.toFixed(2)}* for all household bills! )`;
       return msg;
     }
 
@@ -2336,7 +2342,7 @@
       tempTextArea.select();
       document.execCommand('copy');
       document.body.removeChild(tempTextArea);
-      showToast('📱 WhatsApp Card copied! Paste to Maegan');
+      showToast('WhatsApp Card copied! Paste to Maegan');
     }
 
     function syncCianInput(val) {
@@ -2421,18 +2427,18 @@
       const summaryEl = document.getElementById('extra-bills-paid-summary');
       if (summaryEl) summaryEl.innerText = extraBills.length ? `${paidCount} of ${extraBills.length} paid • £${stillToPay.toFixed(2)} still to pay` : '';
       list.innerHTML = extraBills.map(b => `
-        <div class="p-3 rounded-2xl bg-white border border-[#EBD4DC] flex items-center justify-between gap-3 shadow-sm ${b.paid ? 'extra-bill-paid' : ''}">
+        <div class="p-3 rounded-2xl bg-white border border-[#3A2E33] flex items-center justify-between gap-3 shadow-sm ${b.paid ? 'extra-bill-paid' : ''}">
           <label class="flex items-center gap-3 min-w-0 cursor-pointer">
             <input type="checkbox" class="girly-tick" ${b.paid ? 'checked' : ''} onchange="toggleExtraBillPaid(${b.id}, this.checked)" aria-label="Mark ${escapeHtml(b.name)} as paid" />
             <span class="min-w-0">
-              <strong class="extra-bill-name text-[#1F191C] font-extrabold text-sm block truncate">${escapeHtml(b.name)}</strong>
-              <span class="text-[11px] font-bold text-[#7D6E75]">${label[b.paidFrom] || 'Bills Pot'} • Monthly ${b.paid ? '• 💖 Paid' : ''}</span>
+              <strong class="extra-bill-name text-[#F7EDEF] font-extrabold text-sm block truncate">${escapeHtml(b.name)}</strong>
+              <span class="text-[11px] font-bold text-[#C4AEB6]">${label[b.paidFrom] || 'Bills Pot'} • Monthly ${b.paid ? '• Paid' : ''}</span>
             </span>
           </label>
           <div class="flex items-center gap-2 shrink-0">
-            <span class="font-mono-num font-extrabold text-sm text-[#7D6E75]">£</span>
-            <input type="number" inputmode="decimal" step="0.01" min="0" value="${(parseFloat(b.amount) || 0).toFixed(2)}" onchange="updateExtraBillAmount(${b.id}, this.value)" aria-label="Amount for ${escapeHtml(b.name)}" class="extra-amount-input px-2.5 py-1.5 pennli-input text-sm font-mono-num font-extrabold text-[#1F191C]" />
-            <button type="button" onclick="removeExtraBill(${b.id})" class="px-3 py-1.5 rounded-full bg-[#FCE8EE] text-[#C84369] border border-[#F3C6D4] text-[11px] font-extrabold">Remove</button>
+            <span class="font-mono-num font-extrabold text-sm text-[#C4AEB6]">£</span>
+            <input type="number" inputmode="decimal" step="0.01" min="0" value="${(parseFloat(b.amount) || 0).toFixed(2)}" onchange="updateExtraBillAmount(${b.id}, this.value)" aria-label="Amount for ${escapeHtml(b.name)}" class="extra-amount-input px-2.5 py-1.5 pennli-input text-sm font-mono-num font-extrabold text-[#F7EDEF]" />
+            <button type="button" onclick="removeExtraBill(${b.id})" class="px-3 py-1.5 rounded-full bg-[#1A1216] text-[#C84369] border border-[#4A3440] text-[11px] font-extrabold">Remove</button>
           </div>
         </div>
       `).join('');
@@ -2461,7 +2467,7 @@
       bill.paid = !!isPaid;
       saveState();
       updateDOM(calculateBudget());
-      if (isPaid) { playSound('tick'); showToast('Marked as paid 💖'); }
+      if (isPaid) { playSound('tick'); showToast('Marked as paid'); }
     }
 
     function updateExtraBillAmount(id, val) {
@@ -2508,20 +2514,20 @@
       if (totalEl) totalEl.innerText = `£${total.toFixed(2)} / month`;
       if (summaryEl) summaryEl.innerText = `${paidCount} of ${bills.length} paid • £${stillToPay.toFixed(2)} still to pay`;
       list.innerHTML = bills.map(b => `
-        <div class="bill-row-in p-3 rounded-2xl bg-white border border-[#EBD4DC] flex items-center justify-between gap-3 shadow-sm ${b.paid ? 'fixed-bill-paid' : ''}">
+        <div class="bill-row-in p-3 rounded-2xl bg-white border border-[#3A2E33] flex items-center justify-between gap-3 shadow-sm ${b.paid ? 'fixed-bill-paid' : ''}">
           <label class="flex items-center gap-3 min-w-0 cursor-pointer">
             <input type="checkbox" class="girly-tick" ${b.paid ? 'checked' : ''} onchange="toggleFixedBillPaid('${b.key}', this.checked)" aria-label="Mark ${escapeHtml(b.name)} as paid" />
             <span class="min-w-0">
-              <strong class="fixed-bill-name text-[#1F191C] font-extrabold text-sm block truncate">${escapeHtml(b.name)}</strong>
-              <span class="text-[11px] font-bold text-[#7D6E75]">${b.when}${b.paid ? ' • 💖 Paid' : ''}</span>
+              <strong class="fixed-bill-name text-[#F7EDEF] font-extrabold text-sm block truncate">${escapeHtml(b.name)}</strong>
+              <span class="text-[11px] font-bold text-[#C4AEB6]">${b.when}${b.paid ? ' • Paid' : ''}</span>
             </span>
           </label>
           <div class="flex items-center gap-2 shrink-0">
-            <span class="font-mono-num font-extrabold text-sm text-[#7D6E75]">£</span>
+            <span class="font-mono-num font-extrabold text-sm text-[#C4AEB6]">£</span>
             ${b.builtIn
-              ? `<span class="font-mono-num font-extrabold text-sm text-[#1F191C]">${(parseFloat(b.amount) || 0).toFixed(2)}</span>`
-              : `<input type="number" inputmode="decimal" step="0.01" min="0" value="${(parseFloat(b.amount) || 0).toFixed(2)}" onchange="updateFixedBillAmount(${b.id}, this.value)" aria-label="Amount for ${escapeHtml(b.name)}" class="fixed-amount-input px-2.5 py-1.5 pennli-input text-sm font-mono-num font-extrabold text-[#1F191C]" />
-                 <button type="button" onclick="removeFixedBill(${b.id})" class="px-3 py-1.5 rounded-full bg-[#FCE8EE] text-[#C84369] border border-[#F3C6D4] text-[11px] font-extrabold">Remove</button>`}
+              ? `<span class="font-mono-num font-extrabold text-sm text-[#F7EDEF]">${(parseFloat(b.amount) || 0).toFixed(2)}</span>`
+              : `<input type="number" inputmode="decimal" step="0.01" min="0" value="${(parseFloat(b.amount) || 0).toFixed(2)}" onchange="updateFixedBillAmount(${b.id}, this.value)" aria-label="Amount for ${escapeHtml(b.name)}" class="fixed-amount-input px-2.5 py-1.5 pennli-input text-sm font-mono-num font-extrabold text-[#F7EDEF]" />
+                 <button type="button" onclick="removeFixedBill(${b.id})" class="px-3 py-1.5 rounded-full bg-[#1A1216] text-[#C84369] border border-[#4A3440] text-[11px] font-extrabold">Remove</button>`}
           </div>
         </div>
       `).join('');
@@ -2530,7 +2536,7 @@
       fixedBillsPaid[key] = !!isPaid;
       saveState();
       updateDOM(calculateBudget());
-      if (isPaid) { playSound('tick'); showToast('Marked as paid 💖'); }
+      if (isPaid) { playSound('tick'); showToast('Marked as paid'); }
     }
     function addFixedBill() {
       const nameEl = document.getElementById('fixed-bill-name');
@@ -2621,14 +2627,14 @@
 
       history.forEach(item => {
         const div = document.createElement('div');
-        div.className = 'p-4 rounded-2xl bg-[#FDF4F7] border border-[#EBD4DC] flex items-center justify-between text-xs shadow-sm';
+        div.className = 'p-4 rounded-2xl bg-[#101014] border border-[#3A2E33] flex items-center justify-between text-xs shadow-sm';
         div.innerHTML = `
           <div>
-            <strong class="text-[#1F191C] font-extrabold text-sm">${item.date}</strong>
-            <span class="block text-xs font-bold font-mono-num text-[#7D6E75] mt-0.5">Wages: £${item.combinedWages} • UC: £${item.ucCash}</span>
+            <strong class="text-[#F7EDEF] font-extrabold text-sm">${item.date}</strong>
+            <span class="block text-xs font-bold font-mono-num text-[#C4AEB6] mt-0.5">Wages: £${item.combinedWages} • UC: £${item.ucCash}</span>
           </div>
           <div class="text-right font-mono-num font-extrabold">
-            <span class="text-[#1F191C] text-sm block">Cian: £${item.cianTotal}</span>
+            <span class="text-[#F7EDEF] text-sm block">Cian: £${item.cianTotal}</span>
             <span class="text-[#14855C] text-sm block">Maegan: £${item.maeganTotal}</span>
           </div>
         `;
@@ -2644,7 +2650,7 @@
 
     function copySummary() {
       const calc = calculateBudget(currentCianPay, currentMaeganPay, maeganSlcDebt, currentDebt, debtPayer);
-      let text = `📊 MONTHLY BUDGET PLAN SUMMARY
+      let text = `MONTHLY BUDGET PLAN SUMMARY
 Cian Pay: £${currentCianPay.toFixed(2)} | Maegan Pay: £${currentMaeganPay.toFixed(2)}
 Total Assessed: £${calc.totalTescoPay.toFixed(2)}
 
