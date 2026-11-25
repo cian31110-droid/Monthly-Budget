@@ -7,6 +7,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Budget Planner">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <title>UC & Tesco Budget Planner</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2685,6 +2688,14 @@ Total Assessed: £${calc.totalTescoPay.toFixed(2)}
     updateDebtTrackers();
     updateDOM(calculateBudget(currentCianPay, currentMaeganPay, maeganSlcDebt, currentDebt, debtPayer));
     renderHistory();
+  </script>
+  <script>
+    // Register the service worker so the planner can be installed as an app and open offline.
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('sw.js').catch(function () {});
+      });
+    }
   </script>
 </body>
 </html>
