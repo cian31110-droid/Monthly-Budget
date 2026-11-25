@@ -2,7 +2,11 @@
 <html lang="en" class="h-full">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#FDF0F5">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Budget Planner">
   <title>UC & Tesco Budget Planner</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -34,7 +38,7 @@
     .extra-bill-paid .extra-bill-name { text-decoration: line-through; text-decoration-color: #EC5E8A; }
     .fixed-bill-paid { opacity: 0.75; }
     .fixed-bill-paid .fixed-bill-name { text-decoration: line-through; text-decoration-color: #EC5E8A; }
-    .fixed-amount-input { width: 96px; }
+    .fixed-amount-input { width: 120px; min-height: 44px; }
     /* Liquid glass: floating pink/lilac orbs behind the glass cards */
     .glass-orb { position: fixed; border-radius: 9999px; filter: blur(70px); pointer-events: none; z-index: 0; }
     .glass-orb-1 { width: 340px; height: 340px; top: -80px; left: -90px; background: radial-gradient(circle, rgba(236,94,138,0.45), transparent 70%); animation: orbFloat 14s ease-in-out infinite; }
@@ -49,10 +53,10 @@
     .total-bump { display: inline-block; animation: totalBump 0.45s ease; }
     .bill-row-in { animation: billSlideIn 0.35s ease both; }
     @media (prefers-reduced-motion: reduce) { .glass-orb, .pennli-panel, .bill-row-in, .total-bump { animation: none !important; } }
-    input[type="checkbox"].girly-tick { appearance: none; -webkit-appearance: none; width: 26px; height: 26px; border-radius: 999px; border: 2px solid #EFB9CE; background: #fff; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: all 0.15s ease; }
+    input[type="checkbox"].girly-tick { appearance: none; -webkit-appearance: none; width: 44px; height: 44px; border-radius: 999px; border: 2px solid #EFB9CE; background: #fff; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: all 0.15s ease; }
     input[type="checkbox"].girly-tick:checked { background: linear-gradient(135deg, #EC5E8A, #B388EB); border-color: #EC5E8A; animation: tickPop 0.35s ease; box-shadow: 0 0 0 4px rgba(236, 94, 138, 0.18); }
-    input[type="checkbox"].girly-tick:checked::after { content: '♥'; color: #fff; font-size: 14px; line-height: 1; }
-    .extra-amount-input { width: 96px; }
+    input[type="checkbox"].girly-tick:checked::after { content: '♥'; color: #fff; font-size: 20px; line-height: 1; }
+    .extra-amount-input { width: 120px; min-height: 44px; }
 
     body {
       background-color: var(--bg-blush);
@@ -180,6 +184,60 @@
     ::-webkit-scrollbar-thumb {
       background: #E5C2CE;
       border-radius: 9999px;
+    }
+
+    /* ---- Mobile-first (phone-first): Cian only uses his phone ---- */
+    html { -webkit-text-size-adjust: 100%; }
+    body { touch-action: manipulation; -webkit-tap-highlight-color: transparent; overscroll-behavior-y: none; }
+    /* Safe area: notch / home indicator. Body already has pb-32; add the inset on top. */
+    body { padding-bottom: calc(8rem + env(safe-area-inset-bottom, 0px)); }
+    .max-w-3xl { padding-top: env(safe-area-inset-top, 0px); }
+    /* Bottom tab bar: keep it clear of the home indicator, thumb-height tabs. */
+    .ios-frosted-bar { bottom: max(1rem, env(safe-area-inset-bottom, 0px)) !important; }
+    .ios-frosted-bar button { min-height: 48px; }
+    #toast { bottom: calc(6.5rem + env(safe-area-inset-bottom, 0px)) !important; max-width: calc(100vw - 2rem); }
+    /* 44px minimum touch targets, everywhere. */
+    button { min-height: 44px; }
+    button.w-7, button.h-7 { width: 44px !important; height: 44px !important; min-width: 44px; font-size: 18px; }
+    input[type="range"] { min-height: 44px; }
+    input[type="range"]::-webkit-slider-thumb { height: 28px; width: 28px; margin-top: -10px; }
+    input[type="range"]::-webkit-slider-runnable-track { height: 8px; }
+    /* Inputs: 16px text so iOS does not zoom in on focus, 48px tall fields. */
+    .pennli-input { min-height: 48px; font-size: 16px; }
+    input[type="number"].pennli-input, input[type="text"].pennli-input, input[type="date"].pennli-input, select.pennli-input { font-size: 16px; }
+    /* No horizontal scrolling on a phone, ever. */
+    html, body { overflow-x: hidden; max-width: 100%; }
+    .pennli-panel, .pennli-hero-card, .pennli-subcard { min-width: 0; }
+    img, svg { max-width: 100%; }
+    /* Bill rows: stack the amount + Remove under the name on narrow phones so nothing is squeezed. */
+    @media (max-width: 480px) {
+      #fixed-bills-list > div, #extra-bills-list > div { flex-wrap: wrap; }
+      #fixed-bills-list > div > div:last-child, #extra-bills-list > div > div:last-child { flex-wrap: wrap; row-gap: 8px; }
+      .fixed-amount-input, .extra-amount-input { width: 110px; }
+      /* Pay inputs: full width on a phone instead of a cramped 128px box. */
+      #cian-pay-input, #maegan-pay-input { width: 100%; min-width: 120px; }
+      /* Header action buttons: full-width rows, easy thumb taps. */
+      header .flex.flex-wrap { width: 100%; }
+      header .flex.flex-wrap > button { flex: 1 1 44%; }
+      /* Top tab labels: short on a phone so all three fit without wrapping. */
+      #tab-page-2 span:last-child { font-size: 0; }
+      #tab-page-2 span:last-child::after { content: "Analyze"; font-size: 11px; }
+      #tab-page-3 span:last-child { font-size: 0; }
+      #tab-page-3 span:last-child::after { content: "Sheet"; font-size: 11px; }
+    }
+    /* Spreadsheet table becomes stacked cards on a phone (desktop table unchanged). */
+    @media (max-width: 640px) {
+      input, select, textarea { font-size: 16px !important; }
+      #spreadsheet-tbody tr.bg-\[\#FAF0F4\] { display: block; }
+      #spreadsheet-tbody tr.bg-\[\#FAF0F4\] td { display: block; padding: 12px 16px 4px; }
+      #spreadsheet-tbody tr:not(.bg-\[\#FAF0F4\]) { display: block; margin: 0 12px 12px; border: 1px solid #F2E2E8; border-radius: 18px; background: rgba(255,255,255,0.65); overflow: hidden; }
+      #spreadsheet-tbody tr:not(.bg-\[\#FAF0F4\]) td { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 16px; text-align: right; }
+      #spreadsheet-tbody tr:not(.bg-\[\#FAF0F4\]) td::before { content: attr(data-label); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: #7D6E75; text-align: left; flex-shrink: 0; }
+      #spreadsheet-tbody tr:not(.bg-\[\#FAF0F4\]) td:first-child { justify-content: flex-start; text-align: left; padding-top: 14px; }
+      #spreadsheet-tbody tr:not(.bg-\[\#FAF0F4\]) td:first-child::before { display: none; }
+      #spreadsheet-tbody tr:not(.bg-\[\#FAF0F4\]) td[data-label="When"] { display: flex !important; }
+      #page-3-container .overflow-x-auto { overflow-x: visible; }
+      #page-3-container table thead { display: none; }
     }
   </style>
 </head>
@@ -466,13 +524,13 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div class="p-4 pennli-subcard space-y-2 shadow-sm">
             <label for="fixed-bill-name" class="block text-xs font-extrabold text-[#7D6E75]">Fixed bill name</label>
-            <input type="text" id="fixed-bill-name" placeholder="e.g. New fixed bill" class="w-full px-3.5 py-2.5 pennli-input text-sm font-extrabold" />
+            <input type="text" id="fixed-bill-name" enterkeyhint="next" autocomplete="off" placeholder="e.g. New fixed bill" class="w-full px-3.5 py-2.5 pennli-input text-sm font-extrabold" />
           </div>
           <div class="p-4 pennli-subcard space-y-2 shadow-sm">
             <label for="fixed-bill-amount" class="block text-xs font-extrabold text-[#7D6E75]">Amount per month</label>
             <div class="relative flex items-center">
               <span class="absolute left-3 text-[#7D6E75] font-mono-num font-extrabold text-sm">£</span>
-              <input type="number" id="fixed-bill-amount" step="0.01" min="0" placeholder="0.00" class="w-full pl-8 pr-3 py-2.5 pennli-input text-sm font-mono-num font-extrabold" />
+              <input type="number" inputmode="decimal" id="fixed-bill-amount" step="0.01" min="0" placeholder="0.00" class="w-full pl-8 pr-3 py-2.5 pennli-input text-sm font-mono-num font-extrabold" />
             </div>
           </div>
         </div>
@@ -506,13 +564,13 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div class="p-4 pennli-subcard space-y-2 shadow-sm lg:col-span-2">
             <label for="extra-bill-name" class="block text-xs font-extrabold text-[#7D6E75]">Bill / payment name</label>
-            <input type="text" id="extra-bill-name" placeholder="e.g. New subscription" class="w-full px-3.5 py-2.5 pennli-input text-sm font-extrabold" />
+            <input type="text" id="extra-bill-name" enterkeyhint="next" autocomplete="off" placeholder="e.g. New subscription" class="w-full px-3.5 py-2.5 pennli-input text-sm font-extrabold" />
           </div>
           <div class="p-4 pennli-subcard space-y-2 shadow-sm">
             <label for="extra-bill-amount" class="block text-xs font-extrabold text-[#7D6E75]">Amount per month</label>
             <div class="relative flex items-center">
               <span class="absolute left-3 text-[#7D6E75] font-mono-num font-extrabold text-sm">£</span>
-              <input type="number" id="extra-bill-amount" step="0.01" min="0" placeholder="0.00" class="w-full pl-8 pr-3 py-2.5 pennli-input text-sm font-mono-num font-extrabold" />
+              <input type="number" inputmode="decimal" id="extra-bill-amount" step="0.01" min="0" placeholder="0.00" class="w-full pl-8 pr-3 py-2.5 pennli-input text-sm font-mono-num font-extrabold" />
             </div>
           </div>
           <div class="p-4 pennli-subcard space-y-2 shadow-sm">
@@ -596,7 +654,7 @@
           </div>
           <div class="p-4 pennli-subcard space-y-2">
             <label for="uc-pay-day" class="text-xs font-extrabold text-[#7D6E75] block">UC Payment Day of Month (1–31)</label>
-            <input type="number" id="uc-pay-day" min="1" max="31" value="15" oninput="updatePaydayCalendar()" class="w-full px-3.5 py-2.5 pennli-input text-sm font-mono-num font-extrabold" />
+            <input type="number" inputmode="decimal" id="uc-pay-day" min="1" max="31" value="15" oninput="updatePaydayCalendar()" class="w-full px-3.5 py-2.5 pennli-input text-sm font-mono-num font-extrabold" />
           </div>
         </div>
 
@@ -858,7 +916,7 @@
               </div>
               <div class="relative flex items-center">
                 <span class="absolute left-3 text-[#7D6E75] font-mono-num font-extrabold text-sm">£</span>
-                <input type="number" id="cian-pay-input" step="0.01" value="806.98" oninput="syncCianInput(this.value)" class="w-32 pl-7 pr-3 py-2 pennli-input text-base font-mono-num font-extrabold text-right" />
+                <input type="number" inputmode="decimal" id="cian-pay-input" step="0.01" value="806.98" oninput="syncCianInput(this.value)" class="w-full sm:w-32 pl-7 pr-3 py-2 pennli-input text-base font-mono-num font-extrabold text-right" />
               </div>
             </div>
             <input type="range" id="cian-pay-slider" min="0" max="1500" step="5" value="806.98" oninput="syncCianSlider(this.value)" class="w-full" />
@@ -873,7 +931,7 @@
               </div>
               <div class="relative flex items-center">
                 <span class="absolute left-3 text-[#7D6E75] font-mono-num font-extrabold text-sm">£</span>
-                <input type="number" id="maegan-pay-input" step="0.01" value="624.55" oninput="syncMaeganInput(this.value)" class="w-32 pl-7 pr-3 py-2 pennli-input text-base font-mono-num font-extrabold text-right" />
+                <input type="number" inputmode="decimal" id="maegan-pay-input" step="0.01" value="624.55" oninput="syncMaeganInput(this.value)" class="w-full sm:w-32 pl-7 pr-3 py-2 pennli-input text-base font-mono-num font-extrabold text-right" />
               </div>
             </div>
             <input type="range" id="maegan-pay-slider" min="0" max="1500" step="5" value="624.55" oninput="syncMaeganSlider(this.value)" class="w-full" />
@@ -909,6 +967,7 @@
               <span class="absolute left-3 text-[#7D6E75] font-mono-num font-extrabold text-sm">£</span>
               <input
                 type="number"
+                inputmode="decimal"
                 id="savings-per-person-input"
                 step="5"
                 value="50.00"
@@ -965,7 +1024,7 @@
             </div>
             <div class="relative flex items-center sm:w-36 shrink-0">
               <span class="absolute left-3 text-[#7D6E75] font-mono-num font-extrabold text-sm">£</span>
-              <input type="number" id="maegan-slc-input" step="0.01" value="104.00" oninput="updateMaeganSlcDebt(this.value)" class="w-full pl-7 pr-3 py-2 pennli-input text-sm font-mono-num font-extrabold text-[#D64B73] text-right" />
+              <input type="number" inputmode="decimal" id="maegan-slc-input" step="0.01" value="104.00" oninput="updateMaeganSlcDebt(this.value)" class="w-full pl-7 pr-3 py-2 pennli-input text-sm font-mono-num font-extrabold text-[#D64B73] text-right" />
             </div>
           </div>
 
@@ -1003,7 +1062,7 @@
               <label for="cp-total-input" class="text-xs font-extrabold text-[#7D6E75]">Total:</label>
               <div class="relative flex items-center w-32">
                 <span class="absolute left-3 text-[#7D6E75] font-mono-num font-extrabold text-xs">£</span>
-                <input type="number" id="cp-total-input" step="10" value="500.00" oninput="updateCenterParcsTotal(this.value)" class="w-full pl-7 pr-3 py-2 pennli-input text-sm font-mono-num font-extrabold text-[#1F191C] text-right" />
+                <input type="number" inputmode="decimal" id="cp-total-input" step="10" value="500.00" oninput="updateCenterParcsTotal(this.value)" class="w-full pl-7 pr-3 py-2 pennli-input text-sm font-mono-num font-extrabold text-[#1F191C] text-right" />
               </div>
             </div>
           </div>
@@ -1034,7 +1093,7 @@
             <label for="debt-input" class="block text-xs font-extrabold text-[#7D6E75]">Extra Credit Card Payment (Optional)</label>
             <div class="relative flex items-center">
               <span class="absolute left-3 text-[#7D6E75] font-mono-num font-extrabold text-sm">£</span>
-              <input type="number" id="debt-input" step="0.01" value="0.00" placeholder="0.00" oninput="updateDebt(this.value)" class="w-full pl-8 pr-3 py-2.5 pennli-input text-sm font-mono-num font-extrabold" />
+              <input type="number" inputmode="decimal" id="debt-input" step="0.01" value="0.00" placeholder="0.00" oninput="updateDebt(this.value)" class="w-full pl-8 pr-3 py-2.5 pennli-input text-sm font-mono-num font-extrabold" />
             </div>
           </div>
 
@@ -1064,7 +1123,7 @@
             <label for="onetime-input" class="block text-xs font-extrabold text-[#7D6E75]">Amount (e.g. paying someone back)</label>
             <div class="relative flex items-center">
               <span class="absolute left-3 text-[#7D6E75] font-mono-num font-extrabold text-sm">£</span>
-              <input type="number" id="onetime-input" step="0.01" value="0.00" placeholder="0.00" oninput="updateOneTime(this.value)" class="w-full pl-8 pr-3 py-2.5 pennli-input text-base font-mono-num font-extrabold text-[#D64B73]" />
+              <input type="number" inputmode="decimal" id="onetime-input" step="0.01" value="0.00" placeholder="0.00" oninput="updateOneTime(this.value)" class="w-full pl-8 pr-3 py-2.5 pennli-input text-base font-mono-num font-extrabold text-[#D64B73]" />
             </div>
           </div>
 
@@ -1333,7 +1392,7 @@
     </button>
   </div>
 
-  <footer class="text-center text-xs font-bold text-[#9A8991] py-6 relative z-10">
+  <footer class="text-center text-xs font-bold text-[#9A8991] py-6 relative z-10" style="padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));">
     Pennli-Inspired Pastel Edition • Auto-Save Active
   </footer>
 
@@ -2002,13 +2061,13 @@
           `;
         }
         const ticked = r.tickKey ? !!fixedBillsPaid[r.tickKey] : false;
-        const tickHtml = r.tickKey ? `<input type="checkbox" class="girly-tick" style="width:22px;height:22px;vertical-align:-6px;margin-right:6px" ${ticked ? 'checked' : ''} onchange="toggleFixedBillPaid('${r.tickKey}', this.checked)" aria-label="Mark as paid" />` : '';
+        const tickHtml = r.tickKey ? `<input type="checkbox" class="girly-tick" ${ticked ? 'checked' : ''} onchange="toggleFixedBillPaid('${r.tickKey}', this.checked)" aria-label="Mark as paid" />` : '';
         return `
           <tr class="hover:bg-[#FDF7F9] transition-colors">
-            <td class="py-3.5 px-4 sm:px-6 font-extrabold text-[#1F191C] ${ticked ? 'fixed-bill-paid' : ''}">${tickHtml}<span class="${ticked ? 'fixed-bill-name' : ''}">${r.item}</span></td>
-            <td class="py-3.5 px-3 text-right font-mono-num font-extrabold text-sm text-[#1F191C]">${r.amount}</td>
-            <td class="py-3.5 px-4 sm:px-6">${r.source}</td>
-            <td class="py-3.5 px-4 sm:px-6 text-[#7D6E75] hidden sm:table-cell">${r.when}</td>
+            <td data-label="Bill" class="py-3.5 px-4 sm:px-6 font-extrabold text-[#1F191C] ${ticked ? 'fixed-bill-paid' : ''}">${tickHtml}<span class="${ticked ? 'fixed-bill-name' : ''}">${r.item}</span></td>
+            <td data-label="How much" class="py-3.5 px-3 text-right font-mono-num font-extrabold text-sm text-[#1F191C]">${r.amount}</td>
+            <td data-label="From" class="py-3.5 px-4 sm:px-6">${r.source}</td>
+            <td data-label="When" class="py-3.5 px-4 sm:px-6 text-[#7D6E75] hidden sm:table-cell">${r.when}</td>
           </tr>
         `;
       }).join('');
@@ -2372,7 +2431,7 @@
           </label>
           <div class="flex items-center gap-2 shrink-0">
             <span class="font-mono-num font-extrabold text-sm text-[#7D6E75]">£</span>
-            <input type="number" step="0.01" min="0" value="${(parseFloat(b.amount) || 0).toFixed(2)}" onchange="updateExtraBillAmount(${b.id}, this.value)" aria-label="Amount for ${escapeHtml(b.name)}" class="extra-amount-input px-2.5 py-1.5 pennli-input text-sm font-mono-num font-extrabold text-[#1F191C]" />
+            <input type="number" inputmode="decimal" step="0.01" min="0" value="${(parseFloat(b.amount) || 0).toFixed(2)}" onchange="updateExtraBillAmount(${b.id}, this.value)" aria-label="Amount for ${escapeHtml(b.name)}" class="extra-amount-input px-2.5 py-1.5 pennli-input text-sm font-mono-num font-extrabold text-[#1F191C]" />
             <button type="button" onclick="removeExtraBill(${b.id})" class="px-3 py-1.5 rounded-full bg-[#FCE8EE] text-[#C84369] border border-[#F3C6D4] text-[11px] font-extrabold">Remove</button>
           </div>
         </div>
@@ -2461,7 +2520,7 @@
             <span class="font-mono-num font-extrabold text-sm text-[#7D6E75]">£</span>
             ${b.builtIn
               ? `<span class="font-mono-num font-extrabold text-sm text-[#1F191C]">${(parseFloat(b.amount) || 0).toFixed(2)}</span>`
-              : `<input type="number" step="0.01" min="0" value="${(parseFloat(b.amount) || 0).toFixed(2)}" onchange="updateFixedBillAmount(${b.id}, this.value)" aria-label="Amount for ${escapeHtml(b.name)}" class="fixed-amount-input px-2.5 py-1.5 pennli-input text-sm font-mono-num font-extrabold text-[#1F191C]" />
+              : `<input type="number" inputmode="decimal" step="0.01" min="0" value="${(parseFloat(b.amount) || 0).toFixed(2)}" onchange="updateFixedBillAmount(${b.id}, this.value)" aria-label="Amount for ${escapeHtml(b.name)}" class="fixed-amount-input px-2.5 py-1.5 pennli-input text-sm font-mono-num font-extrabold text-[#1F191C]" />
                  <button type="button" onclick="removeFixedBill(${b.id})" class="px-3 py-1.5 rounded-full bg-[#FCE8EE] text-[#C84369] border border-[#F3C6D4] text-[11px] font-extrabold">Remove</button>`}
           </div>
         </div>
